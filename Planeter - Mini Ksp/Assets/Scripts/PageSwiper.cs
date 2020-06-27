@@ -11,6 +11,8 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public int totalPages = 1;
     private int currentPage = 1;
 
+    public bool isInteractable = true;
+
 
 
     bool isDragging = false;
@@ -46,6 +48,11 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void OnDrag(PointerEventData data)
     {
+        if (!isInteractable)
+        {
+            isDragging = false;
+        }
+
         float difference = data.pressPosition.x - data.position.x;
         transform.position = panelLocation - new Vector3(difference, 0, 0);
 
@@ -75,15 +82,5 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
             SetSmoothMove(transform.position, panelLocation);
         }
         isDragging = false;
-    }
-    IEnumerator SmoothMove(Vector3 startpos, Vector3 endpos, float seconds)
-    {
-        float t = 0f;
-        while (t <= 1.0)
-        {
-            t += Time.deltaTime / seconds;
-            transform.position = Vector3.Lerp(startpos, endpos, Mathf.SmoothStep(0f, 1f, t));
-            yield return null;
-        }
     }
 }
