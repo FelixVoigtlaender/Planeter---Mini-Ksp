@@ -11,15 +11,45 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     public int totalPages = 1;
     private int currentPage = 1;
 
+
+
+    bool isDragging = false;
+    Vector2 startPos;
+    Vector2 endPos;
+    float startTime;
+
+
     // Start is called before the first frame update
     void Start()
     {
         panelLocation = transform.position;
+        startPos = transform.position;
+        endPos = transform.position;
     }
+
+
+    public void SetSmoothMove(Vector2 startPos, Vector2 endPos)
+    {
+        this.startPos = startPos;
+        this.endPos = endPos;
+        startTime = Time.time;
+    }
+
+    public void Update()
+    {
+        if (!isDragging)
+        {
+            float t = (Time.time - startTime);
+            transform.position = Vector3.Lerp(startPos, endPos, Mathf.SmoothStep(0f, 1f, t));
+        }
+    }
+
     public void OnDrag(PointerEventData data)
     {
         float difference = data.pressPosition.x - data.position.x;
         transform.position = panelLocation - new Vector3(difference, 0, 0);
+
+        isDragging = true;
     }
     public void OnEndDrag(PointerEventData data)
     {
@@ -37,13 +67,14 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
                 currentPage--;
                 newLocation += new Vector3(Screen.width, 0, 0);
             }
-            StartCoroutine(SmoothMove(transform.position, newLocation, easing));
+            SetSmoothMove(transform.position, newLocation);
             panelLocation = newLocation;
         }
         else
         {
-            StartCoroutine(SmoothMove(transform.position, panelLocation, easing));
+            SetSmoothMove(transform.position, panelLocation);
         }
+        isDragging = false;
     }
     IEnumerator SmoothMove(Vector3 startpos, Vector3 endpos, float seconds)
     {
