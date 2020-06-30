@@ -9,9 +9,10 @@ public class DynamicBody : MonoBehaviour
 
     public void FixedUpdate()
     {
-        velocity += GravityManager.CalculateAllGravityVector(transform.position, mass);
 
         Vector2 position = transform.position;
+
+        velocity += GravityManager.CalculateAllGravityVector(transform.position, mass)*Time.deltaTime;
         position += velocity * Time.deltaTime;
         transform.position = position;
     }

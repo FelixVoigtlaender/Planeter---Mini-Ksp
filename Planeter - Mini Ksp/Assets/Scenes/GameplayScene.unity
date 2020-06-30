@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 210835847}
   - component: {fileID: 210835846}
   - component: {fileID: 210835849}
+  - component: {fileID: 210835850}
   m_Layer: 0
   m_Name: Moon
   m_TagString: Untagged
@@ -295,11 +296,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210835845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.12, y: 2.04, z: 0}
+  m_LocalPosition: {x: 0.65, y: 6.72, z: 0}
   m_LocalScale: {x: 2.722366, y: 2.722366, z: 2.722366}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &210835849
 MonoBehaviour:
@@ -315,6 +316,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   massScale: 1
   mass: 0
+--- !u!114 &210835850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210835845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f623d8b4b400de43a7e23e4767428f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: {x: 2, y: 0}
+  mass: 1
 --- !u!1 &1234352880
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +407,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1365417934
 GameObject:
@@ -471,7 +486,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1762659016
 GameObject:
@@ -485,6 +500,7 @@ GameObject:
   - component: {fileID: 1762659018}
   - component: {fileID: 1762659017}
   - component: {fileID: 1762659020}
+  - component: {fileID: 1762659021}
   m_Layer: 0
   m_Name: Earth
   m_TagString: Untagged
@@ -574,11 +590,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1762659016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: -1.59, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 8.491383, y: 8.491383, z: 8.491383}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1762659020
 MonoBehaviour:
@@ -594,6 +610,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   massScale: 1
   mass: 0
+--- !u!114 &1762659021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1762659016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f623d8b4b400de43a7e23e4767428f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: {x: 0, y: 0}
+  mass: 1
 --- !u!1 &1845732251
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,11 +649,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1845732251}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.19207774, y: -0.89707583, z: -0.064453125}
+  m_LocalPosition: {x: 0.19207774, y: 0, z: -0.064453125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1845732253
 MonoBehaviour:
@@ -638,7 +668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodies: []
-  gravityConstant: 0.1
+  gravityConstant: 1
 --- !u!1 &2126802899
 GameObject:
   m_ObjectHideFlags: 0
@@ -741,11 +771,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2126802899}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.06, y: 3.31, z: 0}
+  m_LocalPosition: {x: -0.17, y: 1.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &2126802903
 TrailRenderer:
@@ -863,5 +893,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f623d8b4b400de43a7e23e4767428f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 5, y: 0}
+  velocity: {x: 2, y: 0}
   mass: 1

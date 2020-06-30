@@ -26,6 +26,8 @@ public class GravityManager : MonoBehaviour
         {
             if (body == exlcude)
                 continue;
+            if (((Vector2)body.transform.position - position).magnitude < 0.1)
+                continue;
 
 
             count++;
@@ -40,7 +42,7 @@ public class GravityManager : MonoBehaviour
         Vector2 dif = (posB - posA);
         float distance = dif.magnitude;
 
-        float gravity = instance.gravityConstant * (massA * massB) / Mathf.Pow(distance, 2);
+        float gravity = instance.gravityConstant * massB * massA / Mathf.Pow(distance, 2);
 
         Vector2 gravityVector = dif.normalized * gravity;
         return gravityVector;
