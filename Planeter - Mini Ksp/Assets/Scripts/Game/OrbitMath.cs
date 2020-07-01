@@ -30,10 +30,16 @@ public class OrbitMath : MonoBehaviour
 
     public static float CircleOfInfluence(float radius, float planetMass, float sunMass)
     {
-        //https://de.wikipedia.org/wiki/Einflusssph%C3%A4re_(Astronomie)
+        // https://de.wikipedia.org/wiki/Einflusssph%C3%A4re_(Astronomie)
         // r * ( Mp / Ms ) ^(2/5)
+        if(planetMass > sunMass)
+        {
+            print("Planet is heavier than sun???");
+        }
+        print("Planet: " + planetMass + " Sun: " + sunMass);
 
-        float circleOfInfluence = radius * Mathf.Pow((planetMass / sunMass), 2 / 5);
+
+        float circleOfInfluence = radius * Mathf.Pow((planetMass / sunMass), 0.6f);
 
         return circleOfInfluence;
     }

@@ -26,4 +26,12 @@ public class PointMass : MonoBehaviour
         mass = OrbitMath.MassOfCircle(radius, massScale);
     }
     
+    public float GetMass()
+    {
+        if (mass > 0)
+            return mass;
+
+        SetUp();
+        return mass;
+    }
 }

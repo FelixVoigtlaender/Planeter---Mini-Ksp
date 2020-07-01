@@ -45,3 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   massScale: 1
   mass: 0
+  systemPrefab: {fileID: 7222671469399455806}
+  mainMass: {fileID: 0}
