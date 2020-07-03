@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(GravitySystem))]
-
 public class GravitySystemEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -26,7 +25,7 @@ public class GravitySystemEditor : Editor
         }
 
 
-        gravitySytem.CheckSystem();
+        //gravitySytem.CheckSystem();
 
         GUILayout.EndHorizontal();
     }

@@ -43,4 +43,70 @@ public class OrbitMath : MonoBehaviour
 
         return circleOfInfluence;
     }
+
+    /*
+     * Circular Orbit Prediction
+     * 
+     * x(t)=acos( (2π(t−t0)) / T)
+     * y(t)=asin( (2π(t−t0)) / T)
+     * 
+     * T=2π * sqrt( a^3 / q ) 
+     * 
+     * of the central body
+     * q = G * M
+    */
+
+    public static OrbitPrediction GetStaticOrbitPrediction(float t, GravitySystem gravitySystem)
+    {
+        GravitySystem parentSystem = gravitySystem.parentSystem;
+        // No Central body, thus no prediction
+        if (!parentSystem)
+            return new OrbitPrediction(gravitySystem);
+
+        float q = instance.gravityConstant * parentSystem.GetMass();
+        float a = gravitySystem.localStartPosition.magnitude;
+        float T = 2 * Mathf.PI * Mathf.Sqrt(Mathf.Pow(a, 3) / q);
+        float t0 = 0;
+
+        print("q_" + q + " a_" + a + " T_ " + T);
+        float x = a * Mathf.Cos((2 * Mathf.PI * (t - t0)) / T);
+        float y = a * Mathf.Sin((2 * Mathf.PI * (t - t0)) / T);
+
+        Vector2 localPosition = new Vector2(x, y);
+        Vector2 localVelocity = Vector2.zero;
+        print(localPosition);
+
+        return new OrbitPrediction(localPosition, localVelocity);
+    }
+
+    public static float GetT0(GravitySystem gravitySystem)
+    {
+        GravitySystem parentSystem = gravitySystem.parentSystem;
+        // No Central body, thus no prediction
+        if (!parentSystem)
+            return 0;
+
+        return 0;
+    }
+}
+
+    public class OrbitPrediction
+    {
+        public Vector2 localPosition;
+        public Vector2 localVelocity;
+
+        public OrbitPrediction(Vector2 localPosition, Vector2 localVelocity)
+        {
+            this.localPosition = localPosition;
+            this.localVelocity = localVelocity;
+        }
+        public OrbitPrediction(GravitySystem gs)
+        {
+            this.localPosition = gs.transform.localPosition;
+            this.localVelocity = Vector2.zero;
+        }
+    }
+
+
+
 }

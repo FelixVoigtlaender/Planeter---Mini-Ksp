@@ -6,43 +6,52 @@ using UnityEditor;
 
 public class GravitySystem : PointMass
 {
-    public SpriteRenderer renderer;
-
-    public GameObject systemPrefab;
-    public PointMass mainMass;
+    [Header("My Mass")]
     public float radiusOfInfluence = 0;
+    public GravitySystem parentSystem;
 
-    public float totalMass;
+    public Vector2 localStartPosition;
 
-    List<PointMass> masses = new List<PointMass>();
+    public void Awake()
+    {
+        localStartPosition = transform.localPosition;
+        if(transform.parent)
+            parentSystem = transform.parent.GetComponent<GravitySystem>();
+    }
+
+
+    public void FixedUpdate()
+    {
+        OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(Time.time, this);
+        transform.localPosition = prediction.localPosition;
+
+
+    }
 
     public void CheckSystem()
     {
-        //Radius of Influence
-        GravitySystem parentSystem = null;
 
         if (!renderer)
-            renderer = GetComponent<SpriteRenderer>();
-        
+            renderer = GetComponentInChildren<SpriteRenderer>();
+
+        //Radius of Influence
+        GravitySystem parentSystem = null;
         if (transform.parent)
         {
             parentSystem = transform.parent.GetComponent<GravitySystem>();
         }
-
-        totalMass = GetTotalMass();
         if (parentSystem)
         {
             float distToParentSytem = ((Vector2)parentSystem.transform.position - (Vector2)transform.position).magnitude;
-            radiusOfInfluence = OrbitMath.CircleOfInfluence(distToParentSytem, totalMass, parentSystem.totalMass);
-
-
+            radiusOfInfluence = OrbitMath.CircleOfInfluence(distToParentSytem, GetMass(), parentSystem.GetMass());
+            
         }
         else
         {
             radiusOfInfluence = 10000;
         }
 
-        //Add System in other Children
+        // Add Siblings in RadiusOfInfluence
         if (parentSystem)
         {
             GravitySystem[] siblingSystems = parentSystem.GetChildSystems();
@@ -52,18 +61,18 @@ public class GravitySystem : PointMass
                     continue;
 
                 float distance = Vector2.Distance(transform.position, siblingSystem.transform.position);
-                if(distance < radiusOfInfluence && siblingSystem.GetMainMass() < GetMainMass())
+                if(distance < radiusOfInfluence && siblingSystem.GetMass() < GetMass())
                 {
                     siblingSystem.transform.SetParent(transform);
                 }
-                if(distance < siblingSystem.radiusOfInfluence && siblingSystem.GetMainMass() > GetMainMass())
+                if(distance < siblingSystem.radiusOfInfluence && siblingSystem.GetMass() > GetMass())
                 {
                     transform.SetParent(siblingSystem.transform);
                 }
             }
         }
 
-        // Check if Exited System
+        // Check if this system exited another System
         if (parentSystem)
         {
 
@@ -76,38 +85,28 @@ public class GravitySystem : PointMass
 
     }
 
-    public float GetMainMass()
+
+    /// <summary>
+    /// Adds total mass together
+    /// </summary>
+    /// <returns> mass of all masses in system </returns>
+    public override float GetMass()
     {
-        mainMass = mainMass ? mainMass : GetComponent<PointMass>();
-        return mainMass.GetMass();
+        mass = 0;
+
+        mass += base.GetMass();
+
+        PointMass[] systemMasses = transform.GetComponentsInChildren<PointMass>();
+        foreach(PointMass pm in systemMasses)
+        {
+            if (pm.gameObject.GetInstanceID() == GetInstanceID() || pm == this)
+                continue;
+
+            mass += pm.GetMass();
+        }
+        return mass;
     }
     
-    public float GetTotalMass()
-    {
-        float totalMass = 0;
-        
-        // Mass of Object itself
-        mainMass = GetComponent<PointMass>();
-        if (mainMass)
-            totalMass += mainMass.GetMass();
-
-        // Mass of children
-        totalMass += GetTotalChildMass();
-
-        return totalMass;
-    }
-
-    public float GetTotalChildMass()
-    {
-        float totalMass = 0;
-        GravitySystem[] childSystems = GetChildSystems();
-        foreach (GravitySystem childSystem in childSystems)
-        {
-            totalMass += childSystem.GetTotalMass();
-        }
-        return totalMass;
-    }
-
 
     public void AddSystem(GravitySystem system)
     {
@@ -135,7 +134,15 @@ public class GravitySystem : PointMass
         return childSystems.ToArray();
     }
 
-    private void OnDrawGizmosSelected()
+    public GravitySystem GetParentSystem()
+    {
+        if (!transform.parent)
+            return null;
+
+        return transform.parent.GetComponent<GravitySystem>();
+    }
+    
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
         if (renderer)
@@ -153,5 +160,4 @@ public class GravitySystem : PointMass
             Gizmos.DrawWireSphere(transform.parent.position, Vector2.Distance(transform.position, transform.parent.position) + radiusOfInfluence);
         }
     }
-
 }
