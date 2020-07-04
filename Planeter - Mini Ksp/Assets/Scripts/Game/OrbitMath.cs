@@ -66,15 +66,12 @@ public class OrbitMath : MonoBehaviour
         float q = instance.gravityConstant * parentSystem.GetMass();
         float a = gravitySystem.localStartPosition.magnitude;
         float T = 2 * Mathf.PI * Mathf.Sqrt(Mathf.Pow(a, 3) / q);
-        float t0 = 0;
-
-        print("q_" + q + " a_" + a + " T_ " + T);
+        float t0 = gravitySystem.t0;
         float x = a * Mathf.Cos((2 * Mathf.PI * (t - t0)) / T);
         float y = a * Mathf.Sin((2 * Mathf.PI * (t - t0)) / T);
 
         Vector2 localPosition = new Vector2(x, y);
         Vector2 localVelocity = Vector2.zero;
-        print(localPosition);
 
         return new OrbitPrediction(localPosition, localVelocity);
     }
@@ -86,9 +83,27 @@ public class OrbitMath : MonoBehaviour
         if (!parentSystem)
             return 0;
 
-        return 0;
+        float x = gravitySystem.localStartPosition.x;
+        float y = gravitySystem.localStartPosition.y;
+
+        float q = instance.gravityConstant * parentSystem.GetMass();
+        float a = gravitySystem.localStartPosition.magnitude;
+        float T = 2 * Mathf.PI * Mathf.Sqrt(Mathf.Pow(a, 3) / q);
+
+        float xt0 = -(Mathf.Acos(x / a) * T) / (2 * Mathf.PI);
+        float yt0 = -(Mathf.Asin(y / a) * T) / (2 * Mathf.PI);
+
+        string s = gravitySystem.name + "\n";
+        s += "X: " + x + " xT0: " + xt0 + "\n";
+        s += "Y: " + y + " yT0: " + yt0 + "\n";
+        print(s);
+
+        float t0 = 0;
+        t0 = y > 0 ? xt0 : yt0;
+        t0 = y < 0 && x < 0 ? -xt0: t0;
+
+        return t0;
     }
-}
 
     public class OrbitPrediction
     {

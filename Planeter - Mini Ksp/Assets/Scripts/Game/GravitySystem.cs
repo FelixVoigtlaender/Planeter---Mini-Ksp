@@ -11,12 +11,18 @@ public class GravitySystem : PointMass
     public GravitySystem parentSystem;
 
     public Vector2 localStartPosition;
+    public float t0 = 0;
 
     public void Awake()
     {
-        localStartPosition = transform.localPosition;
         if(transform.parent)
             parentSystem = transform.parent.GetComponent<GravitySystem>();
+    }
+
+    private void Start()
+    {
+        localStartPosition = transform.localPosition;
+        t0 = OrbitMath.GetT0(this);
     }
 
 
@@ -142,7 +148,7 @@ public class GravitySystem : PointMass
         return transform.parent.GetComponent<GravitySystem>();
     }
     
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.black;
         if (renderer)
