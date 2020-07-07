@@ -383,7 +383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 50
   massScale: 1
-  mass: 7957.6543
+  mass: 7932.522
   renderer: {fileID: 829415355}
   body: {fileID: 829415354}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
@@ -405,8 +405,9 @@ Transform:
   m_Children:
   - {fileID: 829415354}
   - {fileID: 1951244732}
+  - {fileID: 2126802902}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &764542400
 GameObject:
@@ -513,7 +514,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 810223972}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.06, y: 5.68, z: 0}
+  m_LocalPosition: {x: 1.0599976, y: 5.6800003, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 574891278}
@@ -539,7 +540,7 @@ MonoBehaviour:
   body: {fileID: 574891278}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 1.7602702
+  radiusOfInfluence: 2.7760684
   parentSystem: {fileID: 0}
   localStartPosition: {x: 0, y: 0}
   t0: 0
@@ -955,7 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba357579b493b95409b5da321fd9bc7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityConstant: 10
+  gravityConstant: 1
 --- !u!1 &1951244730
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,7 +994,7 @@ MonoBehaviour:
   body: {fileID: 335738564}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 6.3418956
+  radiusOfInfluence: 14.556919
   parentSystem: {fileID: 0}
   localStartPosition: {x: 0, y: 0}
   t0: 0
@@ -1005,7 +1006,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951244730}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -50.9, y: 55.9, z: 0}
+  m_LocalPosition: {x: 86.2, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 335738564}
@@ -1136,7 +1137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &2126802900
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1218,12 +1219,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2126802899}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.17, y: 1.82, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 76.9, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 704996548}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &2126802903
 TrailRenderer:
@@ -1343,3 +1344,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 5, y: 0}
   mass: 1
+  prediction:
+    time: 0
+    localPosition: {x: 0, y: 0}
+    localVelocity: {x: 0, y: 9.48}
+    localGravity: {x: 0, y: 0}
+    gravitySystem: {fileID: 704996547}

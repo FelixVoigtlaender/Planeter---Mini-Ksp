@@ -23,6 +23,7 @@ public class PointMass : MonoBehaviour
     {
         return OrbitMath.GravityForce(position, transform.position, this.mass, mass);
     }
+    
 
     public virtual void SetUp()
     {

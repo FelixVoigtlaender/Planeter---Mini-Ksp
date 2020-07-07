@@ -22,6 +22,8 @@ public class OrbitMath : MonoBehaviour
     {
         // From pos A to pos B
         Vector2 dif = (posB - posA);
+        if (dif.magnitude < 0.1f)
+            return Vector2.zero;
         float distance = dif.magnitude;
         float gravity = instance.gravityConstant * massB * massA / Mathf.Pow(distance, 2);
         Vector2 gravityVector = dif.normalized * gravity;
@@ -39,7 +41,7 @@ public class OrbitMath : MonoBehaviour
         print("Planet: " + planetMass + " Sun: " + sunMass);
 
 
-        float circleOfInfluence = radius * Mathf.Pow((planetMass / sunMass), 0.6f);
+        float circleOfInfluence = radius * Mathf.Pow((planetMass / sunMass), 2f/5f);
 
         return circleOfInfluence;
     }
@@ -61,7 +63,7 @@ public class OrbitMath : MonoBehaviour
         GravitySystem parentSystem = gravitySystem.parentSystem;
         // No Central body, thus no prediction
         if (!parentSystem)
-            return new OrbitPrediction(gravitySystem);
+            return new OrbitPrediction(t,gravitySystem);
 
         float q = instance.gravityConstant * parentSystem.GetMass();
         float a = gravitySystem.localStartPosition.magnitude;
@@ -73,7 +75,7 @@ public class OrbitMath : MonoBehaviour
         Vector2 localPosition = new Vector2(x, y);
         Vector2 localVelocity = Vector2.zero;
 
-        return new OrbitPrediction(localPosition, localVelocity);
+        return new OrbitPrediction(t,localPosition, localVelocity);
     }
 
     public static float GetT0(GravitySystem gravitySystem)
@@ -105,20 +107,61 @@ public class OrbitMath : MonoBehaviour
         return t0;
     }
 
+    [System.Serializable]
     public class OrbitPrediction
     {
+        public float time;
         public Vector2 localPosition;
         public Vector2 localVelocity;
+        public Vector2 localGravity;
+        public GravitySystem gravitySystem;
 
-        public OrbitPrediction(Vector2 localPosition, Vector2 localVelocity)
+        public OrbitPrediction(float time,Vector2 localPosition, Vector2 localVelocity)
         {
+            this.time = time;
             this.localPosition = localPosition;
             this.localVelocity = localVelocity;
         }
-        public OrbitPrediction(GravitySystem gs)
+        public OrbitPrediction(float time,GravitySystem gs)
         {
+            this.time = time;
             this.localPosition = gs.transform.localPosition;
             this.localVelocity = Vector2.zero;
+        }
+
+        public void ChangeSystem(GravitySystem system)
+        {
+            // From World Space
+            if (!gravitySystem)
+            {
+                localPosition = system.PointToSystem(time,localPosition);
+                gravitySystem = system;
+                return;
+            }
+            //Same system
+            if(gravitySystem == system)
+            {
+                return;
+            }
+            // Conversion to parent system
+            if(gravitySystem.parentSystem == system)
+            {
+                localPosition = gravitySystem.PointToParentSystem(time, localPosition);
+                gravitySystem = system;
+                return;
+            }
+            // Conversion to child system
+            if(system.parentSystem == gravitySystem)
+            {
+                localPosition = system.PointFromParentSystem(time, localPosition);
+                gravitySystem = system;
+                return;
+            }
+            //To World Space
+            localPosition = gravitySystem.PointToWorld(time, localPosition);
+            //To New System Space
+            localPosition = system.PointToSystem(time, localPosition);
+            gravitySystem = system;
         }
     }
 

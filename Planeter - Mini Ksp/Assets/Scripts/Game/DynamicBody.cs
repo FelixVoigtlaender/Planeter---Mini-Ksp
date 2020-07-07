@@ -7,14 +7,47 @@ public class DynamicBody : MonoBehaviour
     public Vector2 velocity = Vector2.zero;
     public float mass = 1;
 
+    public OrbitMath.OrbitPrediction prediction;
+
+    public void Start()
+    {
+        if(prediction != null && prediction.gravitySystem)
+        {
+            prediction.localPosition = prediction.gravitySystem.PointToSystem(0, transform.position);
+        }
+    }
+
+
     public void FixedUpdate()
     {
-        Vector2 position = transform.position;
+        if (prediction == null)
+            return;
 
-        velocity += GravityManager.CalculateAllGravityVector(transform.position, mass)*Time.deltaTime;
+        if (!prediction.gravitySystem)
+            return;
 
-        position += velocity * Time.deltaTime;
+        float deltaTime = Time.time - prediction.time;
+        prediction.time = Time.time;
 
-        transform.position = position;
+        prediction = prediction.gravitySystem.DynamicPrediction(prediction, mass);
+        prediction.localVelocity += prediction.localGravity * deltaTime;
+        prediction.localPosition += prediction.localVelocity * deltaTime;
+
+        transform.parent = prediction.gravitySystem.transform;
+        transform.localPosition = prediction.localPosition;
+        
+
+    }
+
+    private void OnDrawGizmos()
+    {
+
+        if (prediction == null)
+            return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, prediction.localVelocity);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawRay(transform.position, prediction.localGravity);
     }
 }
