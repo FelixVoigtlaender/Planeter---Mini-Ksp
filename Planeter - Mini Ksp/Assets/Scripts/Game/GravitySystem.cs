@@ -47,14 +47,10 @@ public class GravitySystem : PointMass
     {
         OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(Time.time, this);
         transform.localPosition = prediction.localPosition;
-
-
     }
 
     public OrbitMath.OrbitPrediction DynamicPrediction(OrbitMath.OrbitPrediction prediction, float mass = 1)
     {
-        Debug.DrawLine(transform.position, (Vector2)transform.position + prediction.localPosition,Color.blue);
-
         //Set Prediction to this type
         prediction.ChangeSystem(this);
 
@@ -85,29 +81,48 @@ public class GravitySystem : PointMass
         return distance < radiusOfInfluence;
     }
 
+    /// <summary>
+    /// Returns the Center Gravity till sun system
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="localPosition"></param>
+    /// <param name="mass"></param>
+    /// <returns></returns>
+    public Vector2 ParentGravity(float time, Vector2 localPosition, float mass = 1)
+    {
+        if (!parentSystem)
+            return Vector2.zero;
+
+        Vector2 myLocalPosition = GetPrediction(time).localPosition;
+        Vector2 parentLocalPosition = localPosition + myLocalPosition;
+        float distance = parentLocalPosition.magnitude;
+        float parentMass = parentSystem.GetCenterMass();
+        Vector2 gravity = OrbitMath.GravityForce(parentLocalPosition,Vector2.zero,mass,parentMass);
+
+
+        return gravity + parentSystem.ParentGravity(time, parentLocalPosition, mass);
+    }
+    
+
     public Vector2 TotalGravity(float time, Vector2 localPosition, float mass=1)
     {
         Vector2 gravityVector = Vector2.zero;
-        int count = 0;
-        
-        //Center Mass
-        gravityVector += OrbitMath.GravityForce(localPosition, Vector2.zero, mass, OrbitMath.MassOfCircle(radius, massScale));
-        Debug.DrawRay((Vector2)transform.position + localPosition, gravityVector * 100, Color.green);
-        count++;
+        // Parent Mass
+        //Vector2 parentGravity = ParentGravity(time, localPosition, mass);
+        //gravityVector += parentGravity;
+        //Debug.DrawRay((Vector2)transform.position + localPosition, parentGravity * 100, Color.black);
+        // Center Mass
+        Vector2 centerGravity = OrbitMath.GravityForce(localPosition, Vector2.zero, mass, GetCenterMass());
+        gravityVector += centerGravity;
+        //Debug.DrawRay((Vector2)transform.position + localPosition, centerGravity * 100, Color.white);
+
+        // Child Mass
         foreach(GravitySystem system in childSystems)
         {
             Vector2 systemVec = system.Gravity(time, localPosition);
-            Debug.DrawRay((Vector2)transform.position + localPosition, systemVec*100, Color.black);
-
-            gravityVector += systemVec;
-            count++;
+            //Debug.DrawRay((Vector2)transform.position + localPosition, systemVec*100, Color.grey);
+            //gravityVector += systemVec;
         }
-        Debug.DrawRay((Vector2)transform.position + localPosition, gravityVector * 100, Color.white);
-
-        Debug.DrawRay((Vector2)transform.position + localPosition, Vector2.up * gravityVector.magnitude * 100, Color.white);
-
-        if (count == 0)
-            return Vector2.zero;
 
         
 
@@ -267,7 +282,7 @@ public class GravitySystem : PointMass
             return mass;
         mass = 0;
 
-        mass += base.GetMass();
+        mass += GetCenterMass();
 
         PointMass[] systemMasses = transform.GetComponentsInChildren<PointMass>();
         foreach(PointMass pm in systemMasses)
@@ -280,6 +295,12 @@ public class GravitySystem : PointMass
         return mass;
     }
 
+    public float GetCenterMass()
+    {
+        float centerMass = OrbitMath.MassOfCircle(radius, massScale);
+        return centerMass;
+    }
+
     
     private void OnDrawGizmos()
     {
@@ -290,7 +311,7 @@ public class GravitySystem : PointMass
 
         foreach(Transform child in transform)
         {
-            Gizmos.DrawLine(transform.position, child.position);
+            //Gizmos.DrawLine(transform.position, child.position);
         }
     }
 

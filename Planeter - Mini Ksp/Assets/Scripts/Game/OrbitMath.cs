@@ -72,8 +72,11 @@ public class OrbitMath : MonoBehaviour
         float x = a * Mathf.Cos((2 * Mathf.PI * (t - t0)) / T);
         float y = a * Mathf.Sin((2 * Mathf.PI * (t - t0)) / T);
 
+        float xV = -a * Mathf.Sin((2 * Mathf.PI * (t - t0)) / T) * (2 * Mathf.PI) / T;
+        float yV = a * Mathf.Cos((2 * Mathf.PI * (t - t0)) / T) * (2 * Mathf.PI) / T;
+
         Vector2 localPosition = new Vector2(x, y);
-        Vector2 localVelocity = Vector2.zero;
+        Vector2 localVelocity = new Vector2(xV,yV);
 
         return new OrbitPrediction(t,localPosition, localVelocity);
     }
@@ -128,40 +131,73 @@ public class OrbitMath : MonoBehaviour
             this.localPosition = gs.transform.localPosition;
             this.localVelocity = Vector2.zero;
         }
-
-        public void ChangeSystem(GravitySystem system)
+        public OrbitPrediction()
         {
+
+        }
+
+        public OrbitPrediction Clone()
+        {
+            OrbitPrediction clone = new OrbitPrediction(time, localPosition, localVelocity);
+            clone.time = time;
+            clone.localPosition = localPosition;
+            clone.localVelocity = localVelocity;
+            clone.localGravity = localGravity;
+            clone.gravitySystem = gravitySystem;
+            return clone;
+        }
+
+        public void ChangeSystem(GravitySystem newSystem)
+        {
+            // Same System
+            if (gravitySystem == newSystem)
+                return;
+
+            if (!newSystem)
+                return;
+
+            OrbitPrediction newSystemPrediction = newSystem.GetPrediction(time);
+
             // From World Space
             if (!gravitySystem)
             {
-                localPosition = system.PointToSystem(time,localPosition);
-                gravitySystem = system;
-                return;
+                if (!newSystem.parentSystem)
+                {
+                    //Sun
+                    gravitySystem = newSystem;
+                    return;
+                }
+                else
+                {
+                    //
+                    localPosition -= newSystemPrediction.localPosition;
+                    localVelocity -= newSystemPrediction.localVelocity;
+                    gravitySystem = newSystem;
+                    return;
+                }
             }
-            //Same system
-            if(gravitySystem == system)
+
+            // From ParentSystem
+            if (gravitySystem == newSystem.parentSystem)
             {
+                localPosition -= newSystemPrediction.localPosition;
+                localVelocity -= newSystemPrediction.localVelocity;
+                gravitySystem = newSystem;
                 return;
             }
-            // Conversion to parent system
-            if(gravitySystem.parentSystem == system)
+            // From Child System
+            if (gravitySystem.parentSystem = newSystem)
             {
-                localPosition = gravitySystem.PointToParentSystem(time, localPosition);
-                gravitySystem = system;
+
+                OrbitMath.OrbitPrediction childPrediction = gravitySystem.GetPrediction(time);
+                localPosition += childPrediction.localPosition;
+                localVelocity += childPrediction.localVelocity;
+                gravitySystem = newSystem;
+
                 return;
             }
-            // Conversion to child system
-            if(system.parentSystem == gravitySystem)
-            {
-                localPosition = system.PointFromParentSystem(time, localPosition);
-                gravitySystem = system;
-                return;
-            }
-            //To World Space
-            localPosition = gravitySystem.PointToWorld(time, localPosition);
-            //To New System Space
-            localPosition = system.PointToSystem(time, localPosition);
-            gravitySystem = system;
+
+            gravitySystem = newSystem;
         }
     }
 

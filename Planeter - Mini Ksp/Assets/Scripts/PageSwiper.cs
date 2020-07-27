@@ -48,6 +48,9 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void OnDrag(PointerEventData data)
     {
+        Vector2 position = Camera.main.ScreenToWorldPoint(data.position);
+        Vector2 pressPosition = Camera.main.ScreenToWorldPoint(data.pressPosition);
+        Debug.DrawLine(position, pressPosition);
         if (!isInteractable)
         {
             isDragging = false;
@@ -60,6 +63,7 @@ public class PageSwiper : MonoBehaviour, IDragHandler, IEndDragHandler
     }
     public void OnEndDrag(PointerEventData data)
     {
+
         float percentage = (data.pressPosition.x - data.position.x) / Screen.width;
         if (Mathf.Abs(percentage) >= percentThreshold)
         {
