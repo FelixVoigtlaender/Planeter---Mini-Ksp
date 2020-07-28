@@ -313,6 +313,11 @@ public class GravitySystem : PointMass
         {
             //Gizmos.DrawLine(transform.position, child.position);
         }
+
+        if (transform.parent)
+        {
+            Gizmos.DrawWireSphere(transform.parent.position, Vector2.Distance(transform.position, transform.parent.position) );
+        }
     }
 
     private void OnDrawGizmosSelected()
