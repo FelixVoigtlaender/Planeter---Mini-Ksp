@@ -117,6 +117,8 @@ public class DynamicBody : MonoBehaviour
         nextPrediction.time += deltaTime;
         nextPrediction.localVelocity += nextPrediction.localGravity * deltaTime;
         nextPrediction.localPosition += nextPrediction.localVelocity * deltaTime;
+        
+        //TODO Collision
 
         nextPrediction = nextPrediction.gravitySystem.DynamicPrediction(nextPrediction, mass);
 
@@ -151,5 +153,15 @@ public class DynamicBody : MonoBehaviour
         Gizmos.DrawRay(transform.position, predictions[currentIndex].localVelocity);
         Gizmos.color = Color.yellow;
         Gizmos.DrawRay(transform.position, predictions[currentIndex].localGravity);
+    }
+
+    public OrbitMath.OrbitPrediction GetCurrentPrediction()
+    {
+        return predictions[currentIndex];
+    }
+
+    public OrbitMath.OrbitPrediction GetLastPrediction()
+    {
+        return predictions[maxIndex];
     }
 }

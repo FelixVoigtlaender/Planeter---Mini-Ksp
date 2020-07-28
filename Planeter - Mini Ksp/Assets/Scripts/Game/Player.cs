@@ -5,10 +5,17 @@ using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour
 {
-
+    public static Player instance;
     DynamicBody dynamicBody;
 
     public float deltaV = 1;
+
+    Vector2 relativeVelocity;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -41,4 +48,8 @@ public class Player : MonoBehaviour
         Time.timeScale = 0.5f;
     }
 
+    public GravitySystem GetCurrentSystem()
+    {
+        return dynamicBody.GetCurrentPrediction().gravitySystem;
+    }
 }
