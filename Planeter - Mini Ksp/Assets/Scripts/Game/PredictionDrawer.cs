@@ -51,7 +51,8 @@ public class PredictionDrawer : MonoBehaviour
                 }
             }
             // No entry Prediction Found -> Thus switched System
-            if (entryPrediction == null)
+            if (entryPrediction == null && curPrediction.gravitySystem.parentSystem == prevPrediction.gravitySystem || entryPredictions.Count == 0)
+            //if (entryPrediction == null)
             {
                 entryPrediction = curPrediction;
                 entryPredictions.Add(entryPrediction);
@@ -60,6 +61,7 @@ public class PredictionDrawer : MonoBehaviour
 
             if(curPrediction.gravitySystem != prevPrediction.gravitySystem && switches<maxSwitches)
             {
+                lineObjects[switches].gameObject.SetActive(true);
                 lineObjects[switches].positionCount = currentPath.Count;
                 lineObjects[switches].SetPositions(currentPath.ToArray());
                 lineObjects[switches].endColor = prevPrediction.gravitySystem.renderer.color;
@@ -76,10 +78,17 @@ public class PredictionDrawer : MonoBehaviour
         }
         if(currentPath.Count > 0 && switches < maxSwitches)
         {
+
+            lineObjects[switches].gameObject.SetActive(true);
             lineObjects[switches].positionCount = currentPath.Count;
             lineObjects[switches].SetPositions(currentPath.ToArray());
-            lineObjects[switches].endColor = entryPredictions[entryPredictions.Count - 1].gravitySystem.renderer.color;
+            lineObjects[switches].endColor = predictions[maxI].gravitySystem.renderer.color;
             lineObjects[switches].startColor = lineObjects[switches].endColor;
+            switches++;
+        }
+        for (int i = switches; i < lineObjects.Length; i++)
+        {
+            lineObjects[i].gameObject.SetActive(false);
         }
     }
 
@@ -90,6 +99,7 @@ public class PredictionDrawer : MonoBehaviour
             return curPrediciton.localPosition;
         }
 
+        //if (entryPrediction == null && curPrediction.gravitySystem.parentSystem == prevPrediction.gravitySystem || entryPredictions.Count == 0)
         foreach (OrbitMath.OrbitPrediction entryPred in entryPredictions)
         {
             if (curPrediciton.gravitySystem == entryPred.gravitySystem)

@@ -25,7 +25,7 @@ public class GravitySystem : PointMass
             sunSystem = this;
     }
 
-    private void Start()
+    public void Start()
     {
         //Orbit Prediction Setup
         localStartPosition = transform.localPosition;

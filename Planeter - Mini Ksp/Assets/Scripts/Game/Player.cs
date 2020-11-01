@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class Player : MonoBehaviour
 {
     public static Player instance;
-    DynamicBody dynamicBody;
+    public DynamicBody dynamicBody;
 
     public float deltaV = 1;
 
@@ -52,4 +52,5 @@ public class Player : MonoBehaviour
     {
         return dynamicBody.GetCurrentPrediction().gravitySystem;
     }
+
 }

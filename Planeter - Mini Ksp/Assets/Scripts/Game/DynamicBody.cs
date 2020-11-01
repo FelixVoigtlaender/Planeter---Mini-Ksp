@@ -151,14 +151,25 @@ public class DynamicBody : MonoBehaviour
     public OrbitMath.OrbitPrediction CalculateNextPrediction(OrbitMath.OrbitPrediction currentPrediction)
     {
         OrbitMath.OrbitPrediction nextPrediction = currentPrediction.Clone();
-
-
+        
+        // Collision
+        if (nextPrediction.localPosition.magnitude < nextPrediction.gravitySystem.radius)
+        {
+            bool fliesIntoCenter = Vector2.Dot(nextPrediction.localPosition.normalized, nextPrediction.localVelocity) < 0;
+            if (fliesIntoCenter)
+            {
+                Vector2 position = nextPrediction.localPosition.normalized * nextPrediction.gravitySystem.radius;
+                nextPrediction.localPosition = position;
+                nextPrediction.localVelocity = Vector2.zero;
+            }
+        }
+        // Movement
         float deltaTime = Time.fixedDeltaTime;
         nextPrediction.time += deltaTime;
         nextPrediction.localVelocity += nextPrediction.localGravity * deltaTime;
         nextPrediction.localPosition += nextPrediction.localVelocity * deltaTime;
-        
-        //TODO Collision
+
+
 
         nextPrediction = nextPrediction.gravitySystem.DynamicPrediction(nextPrediction, mass);
 
