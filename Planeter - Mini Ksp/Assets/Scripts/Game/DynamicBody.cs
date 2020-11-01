@@ -40,7 +40,6 @@ public class DynamicBody : MonoBehaviour
         int newPredictionCount = Mathf.Max(100 - currentPredictionCount, 10);
         if (ModuloDistance(currentIndex, maxIndex, predictions.Length) < predictions.Length - newPredictionCount-2)
         {
-            print("TEST");
             predictions = PredictPath(predictions, maxIndex, newPredictionCount);
             maxIndex = (maxIndex + newPredictionCount) % predictions.Length;
         }
@@ -59,7 +58,7 @@ public class DynamicBody : MonoBehaviour
         Grapher.Log(prediction.localGravity.magnitude, prediction.gravitySystem.name, prediction.gravitySystem.renderer.color, prediction.time);
     }
 
-    public void DrawPath(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
+    public void DrawPathA(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
     {
         OrbitMath.OrbitPrediction enterPrediction = predictions[curI];
         Vector2 lastPosition = enterPrediction.gravitySystem.PointToWorld(enterPrediction.time, enterPrediction.localPosition);
@@ -87,6 +86,65 @@ public class DynamicBody : MonoBehaviour
             }
             lastPosition = worldPosition;
         }
+    }
+
+    public void DrawPath(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
+    {
+        // Predictions in the same system are calculated relative to their entry points!
+        List<OrbitMath.OrbitPrediction> entryPredictions = new List<OrbitMath.OrbitPrediction>();
+        Vector2 lastPosition = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
+        for (int steps = 0; steps < ModuloDistance(curI, maxI, predictions.Length) - 1; steps++)
+        {
+            //Get Index
+            int i = (steps + curI) % predictions.Length;
+            int prevI = (i - 1 + predictions.Length) % predictions.Length;
+
+            // Current Prediction
+            OrbitMath.OrbitPrediction curPrediction = predictions[i];
+            // Find Relative entry Predicion
+            OrbitMath.OrbitPrediction entryPrediction = null;
+            foreach (OrbitMath.OrbitPrediction pred in entryPredictions)
+            {
+                if(pred.gravitySystem == curPrediction.gravitySystem)
+                {
+                    entryPrediction = pred;
+                }
+            }
+            // No entry Prediction Found
+            if(entryPrediction == null)
+            {
+                entryPrediction = curPrediction;
+                entryPredictions.Add(curPrediction);
+            }
+
+            // Get Relative Position
+            Vector2 relativePosition = RelativeTimePositionToWorld(curPrediction, entryPredictions);
+            if (predictions[prevI].gravitySystem == predictions[i].gravitySystem)
+            {
+                Debug.DrawLine(lastPosition, relativePosition, curPrediction.gravitySystem.renderer.color);
+            }
+            lastPosition = relativePosition;
+        }
+    }
+
+    public Vector2 RelativeTimePositionToWorld(OrbitMath.OrbitPrediction curPrediciton, List<OrbitMath.OrbitPrediction> entryPredictions)
+    {
+        if(curPrediciton.gravitySystem.parentSystem == null)
+        {
+            return curPrediciton.localPosition;
+        }
+
+        foreach(OrbitMath.OrbitPrediction entryPred in entryPredictions)
+        {
+            if (curPrediciton.gravitySystem == entryPred.gravitySystem)
+            {
+                Vector2 relativePosition = entryPred.gravitySystem.PointToParentSystem(entryPred.time, curPrediciton.localPosition);
+                OrbitMath.OrbitPrediction relativePred = new OrbitMath.OrbitPrediction(curPrediciton.time, relativePosition, curPrediciton.localVelocity);
+                relativePred.gravitySystem = entryPred.gravitySystem.parentSystem;
+                return RelativeTimePositionToWorld(relativePred, entryPredictions);
+            }
+        }
+        return curPrediciton.gravitySystem.PointToWorld(entryPredictions[0].time,curPrediciton.localPosition);
     }
 
     public OrbitMath.OrbitPrediction[] PredictPath(OrbitMath.OrbitPrediction[] predictions, int index, int steps)
