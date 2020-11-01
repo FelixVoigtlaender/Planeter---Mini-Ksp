@@ -9,16 +9,17 @@ public class SolarBody : MonoBehaviour
 
     public void Start()
     {
-        mass = CalculateMass();
+        SetUp();
     }
 
-    public float CalculateMass()
+    public void SetUp()
     {
-        //A = π r2
-
         float radius = transform.lossyScale.x / 2;
+        mass = CalculateMass(radius, massScale);
+    }
+    public static float CalculateMass(float radius, float massScale)
+    {
         float area = Mathf.PI * Mathf.Pow(radius, 2);
-
         float mass = area * massScale;
         return mass;
     }

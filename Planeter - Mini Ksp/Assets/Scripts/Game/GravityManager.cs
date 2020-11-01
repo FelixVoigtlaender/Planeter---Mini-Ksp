@@ -26,25 +26,18 @@ public class GravityManager : MonoBehaviour
         {
             if (body == exlcude)
                 continue;
-            if (((Vector2)body.transform.position - position).magnitude < 0.1)
+            if (((Vector2)body.transform.position - position).magnitude < 1)
                 continue;
 
 
             count++;
-            gravityVector += CalculateGravityVector(position, body.transform.position, mass, body.mass);
+            gravityVector += OrbitMath.GravityForce(position, body.transform.position, mass, body.mass);
         }
+        if (count == 0)
+            return Vector2.zero;
+
         gravityVector /= count;
         return gravityVector;
     }
-    public static Vector2 CalculateGravityVector(Vector2 posA, Vector2 posB, float massA, float massB)
-    {
-        // From pos A to pos B
-        Vector2 dif = (posB - posA);
-        float distance = dif.magnitude;
 
-        float gravity = instance.gravityConstant * massB * massA / Mathf.Pow(distance, 2);
-
-        Vector2 gravityVector = dif.normalized * gravity;
-        return gravityVector;
-    }
 }
