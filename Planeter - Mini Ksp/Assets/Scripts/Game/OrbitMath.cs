@@ -110,6 +110,15 @@ public class OrbitMath : MonoBehaviour
         return t0;
     }
 
+    public static int ModuloDistance(int a, int b, int m)
+    {
+        if (a <= b)
+            return b - a;
+        else
+            return (m - a) + b;
+    }
+
+
     [System.Serializable]
     public class OrbitPrediction
     {
@@ -199,6 +208,7 @@ public class OrbitMath : MonoBehaviour
 
             gravitySystem = newSystem;
         }
+
     }
 
 

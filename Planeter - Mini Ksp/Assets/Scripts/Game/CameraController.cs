@@ -66,11 +66,11 @@ public class CameraController : MonoBehaviour
 
         //Position
         middle = currentSystem.transform.position;
-        if (currentSystem == GravitySystem.sunSystem)
-            middle = player.transform.position;
+        //if (currentSystem == GravitySystem.sunSystem)
+          //  middle = player.transform.position;
 
         //Size
-        size = Vector2.one * currentSystem.radiusOfInfluence * 2;
+        size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
         newOSize = ToOrthographicSize(size);
     }
 

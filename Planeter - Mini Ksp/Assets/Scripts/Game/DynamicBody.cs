@@ -16,9 +16,12 @@ public class DynamicBody : MonoBehaviour
     public int maxIndex;
     public int currentIndex;
     public OrbitMath.OrbitPrediction[] predictions;
+    public PredictionDrawer predictionDrawer;
 
     public void Start()
     {
+        predictionDrawer = GetComponent<PredictionDrawer>();
+
         if(startPrediction != null && startPrediction.gravitySystem)
         {
             startPrediction.localPosition = startPrediction.gravitySystem.PointToSystem(0, transform.position);
@@ -58,38 +61,17 @@ public class DynamicBody : MonoBehaviour
         Grapher.Log(prediction.localGravity.magnitude, prediction.gravitySystem.name, prediction.gravitySystem.renderer.color, prediction.time);
     }
 
-    public void DrawPathA(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
-    {
-        OrbitMath.OrbitPrediction enterPrediction = predictions[curI];
-        Vector2 lastPosition = enterPrediction.gravitySystem.PointToWorld(enterPrediction.time, enterPrediction.localPosition);
-        int switches = 0;
-        for (int steps = 0; steps < ModuloDistance(curI, maxI, predictions.Length)-1; steps++)
-        {
-            int i = (steps + curI) % predictions.Length;
-            int prevI = (i - 1 + predictions.Length) % predictions.Length;
-
-            if (predictions[prevI].gravitySystem != predictions[i].gravitySystem)
-            {
-                enterPrediction = predictions[i];
-                switches++;
-
-                if (switches > 1)
-                    break;
-            }
-
-            Vector2 worldPositionL = enterPrediction.gravitySystem.PointToWorld(enterPrediction.time, predictions[i].localPosition);
-            Vector2 worldPositionW = enterPrediction.gravitySystem.PointToWorld(predictions[i].time, predictions[i].localPosition);
-            Vector2 worldPosition = showLocal ? worldPositionL : worldPositionW;
-            if (predictions[prevI].gravitySystem == predictions[i].gravitySystem)
-            {
-                Debug.DrawLine(lastPosition, worldPosition, enterPrediction.gravitySystem.renderer.color);
-            }
-            lastPosition = worldPosition;
-        }
-    }
-
     public void DrawPath(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
     {
+        if (predictionDrawer)
+        {
+            predictionDrawer.DrawPrediction(predictions, curI, maxI);
+            return;
+
+        }
+
+       
+
         // Predictions in the same system are calculated relative to their entry points!
         List<OrbitMath.OrbitPrediction> entryPredictions = new List<OrbitMath.OrbitPrediction>();
         Vector2 lastPosition = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
