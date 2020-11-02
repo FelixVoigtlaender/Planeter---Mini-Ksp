@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class Player : MonoBehaviour
 {
     public static Player instance;
-    DynamicBody dynamicBody;
+    public DynamicBody dynamicBody;
 
     public float deltaV = 1;
 
@@ -24,6 +24,15 @@ public class Player : MonoBehaviour
 
         DragManager.OnDragEnded += OnLaunch;
         DragManager.OnDrag += OnPlanning;
+    }
+
+    public void Update()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            print("SKIP");
+            OTime.time += 1;
+        }
     }
 
 
@@ -52,4 +61,5 @@ public class Player : MonoBehaviour
     {
         return dynamicBody.GetCurrentPrediction().gravitySystem;
     }
+
 }

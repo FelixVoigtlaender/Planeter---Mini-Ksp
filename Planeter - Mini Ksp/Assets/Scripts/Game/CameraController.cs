@@ -39,14 +39,12 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         player = Player.instance;
-        currentSystem = player.GetCurrentSystem();
     }
 
     private void Update()
     {
-
-        currentSystem = player.GetCurrentSystem();
-
+        if (!currentSystem)
+            return;
         //Move to position
         Vector3 focusPosition = middle;
         focusPosition.z = transform.position.z;
@@ -67,10 +65,10 @@ public class CameraController : MonoBehaviour
         //Position
         middle = currentSystem.transform.position;
         if (currentSystem == GravitySystem.sunSystem)
-            middle = player.transform.position;
+          middle = player.transform.position;
 
         //Size
-        size = Vector2.one * currentSystem.radiusOfInfluence * 2;
+        size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
         newOSize = ToOrthographicSize(size);
     }
 
