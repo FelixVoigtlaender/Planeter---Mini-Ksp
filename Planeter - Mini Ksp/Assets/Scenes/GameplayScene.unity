@@ -212,7 +212,7 @@ MonoBehaviour:
   verticalSmoothTime: 0
   offset: {x: 0, y: 0}
   minimumSize: 3
-  maximumSize: 150
+  maximumSize: 10000
   skinWidth: 0.1
   lockSize: 0
   sizeSmoothTime: 0.2

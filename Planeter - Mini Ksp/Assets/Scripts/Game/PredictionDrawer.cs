@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Rendering;
+using UnityEngine.SocialPlatforms;
 
 public class PredictionDrawer : MonoBehaviour
 {
@@ -24,8 +26,18 @@ public class PredictionDrawer : MonoBehaviour
         }
     }
 
-    public void DrawPrediction(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="predictions"></param>
+    /// <param name="curI"></param>
+    /// <param name="maxI"></param>
+    /// <returns>Max Size </returns>
+    public Vector2 DrawPrediction(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
     {
+        Vector2 start = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
+        Vector2 maxSize = Vector2.zero;
+
         // Predictions in the same system are calculated relative to their entry points!
         List<OrbitMath.OrbitPrediction> entryPredictions = new List<OrbitMath.OrbitPrediction>();
         Vector2 lastPosition = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
@@ -58,7 +70,6 @@ public class PredictionDrawer : MonoBehaviour
                 entryPredictions.Add(entryPrediction);
             }
 
-
             if(curPrediction.gravitySystem != prevPrediction.gravitySystem && switches<maxSwitches)
             {
                 subsections[switches].gameObject.SetActive(true);
@@ -70,6 +81,12 @@ public class PredictionDrawer : MonoBehaviour
 
             //Get Relative Position
             Vector2 relativePosition = RelativeTimePositionToWorld(curPrediction, entryPredictions);
+
+            //MaxSize
+            Vector2 dist = relativePosition - start;
+            maxSize.x = Mathf.Abs(dist.x) > maxSize.x ? Mathf.Abs(dist.x) : maxSize.x;
+            maxSize.y = Mathf.Abs(dist.y) > maxSize.y ? Mathf.Abs(dist.y) : maxSize.y;
+
             // add to path
             currentPath.Add(relativePosition);
         }
@@ -83,6 +100,8 @@ public class PredictionDrawer : MonoBehaviour
         {
             subsections[i].gameObject.SetActive(false);
         }
+
+        return maxSize;
     }
 
     public Vector2 RelativeTimePositionToWorld(OrbitMath.OrbitPrediction curPrediciton, List<OrbitMath.OrbitPrediction> entryPredictions)

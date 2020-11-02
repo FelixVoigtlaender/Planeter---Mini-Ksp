@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class DynamicBody : MonoBehaviour
 {
     public float mass = 1;
 
-    public int predictionCount = 1000;
+    public int predictionCount = 2000;
 
     public OrbitMath.OrbitPrediction startPrediction;
 
@@ -17,6 +18,9 @@ public class DynamicBody : MonoBehaviour
     public int currentIndex;
     public OrbitMath.OrbitPrediction[] predictions;
     public PredictionDrawer predictionDrawer;
+
+
+    
 
     public void Start()
     {
@@ -68,7 +72,7 @@ public class DynamicBody : MonoBehaviour
     {
         if (predictionDrawer)
         {
-            predictionDrawer.DrawPrediction(predictions, curI, maxI);
+            Vector2 maxSize = predictionDrawer.DrawPrediction(predictions, curI, maxI);
             return;
 
         }
