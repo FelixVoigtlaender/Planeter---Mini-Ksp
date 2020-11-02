@@ -81,6 +81,19 @@ public class OrbitMath : MonoBehaviour
         return new OrbitPrediction(t,localPosition, localVelocity);
     }
 
+    public static float GetOrbitTime(GravitySystem gravitySystem)
+    {
+        GravitySystem parentSystem = gravitySystem.parentSystem;
+        if (!parentSystem)
+            return 0;
+
+        float q = instance.gravityConstant * parentSystem.GetMass();
+        float a = gravitySystem.localStartPosition.magnitude;
+        float T = 2 * Mathf.PI * Mathf.Sqrt(Mathf.Pow(a, 3) / q);
+
+        return T;
+    }
+
     public static float GetT0(GravitySystem gravitySystem)
     {
         GravitySystem parentSystem = gravitySystem.parentSystem;

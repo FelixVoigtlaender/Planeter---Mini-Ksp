@@ -48,7 +48,10 @@ public class DynamicBody : MonoBehaviour
         }
 
         //
-        currentIndex = (currentIndex + 1) % predictions.Length;
+        //currentIndex = (currentIndex + 1) % predictions.Length;
+
+        int skipSteps = (int)((OTime.time - predictions[currentIndex].time) / OTime.fixedDeltaTime);
+        currentIndex = (currentIndex + skipSteps) % predictions.Length;
         OrbitMath.OrbitPrediction prediction = predictions[currentIndex];
 
         transform.parent = prediction.gravitySystem.transform;
@@ -164,7 +167,7 @@ public class DynamicBody : MonoBehaviour
             }
         }
         // Movement
-        float deltaTime = Time.fixedDeltaTime;
+        float deltaTime = OTime.fixedDeltaTime;
         nextPrediction.time += deltaTime;
         nextPrediction.localVelocity += nextPrediction.localGravity * deltaTime;
         nextPrediction.localPosition += nextPrediction.localVelocity * deltaTime;

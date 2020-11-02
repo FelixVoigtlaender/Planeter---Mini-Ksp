@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEditor;
+using System.Linq;
 
 public class GravitySystem : PointMass
 {
@@ -10,6 +11,7 @@ public class GravitySystem : PointMass
     [Header("My Mass")]
     public float radiusOfInfluence = 0;
     public GravitySystem parentSystem;
+    public SpriteRenderer sphereOfInfluence;
 
     public Vector2 localStartPosition;
     public float t0 = 0;
@@ -24,6 +26,7 @@ public class GravitySystem : PointMass
         else
             sunSystem = this;
     }
+
 
     public void Start()
     {
@@ -40,12 +43,16 @@ public class GravitySystem : PointMass
                 systems.Add(system);
         }
         childSystems = systems.ToArray();
+
+
+        //Draw Orbit
+        CheckOrbit();
     }
 
 
     public void FixedUpdate()
     {
-        OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(Time.time, this);
+        OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(OTime.time, this);
         transform.localPosition = prediction.localPosition;
     }
 
@@ -124,8 +131,6 @@ public class GravitySystem : PointMass
             //gravityVector += systemVec;
         }
 
-        
-
         return gravityVector;
     }
 
@@ -199,7 +204,17 @@ public class GravitySystem : PointMass
         {
             float distToParentSytem = ((Vector2)parentSystem.transform.position - (Vector2)transform.position).magnitude;
             radiusOfInfluence = OrbitMath.CircleOfInfluence(distToParentSytem, GetMass(), parentSystem.GetMass());
-            
+
+            if (!sphereOfInfluence)
+            {
+                sphereOfInfluence =  Instantiate(bodyPrefab, transform).GetComponent<SpriteRenderer>();
+            }
+            sphereOfInfluence.transform.localScale = Vector3.one * 2 * radiusOfInfluence;
+            sphereOfInfluence.transform.localPosition = Vector3.zero;
+            Color color = renderer.color;
+            color.a = 0.1f;
+            sphereOfInfluence.color = color;
+
         }
         else
         {
@@ -237,6 +252,40 @@ public class GravitySystem : PointMass
                 transform.SetParent(parentSystem.transform.parent);
             }
         }
+
+    }
+
+    public void CheckOrbit()
+    {
+        // Only Planets
+        if (!GetParentSystem())
+            return;
+        if (GetParentSystem().GetParentSystem())
+            return;
+
+        //Linerenderer
+        LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        if (!lineRenderer)
+            return;
+
+        //Prediction
+        int count = 500;
+        float orbitTime = OrbitMath.GetOrbitTime(this);
+        float timeSteps = orbitTime / (count-1);
+        print(timeSteps);
+        Vector3[] path = new Vector3[count];
+        for (int i = 0; i < path.Length; i++)
+        {
+            path[i] = OrbitMath.GetStaticOrbitPrediction(i * timeSteps, this).localPosition;
+        }
+
+        //Linerenderer Setup
+        lineRenderer.positionCount = path.Length;
+        lineRenderer.SetPositions(path);
+        Color color = renderer.color;
+        color.a = 0.1f;
+        lineRenderer.endColor = lineRenderer.startColor = color;
+
     }
 
     public void AddSystem(GravitySystem system)

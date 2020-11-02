@@ -26,6 +26,15 @@ public class Player : MonoBehaviour
         DragManager.OnDrag += OnPlanning;
     }
 
+    public void Update()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            print("SKIP");
+            OTime.time += 1;
+        }
+    }
+
 
     public void OnLaunch(DragManager.Drag drag)
     {

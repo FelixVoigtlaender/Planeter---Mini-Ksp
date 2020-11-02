@@ -5,8 +5,8 @@ using UnityEngine.Rendering;
 
 public class PredictionDrawer : MonoBehaviour
 {
-    public GameObject linePrefab;
-    public LineRenderer[] lineObjects;
+    public GameObject subsectionPrefab;
+    public PathSubsection[] subsections;
     public int maxSwitches = 3;
 
     private void Start()
@@ -16,11 +16,11 @@ public class PredictionDrawer : MonoBehaviour
 
     void CreateLineObjects()
     {
-        lineObjects = new LineRenderer[maxSwitches];
-        for (int i = 0; i < lineObjects.Length; i++)
+        subsections = new PathSubsection[maxSwitches];
+        for (int i = 0; i < subsections.Length; i++)
         {
-            GameObject lineObject = Instantiate(linePrefab);
-            lineObjects[i] = lineObject.GetComponent<LineRenderer>();
+            GameObject lineObject = Instantiate(subsectionPrefab);
+            subsections[i] = lineObject.GetComponent<PathSubsection>();
         }
     }
 
@@ -61,11 +61,8 @@ public class PredictionDrawer : MonoBehaviour
 
             if(curPrediction.gravitySystem != prevPrediction.gravitySystem && switches<maxSwitches)
             {
-                lineObjects[switches].gameObject.SetActive(true);
-                lineObjects[switches].positionCount = currentPath.Count;
-                lineObjects[switches].SetPositions(currentPath.ToArray());
-                lineObjects[switches].endColor = prevPrediction.gravitySystem.renderer.color;
-                lineObjects[switches].startColor = lineObjects[switches].endColor;
+                subsections[switches].gameObject.SetActive(true);
+                subsections[switches].SetUp(prevPrediction.gravitySystem, currentPath);
                 currentPath = new List<Vector3>();
                 switches++;
             }
@@ -78,17 +75,13 @@ public class PredictionDrawer : MonoBehaviour
         }
         if(currentPath.Count > 0 && switches < maxSwitches)
         {
-
-            lineObjects[switches].gameObject.SetActive(true);
-            lineObjects[switches].positionCount = currentPath.Count;
-            lineObjects[switches].SetPositions(currentPath.ToArray());
-            lineObjects[switches].endColor = predictions[maxI].gravitySystem.renderer.color;
-            lineObjects[switches].startColor = lineObjects[switches].endColor;
+            subsections[switches].gameObject.SetActive(true);
+            subsections[switches].SetUp(predictions[maxI].gravitySystem, currentPath);
             switches++;
         }
-        for (int i = switches; i < lineObjects.Length; i++)
+        for (int i = switches; i < subsections.Length; i++)
         {
-            lineObjects[i].gameObject.SetActive(false);
+            subsections[i].gameObject.SetActive(false);
         }
     }
 
