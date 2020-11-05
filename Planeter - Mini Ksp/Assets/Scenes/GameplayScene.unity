@@ -214,8 +214,9 @@ MonoBehaviour:
   minimumSize: 3
   maximumSize: 10000
   skinWidth: 0.1
+  size: {x: 0, y: 0}
   lockSize: 0
-  sizeSmoothTime: 0.2
+  sizeSmoothTime: 0.5
 --- !u!1 &21141942
 GameObject:
   m_ObjectHideFlags: 0
@@ -4949,6 +4950,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1845732252}
+  - component: {fileID: 1845732258}
   - component: {fileID: 1845732253}
   - component: {fileID: 1845732255}
   - component: {fileID: 1845732254}
@@ -5037,6 +5039,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 344805c231df1cd42a63ed9f270f7096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1845732258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845732251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3af681cc9ac2d144bb36e6563395b128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1851343757
@@ -6527,6 +6541,9 @@ MonoBehaviour:
     type: 3}
   subsections: []
   maxSwitches: 3
+  min: {x: 0, y: 0}
+  max: {x: 0, y: 0}
+  systemCount: 0
 --- !u!1 &2129403793
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,6 +38,10 @@ public class Player : MonoBehaviour
 
     public void OnLaunch(DragManager.Drag drag)
     {
+        if (!GameManager.isGameActive)
+            return;
+
+
         Vector2 dragDif = drag.localStart - drag.localEnd;
         Vector2 dragDir = dragDif.normalized;
 
@@ -49,6 +53,9 @@ public class Player : MonoBehaviour
 
     public void OnPlanning(DragManager.Drag drag)
     {
+        if (!GameManager.isGameActive)
+            return;
+
         Vector2 dragDif = drag.localStart - drag.localEnd;
         Vector2 dragDir = dragDif.normalized;
 

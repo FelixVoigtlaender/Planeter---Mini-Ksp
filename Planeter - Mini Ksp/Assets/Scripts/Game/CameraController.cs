@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -23,7 +24,7 @@ public class CameraController : MonoBehaviour
     public float skinWidth = 1;
     float newOSize;
     float smoothVelocitySize;
-    Vector2 size;
+    public Vector2 size;
 
     public bool lockSize;
     public float sizeSmoothTime;
@@ -67,9 +68,31 @@ public class CameraController : MonoBehaviour
 
         //Size
         size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
-        if (!currentSystem.parentSystem)
+        PredictionDrawer predictionDrawer = player.dynamicBody.predictionDrawer;
+        if(predictionDrawer.systemCount <= 1 || true)
         {
-            size = Vector2.one * player.transform.position.magnitude * 2 * 1.2f;
+            middle = currentSystem.transform.position;
+            size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
+            if (!currentSystem.parentSystem)
+            {
+                //print("SUN");
+                GravitySystem furtherSystem = currentSystem.GetFurtherSystem(player.transform.localPosition);
+                if (furtherSystem)
+                {
+
+                    //print("SUNNY: " + furtherSystem.name);
+                    size = Vector2.one * furtherSystem.localStartPosition.magnitude * 2 * 1.2f;
+                }
+            }
+            else
+            {
+                //print("One System");
+            }
+        }
+        else if(predictionDrawer.systemCount > 1){
+            //print("TRANSFER");
+            //middle = (predictionDrawer.min + predictionDrawer.max) / 2;
+            //size = (predictionDrawer.max - predictionDrawer.min) * 1.2f;
         }
 
         newOSize = ToOrthographicSize(size);

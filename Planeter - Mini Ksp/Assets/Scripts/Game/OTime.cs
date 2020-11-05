@@ -10,6 +10,8 @@ public class OTime : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!GameManager.isGameActive)
+            return;
         time += fixedDeltaTime * timeScale;
     }
 }

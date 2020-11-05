@@ -72,7 +72,7 @@ public class DynamicBody : MonoBehaviour
     {
         if (predictionDrawer)
         {
-            Vector2 maxSize = predictionDrawer.DrawPrediction(predictions, curI, maxI);
+            predictionDrawer.DrawPrediction(predictions, curI, maxI);
             return;
 
         }

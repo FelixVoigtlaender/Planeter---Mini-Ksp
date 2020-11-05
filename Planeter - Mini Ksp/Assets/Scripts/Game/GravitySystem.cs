@@ -302,6 +302,30 @@ public class GravitySystem : PointMass
     }
 
 
+    public GravitySystem GetFurtherSystem(Vector2 localPosition)
+    {
+        float distance = localPosition.magnitude;
+        GravitySystem furtherSystem = null;
+        foreach(GravitySystem cs in childSystems)
+        {
+            float csDistance = cs.localStartPosition.magnitude;
+            if (!furtherSystem)
+            {
+                if (csDistance > distance)
+                {
+                    furtherSystem = cs;
+                }
+                continue;
+            }
+
+
+            Debug.DrawLine(furtherSystem.localStartPosition, cs.localStartPosition);
+            if (csDistance > distance && csDistance < furtherSystem.localStartPosition.magnitude)
+                furtherSystem = cs;
+        }
+        return furtherSystem;
+    }
+
     public GravitySystem GetParentSystem()
     {
         if (!transform.parent)

@@ -11,6 +11,9 @@ public class PathSubsection : MonoBehaviour
     public SpriteRenderer exitPoint;
     public float pointSizePx = 20;
 
+    public Vector2 min;
+    public Vector2 max;
+
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -27,6 +30,8 @@ public class PathSubsection : MonoBehaviour
         lineRenderer.positionCount = path.Count;
         lineRenderer.SetPositions(path.ToArray());
         lineRenderer.startColor = lineRenderer.endColor = gravitySystem.renderer.color;
+
+
 
         // EntryPoint
         entryPoint.transform.position = path[0];
