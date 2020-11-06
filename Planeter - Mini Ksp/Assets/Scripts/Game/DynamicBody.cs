@@ -20,13 +20,35 @@ public class DynamicBody : MonoBehaviour
     public PredictionDrawer predictionDrawer;
 
 
+    Transform startParent;
+    Vector2 startPosition;
     
 
-    public void Start()
+    public void Awake()
     {
+        startParent = transform.parent;
+        startPosition = transform.position;
+
+        Setup();
+
+        GameManager.OnGameEnd += Reset;
+    }
+
+    public void Reset()
+    {
+        transform.parent = startParent;
+        transform.position = startPosition;
+
+        Setup();
+    }
+
+    public void Setup()
+    {
+        maxIndex = currentIndex = 0;
+
         predictionDrawer = GetComponent<PredictionDrawer>();
 
-        if(startPrediction != null && startPrediction.gravitySystem)
+        if (startPrediction != null && startPrediction.gravitySystem)
         {
             startPrediction.localPosition = startPrediction.gravitySystem.PointToSystem(0, transform.position);
         }
@@ -42,6 +64,8 @@ public class DynamicBody : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (!GameManager.isGameActive)
+            return;
         //Predict path
         int currentPredictionCount = ModuloDistance(currentIndex, maxIndex, predictions.Length);
         int newPredictionCount = Mathf.Max(100 - currentPredictionCount, 10);

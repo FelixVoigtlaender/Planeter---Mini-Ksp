@@ -62,6 +62,8 @@ public class CameraController : MonoBehaviour
     public void FixedUpdate()
     {
         currentSystem = player.GetCurrentSystem();
+        if (!currentSystem)
+            return;
 
         //Position
         middle = currentSystem.transform.position;

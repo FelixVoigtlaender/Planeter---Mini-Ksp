@@ -11,33 +11,39 @@ public class ContentCopy : MonoBehaviour
     public void Start()
     {
         myReorderableList = GetComponent<ReorderableList>();
-        myReorderableList.OnElementAdded.AddListener(ContentChanged);
-        myReorderableList.OnElementRemoved.AddListener(ContentChanged);
-        myReorderableList.OnElementGrabbed.AddListener(ContentChanged);
-        myReorderableList.OnElementDropped.AddListener(ContentChanged);
     }
 
-    public void ContentChanged(ReorderableList.ReorderableListEventStruct eventStruct)
+    public void OnElementAdded(ReorderableList.ReorderableListEventStruct eventStruct)
     {
-        print("CHANGED");
         ClearContent();
         FillContent();
     }
+    public void OnElementRemoved(ReorderableList.ReorderableListEventStruct eventStruct)
+    {
+        ClearContent();
+        FillContent(eventStruct.SourceObject);
+    }
+
     public void ClearContent()
     {
         RectTransform content = reorderableList.ContentLayout.GetComponent<RectTransform>();
         foreach (Transform child in content.transform)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
     }
-    public void FillContent()
+    public void FillContent(GameObject except = null)
     {
         RectTransform myContent = myReorderableList.ContentLayout.GetComponent<RectTransform>();
         RectTransform content = reorderableList.ContentLayout.GetComponent<RectTransform>();
         foreach (Transform child in myContent.transform)
         {
+            if (child.gameObject == except)
+                continue;
+            if (child.gameObject.name.Contains("Fake"))
+                continue;
             Instantiate(child, content);
         }
     }
+
 }
