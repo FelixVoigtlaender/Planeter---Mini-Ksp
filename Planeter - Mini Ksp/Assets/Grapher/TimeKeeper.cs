@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+#if UNITY_EDITOR
+using System;
 using UnityEditor;
 
 namespace NWH
@@ -48,3 +50,4 @@ namespace NWH
 
     }
 }
+#endif

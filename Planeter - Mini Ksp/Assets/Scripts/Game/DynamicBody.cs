@@ -88,8 +88,10 @@ public class DynamicBody : MonoBehaviour
         DrawPath(predictions, currentIndex, maxIndex);
 
 
+#if UNITY_EDITOR
         Grapher.Log(prediction.localGravity.magnitude, "Gravity", prediction.time);
         Grapher.Log(prediction.localGravity.magnitude, prediction.gravitySystem.name, prediction.gravitySystem.renderer.color, prediction.time);
+#endif
     }
 
     public void DrawPath(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)

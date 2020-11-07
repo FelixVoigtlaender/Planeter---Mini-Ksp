@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿
+#if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 using NWH;
+using UnityEditor.PackageManager.Requests;
 
 // Replay
 public partial class Grapher : EditorWindow
@@ -103,3 +106,4 @@ public partial class Grapher : EditorWindow
         }
     }
 }
+#endif
