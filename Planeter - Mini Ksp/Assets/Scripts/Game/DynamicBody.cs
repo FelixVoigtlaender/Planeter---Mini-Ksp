@@ -18,6 +18,7 @@ public class DynamicBody : MonoBehaviour
     public int currentIndex;
     public OrbitMath.OrbitPrediction[] predictions;
     public PredictionDrawer predictionDrawer;
+    public PredictionDrawer pretendPredictionDrawer;
 
 
     Transform startParent;
@@ -45,8 +46,6 @@ public class DynamicBody : MonoBehaviour
     public void Setup()
     {
         maxIndex = currentIndex = 0;
-
-        predictionDrawer = GetComponent<PredictionDrawer>();
 
         if (startPrediction != null && startPrediction.gravitySystem)
         {
@@ -100,45 +99,15 @@ public class DynamicBody : MonoBehaviour
         {
             predictionDrawer.DrawPrediction(predictions, curI, maxI);
             return;
-
         }
+    }
 
-       
-
-        // Predictions in the same system are calculated relative to their entry points!
-        List<OrbitMath.OrbitPrediction> entryPredictions = new List<OrbitMath.OrbitPrediction>();
-        Vector2 lastPosition = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
-        for (int steps = 0; steps < ModuloDistance(curI, maxI, predictions.Length) - 1; steps++)
+    public void PretendDrawPath(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
+    {
+        if (pretendPredictionDrawer)
         {
-            //Get Index
-            int i = (steps + curI) % predictions.Length;
-            int prevI = (i - 1 + predictions.Length) % predictions.Length;
-
-            // Current Prediction
-            OrbitMath.OrbitPrediction curPrediction = predictions[i];
-            // Find Relative entry Predicion
-            OrbitMath.OrbitPrediction entryPrediction = null;
-            foreach (OrbitMath.OrbitPrediction pred in entryPredictions)
-            {
-                if(pred.gravitySystem == curPrediction.gravitySystem)
-                {
-                    entryPrediction = pred;
-                }
-            }
-            // No entry Prediction Found
-            if(entryPrediction == null)
-            {
-                entryPrediction = curPrediction;
-                entryPredictions.Add(curPrediction);
-            }
-
-            // Get Relative Position
-            Vector2 relativePosition = RelativeTimePositionToWorld(curPrediction, entryPredictions);
-            if (predictions[prevI].gravitySystem == predictions[i].gravitySystem)
-            {
-                Debug.DrawLine(lastPosition, relativePosition, curPrediction.gravitySystem.renderer.color);
-            }
-            lastPosition = relativePosition;
+            pretendPredictionDrawer.DrawPrediction(predictions, curI, maxI);
+            return;
         }
     }
 
@@ -213,6 +182,9 @@ public class DynamicBody : MonoBehaviour
     {
         predictions[currentIndex].localVelocity += velocity;
         maxIndex = currentIndex;
+
+        if (pretendPredictionDrawer)
+            pretendPredictionDrawer.Hide();
     }
 
     public void PretendAddVelocity(Vector2 velocity)
@@ -222,7 +194,7 @@ public class DynamicBody : MonoBehaviour
         path[0].localVelocity += velocity;
 
         path = PredictPath(path, 0, 499);
-        DrawPath(path, 0, 499);
+        PretendDrawPath(path, 0, 499);
     }
 
     private void OnDrawGizmos()

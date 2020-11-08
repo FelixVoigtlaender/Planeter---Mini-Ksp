@@ -63,7 +63,6 @@ public class PredictionDrawer : MonoBehaviour
             }
             // No entry Prediction Found -> Thus switched System
             if (entryPrediction == null && curPrediction.gravitySystem.parentSystem == prevPrediction.gravitySystem || entryPredictions.Count == 0)
-            //if (entryPrediction == null)
             {
                 entryPrediction = curPrediction;
                 entryPredictions.Add(entryPrediction);
@@ -99,6 +98,14 @@ public class PredictionDrawer : MonoBehaviour
         }
         // Deactivate unused subsections
         for (int i = switches; i < subsections.Length; i++)
+        {
+            subsections[i].gameObject.SetActive(false);
+        }
+    }
+
+    public void Hide()
+    {
+        for (int i = 0; i < subsections.Length; i++)
         {
             subsections[i].gameObject.SetActive(false);
         }

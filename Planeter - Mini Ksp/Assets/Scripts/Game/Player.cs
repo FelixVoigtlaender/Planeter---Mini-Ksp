@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public DynamicBody dynamicBody;
     public StageManager stageManager;
     LineRenderer lineRenderer;
+    public Joystick joystick;
 
     public float deltaV = 1;
 
@@ -26,28 +27,19 @@ public class Player : MonoBehaviour
     void Start()
     {
         dynamicBody = GetComponent<DynamicBody>();
-
-        DragManager.OnDragEnded += OnLaunch;
-        DragManager.OnDrag += OnPlanning;
     }
 
     public void Update()
     {
-        if (Input.GetMouseButton(1))
-        {
-            print("SKIP");
-            OTime.time += 1;
-        }
+        OnPlanning();
     }
 
 
-    public void OnLaunch(DragManager.Drag drag)
+    public void OnLaunch()
     {
         if (!GameManager.isGameActive)
             return;
         if (stageManager.IsStagesEmpty())
-            return;
-        if (drag.GetDifference().magnitude < 0.1f)
             return;
 
         Stage currentStage = stageManager.GetCurrentStage();
@@ -55,42 +47,44 @@ public class Player : MonoBehaviour
         if (!currentStage)
             return;
 
-        Vector2 dir = drag.GetDirection();
+        Vector2 dir = -joystick.Direction;
+        print(dir);
+
         Vector2 thrust = currentStage.Ignite(dir);
 
         dynamicBody.AddVelocity(thrust);
-
 
         //Line Renderer
         lineRenderer.enabled = false;
     }
 
-    public void OnPlanning(DragManager.Drag drag)
+    public void OnPlanning()
     {
         if (!GameManager.isGameActive)
             return;
         if (stageManager.IsStagesEmpty())
+        {
+            if (dynamicBody.pretendPredictionDrawer)
+            {
+                dynamicBody.pretendPredictionDrawer.Hide();
+            }
             return;
+        }
 
         Stage currentStage = stageManager.GetCurrentStage();
 
         if (!currentStage)
             return;
 
-        Vector2 dir = drag.GetDirection();
+        Vector2 dir = -joystick.Direction;
         Vector2 thrust = currentStage.PretendIgnite(dir);
         //thrust = dir * deltaV;
 
-        print("PLANNING: " + dir + "   " + thrust);
 
         dynamicBody.PretendAddVelocity(thrust);
 
 
         //Line Renderer
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, drag.GetStart());
-        lineRenderer.SetPosition(1, drag.GetEnd());
-        lineRenderer.enabled = true;
     }
 
     public GravitySystem GetCurrentSystem()
