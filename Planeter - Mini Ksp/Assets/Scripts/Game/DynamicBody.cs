@@ -47,6 +47,14 @@ public class DynamicBody : MonoBehaviour
     {
         maxIndex = currentIndex = 0;
 
+
+        // Init StartPrediction
+        //startPrediction = startPrediction != null ? startPrediction : new OrbitMath.OrbitPrediction();
+
+        // Setup StartPrediction
+        //startPrediction.localPosition = GravitySystem.sunSystem.PointToSystem(OTime.time, transform.position);
+        //startPrediction.gravitySystem = GravitySystem.sunSystem.PointToGravitySystem(OTime.time, transform.position);
+        
         if (startPrediction != null && startPrediction.gravitySystem)
         {
             startPrediction.localPosition = startPrediction.gravitySystem.PointToSystem(0, transform.position);

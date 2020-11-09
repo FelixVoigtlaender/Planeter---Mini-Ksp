@@ -36,14 +36,13 @@ public class GravitySystem : PointMass
 
         //Collect ChildSystems
         List<GravitySystem> systems = new List<GravitySystem>();
-        foreach(Transform child in transform)
+        foreach (Transform child in transform)
         {
             GravitySystem system = child.GetComponent<GravitySystem>();
             if (system)
                 systems.Add(system);
         }
         childSystems = systems.ToArray();
-
 
         //Draw Orbit
         CheckOrbit();
@@ -81,10 +80,10 @@ public class GravitySystem : PointMass
     }
 
     // LocalPosition to parent system
-    public bool IsInSystem(float time, Vector2 localPosition)
+    public bool IsInSystem(float time, Vector2 parentLocalPosition)
     {
         Vector2 myLocalPosition = GetPrediction(time).localPosition;
-        float distance = (localPosition - myLocalPosition).magnitude;
+        float distance = (parentLocalPosition - myLocalPosition).magnitude;
         return distance < radiusOfInfluence;
     }
 
@@ -159,6 +158,18 @@ public class GravitySystem : PointMass
             return parentSystem.PointToSystem(time, position - prediction.localPosition);
         else
             return position;
+    }
+
+    public GravitySystem PointToGravitySystem(float time, Vector2 position)
+    {
+        foreach (GravitySystem childSystem in childSystems)
+        {
+            if (childSystem.IsInSystem(time, position))
+            {
+                return childSystem.PointToGravitySystem(time,childSystem.PointToSystem(time, position));
+            }
+        }
+        return this;
     }
     public Vector2 PointToWorld(float time, Vector2 localPosition)
     {

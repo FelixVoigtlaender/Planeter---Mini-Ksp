@@ -9,7 +9,6 @@ public class Player : MonoBehaviour
     public static Player instance;
     public DynamicBody dynamicBody;
     public StageManager stageManager;
-    LineRenderer lineRenderer;
     public Joystick joystick;
 
     public float deltaV = 1;
@@ -19,8 +18,6 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         instance = this;
-
-        lineRenderer = GetComponent<LineRenderer>();
     }
 
     // Start is called before the first frame update
@@ -54,8 +51,6 @@ public class Player : MonoBehaviour
 
         dynamicBody.AddVelocity(thrust);
 
-        //Line Renderer
-        lineRenderer.enabled = false;
     }
 
     public void OnPlanning()
