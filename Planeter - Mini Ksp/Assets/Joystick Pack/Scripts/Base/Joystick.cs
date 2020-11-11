@@ -87,6 +87,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         {
             if (magnitude > 1)
                 input = normalised;
+            else if(normalize)
+                input = input.normalized;
         }
         else
             input = Vector2.zero;
@@ -98,11 +100,6 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
             input = new Vector2(input.x, 0f);
         else if (axisOptions == AxisOptions.Vertical)
             input = new Vector2(0f, input.y);
-
-        if (normalize)
-        {
-            input = input.normalized;
-        }
     }
 
     private float SnapFloat(float value, AxisOptions snapAxis)
