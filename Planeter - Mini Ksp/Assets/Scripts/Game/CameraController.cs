@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour
     public float skinWidth = 1;
     float newOSize;
     float smoothVelocitySize;
-    Vector2 size;
+    public Vector2 size;
 
     public bool lockSize;
     public float sizeSmoothTime;
@@ -61,14 +61,41 @@ public class CameraController : MonoBehaviour
     public void FixedUpdate()
     {
         currentSystem = player.GetCurrentSystem();
+        if (!currentSystem)
+            return;
 
         //Position
         middle = currentSystem.transform.position;
-        if (currentSystem == GravitySystem.sunSystem)
-          middle = player.transform.position;
 
         //Size
         size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
+        PredictionDrawer predictionDrawer = player.dynamicBody.predictionDrawer;
+        if(predictionDrawer.systemCount <= 1 || true)
+        {
+            middle = currentSystem.transform.position;
+            size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
+            if (!currentSystem.parentSystem)
+            {
+                //print("SUN");
+                GravitySystem furtherSystem = currentSystem.GetFurtherSystem(player.transform.localPosition);
+                if (furtherSystem)
+                {
+
+                    //print("SUNNY: " + furtherSystem.name);
+                    size = Vector2.one * furtherSystem.localStartPosition.magnitude * 2 * 1.2f;
+                }
+            }
+            else
+            {
+                //print("One System");
+            }
+        }
+        else if(predictionDrawer.systemCount > 1){
+            //print("TRANSFER");
+            //middle = (predictionDrawer.min + predictionDrawer.max) / 2;
+            //size = (predictionDrawer.max - predictionDrawer.min) * 1.2f;
+        }
+
         newOSize = ToOrthographicSize(size);
     }
 

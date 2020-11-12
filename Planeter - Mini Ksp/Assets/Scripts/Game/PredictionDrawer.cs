@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Rendering;
+using UnityEngine.SocialPlatforms;
 
 public class PredictionDrawer : MonoBehaviour
 {
     public GameObject subsectionPrefab;
     public PathSubsection[] subsections;
     public int maxSwitches = 3;
+    public Vector2 min;
+    public Vector2 max;
+    public int systemCount = 0;
+
 
     private void Start()
     {
@@ -23,9 +29,14 @@ public class PredictionDrawer : MonoBehaviour
             subsections[i] = lineObject.GetComponent<PathSubsection>();
         }
     }
-
     public void DrawPrediction(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
     {
+        Vector2 start = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
+
+        max = Vector2.one * float.MinValue;
+        min = Vector2.one * float.MaxValue;
+        systemCount = 1;
+
         // Predictions in the same system are calculated relative to their entry points!
         List<OrbitMath.OrbitPrediction> entryPredictions = new List<OrbitMath.OrbitPrediction>();
         Vector2 lastPosition = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
@@ -52,12 +63,10 @@ public class PredictionDrawer : MonoBehaviour
             }
             // No entry Prediction Found -> Thus switched System
             if (entryPrediction == null && curPrediction.gravitySystem.parentSystem == prevPrediction.gravitySystem || entryPredictions.Count == 0)
-            //if (entryPrediction == null)
             {
                 entryPrediction = curPrediction;
                 entryPredictions.Add(entryPrediction);
             }
-
 
             if(curPrediction.gravitySystem != prevPrediction.gravitySystem && switches<maxSwitches)
             {
@@ -65,21 +74,38 @@ public class PredictionDrawer : MonoBehaviour
                 subsections[switches].SetUp(prevPrediction.gravitySystem, currentPath);
                 currentPath = new List<Vector3>();
                 switches++;
+                systemCount = switches;
             }
 
 
             //Get Relative Position
             Vector2 relativePosition = RelativeTimePositionToWorld(curPrediction, entryPredictions);
+
+            // Min
+            min = Vector2.Min(min, relativePosition);
+            // Max
+            max = Vector2.Max(max, relativePosition);
+
             // add to path
             currentPath.Add(relativePosition);
         }
+        // Draw last subsection
         if(currentPath.Count > 0 && switches < maxSwitches)
         {
             subsections[switches].gameObject.SetActive(true);
             subsections[switches].SetUp(predictions[maxI].gravitySystem, currentPath);
             switches++;
         }
+        // Deactivate unused subsections
         for (int i = switches; i < subsections.Length; i++)
+        {
+            subsections[i].gameObject.SetActive(false);
+        }
+    }
+
+    public void Hide()
+    {
+        for (int i = 0; i < subsections.Length; i++)
         {
             subsections[i].gameObject.SetActive(false);
         }

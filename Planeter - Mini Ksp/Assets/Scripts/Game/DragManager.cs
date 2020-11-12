@@ -87,6 +87,15 @@ public class DragManager : MonoBehaviour
             return Camera.main.ScreenToWorldPoint(localEnd);
         }
 
+        public Vector2 GetDirection()
+        {
+            return GetDifference().normalized;
+        }
+        public Vector2 GetDifference()
+        {
+            return (localStart - localEnd);
+        }
+
         public void DrawDebug(Color color)
         {
 

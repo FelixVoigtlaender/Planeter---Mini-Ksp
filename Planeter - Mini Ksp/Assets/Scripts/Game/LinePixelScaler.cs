@@ -10,6 +10,7 @@ public class LinePixelScaler : MonoBehaviour
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.endWidth = lineRenderer.startWidth = 0f;
     }
     public void Update()
     {

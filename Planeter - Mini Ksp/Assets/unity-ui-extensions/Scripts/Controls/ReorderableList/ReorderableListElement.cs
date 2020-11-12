@@ -58,6 +58,7 @@ namespace UnityEngine.UI.Extensions
                 //Send OnElementRemoved Event
                 if (_reorderableList.OnElementRemoved != null)
                 {
+                    print("ELEMENT REMOVED: " + _reorderableList.name);
                     _reorderableList.OnElementRemoved.Invoke(new ReorderableList.ReorderableListEventStruct
                     {
                         DroppedObject = _draggingObject.gameObject,
@@ -227,7 +228,7 @@ namespace UnityEngine.UI.Extensions
                     _draggingObject.rotation = _currentReorderableListRaycasted.transform.rotation;
                     _draggingObject.SetSiblingIndex(_fakeElement.GetSiblingIndex());
 
-                    _reorderableList.OnElementAdded.Invoke(args);
+                    _currentReorderableListRaycasted.OnElementAdded.Invoke(args);
 
                     if(!isValid) throw new Exception("It's too late to cancel the Transfer! Do so in OnElementDropped!");
 

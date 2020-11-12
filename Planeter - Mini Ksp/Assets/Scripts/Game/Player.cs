@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
     public static Player instance;
     public DynamicBody dynamicBody;
+    public StageManager stageManager;
+    public Joystick joystick;
 
     public float deltaV = 1;
 
@@ -21,40 +24,62 @@ public class Player : MonoBehaviour
     void Start()
     {
         dynamicBody = GetComponent<DynamicBody>();
-
-        DragManager.OnDragEnded += OnLaunch;
-        DragManager.OnDrag += OnPlanning;
     }
 
     public void Update()
     {
-        if (Input.GetMouseButton(1))
+        OnPlanning();
+    }
+
+
+    public void OnLaunch()
+    {
+        if (!GameManager.isGameActive)
+            return;
+        if (stageManager.IsStagesEmpty())
+            return;
+
+        Stage currentStage = stageManager.GetCurrentStage();
+
+        if (!currentStage)
+            return;
+
+        Vector2 dir = -joystick.Direction;
+        print(dir);
+
+        Vector2 thrust = currentStage.Ignite(dir);
+
+        dynamicBody.AddVelocity(thrust);
+
+    }
+
+    public void OnPlanning()
+    {
+        if (!GameManager.isGameActive)
+            return;
+        if (stageManager.IsStagesEmpty())
         {
-            print("SKIP");
-            OTime.time += 1;
+            if (dynamicBody.pretendPredictionDrawer)
+            {
+                dynamicBody.pretendPredictionDrawer.Hide();
+            }
+            return;
         }
-    }
+
+        Stage currentStage = stageManager.GetCurrentStage();
+
+        if (!currentStage)
+            return;
+
+        Vector2 dir = -joystick.Direction;
+        Vector2 thrust = currentStage.PretendIgnite(dir);
+        //thrust = dir * deltaV;
 
 
-    public void OnLaunch(DragManager.Drag drag)
-    {
-        Vector2 dragDif = drag.localStart - drag.localEnd;
-        Vector2 dragDir = dragDif.normalized;
-
-        dynamicBody.AddVelocity(dragDir * deltaV);
+        dynamicBody.PretendAddVelocity(thrust);
 
 
-        Time.timeScale = 1;
-    }
-
-    public void OnPlanning(DragManager.Drag drag)
-    {
-        Vector2 dragDif = drag.localStart - drag.localEnd;
-        Vector2 dragDir = dragDif.normalized;
-
-        dynamicBody.PretendAddVelocity(dragDir * deltaV);
-
-        Time.timeScale = 0.5f;
+        //Line Renderer
     }
 
     public GravitySystem GetCurrentSystem()
