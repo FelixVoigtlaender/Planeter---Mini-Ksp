@@ -140,6 +140,7 @@ public class OrbitMath : MonoBehaviour
         public Vector2 localVelocity;
         public Vector2 localGravity;
         public GravitySystem gravitySystem;
+        public bool isGrounded = false;
 
         public OrbitPrediction(float time,Vector2 localPosition, Vector2 localVelocity)
         {

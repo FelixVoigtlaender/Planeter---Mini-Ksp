@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
 
         Vector2 thrust = currentStage.Ignite(dir);
 
-        dynamicBody.AddVelocity(thrust);
+        dynamicBody.AddRelativeVelocity(thrust);
 
     }
 
@@ -76,7 +76,7 @@ public class Player : MonoBehaviour
         //thrust = dir * deltaV;
 
 
-        dynamicBody.PretendAddVelocity(thrust);
+        dynamicBody.PretendAddRelativeVelocity(thrust);
 
 
         //Line Renderer

@@ -90,7 +90,7 @@ public class DynamicBody : MonoBehaviour
         OrbitMath.OrbitPrediction prediction = predictions[currentIndex];
 
         transform.parent = prediction.gravitySystem.transform;
-        transform.localPosition = prediction.localPosition;
+        transform.localPosition = prediction.gravitySystem.PointToWorld(prediction.time,prediction.localPosition);
 
         DrawPath(predictions, currentIndex, maxIndex);
 
@@ -171,6 +171,7 @@ public class DynamicBody : MonoBehaviour
                 Vector2 position = nextPrediction.localPosition.normalized * nextPrediction.gravitySystem.radius;
                 nextPrediction.localPosition = position;
                 nextPrediction.localVelocity = Vector2.zero;
+                nextPrediction.isGrounded = true;
             }
         }
         // Movement
@@ -185,18 +186,22 @@ public class DynamicBody : MonoBehaviour
 
         return nextPrediction;
     }
-
-    public void AddVelocity(Vector2 velocity)
+    /// <summary>
+    /// Adds veloticity in worldspace
+    /// </summary>
+    /// <param name="deltaVelocity"></param>
+    public void AddVelocity(Vector2 deltaVelocity)
     {
-        predictions[currentIndex].localVelocity += velocity;
+        predictions[currentIndex].localVelocity += deltaVelocity;
         maxIndex = currentIndex;
 
         if (pretendPredictionDrawer)
             pretendPredictionDrawer.Hide();
     }
-
     public void PretendAddVelocity(Vector2 velocity)
     {
+        Debug.DrawRay(transform.position, velocity * 10);
+
         OrbitMath.OrbitPrediction[] path = new OrbitMath.OrbitPrediction[500];
         path[0] = predictions[currentIndex].Clone();
         path[0].localVelocity += velocity;
@@ -204,6 +209,27 @@ public class DynamicBody : MonoBehaviour
         path = PredictPath(path, 0, 499);
         PretendDrawPath(path, 0, 499);
     }
+    /// <summary>
+    /// Adds relative velocity to the current velocity thus that
+    /// y: Parallel to current velocity
+    /// x: Orthogonal to current velocity
+    /// </summary>
+    /// <param name="relativeDelta"></param>
+    public void AddRelativeVelocity(Vector2 relativeDelta)
+    {
+        AddVelocity(RelativeToWorldVelocity(relativeDelta));
+    }
+    public void PretendAddRelativeVelocity(Vector2 relativeDelta)
+    {
+        PretendAddVelocity(RelativeToWorldVelocity(relativeDelta));
+    }
+    public Vector2 RelativeToWorldVelocity(Vector2 relativeDelta)
+    {
+        Vector2 myDir = predictions[currentIndex].isGrounded ? predictions[currentIndex].localPosition : predictions[currentIndex].localVelocity;
+        myDir.Normalize();
+        return myDir * relativeDelta.y  - Vector2.Perpendicular(myDir) * relativeDelta.x;
+    }
+
 
     private void OnDrawGizmos()
     {
