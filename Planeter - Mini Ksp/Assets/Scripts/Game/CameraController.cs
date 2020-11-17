@@ -9,117 +9,106 @@ public class CameraController : MonoBehaviour
 
 
     [Header("Movement")]
-    public bool lockX;
+    public Transform target;
+    public Vector2 targetDelta;
+    public Vector2 targetOffset;
     public float horizontalSmoothTime;
     public float verticalSmoothTime;
-    public Vector2 offset;
-    float smoothVelocityX;
-    float smoothVelocityY;
-    Vector3 middle;
+    Vector2 targetSmoothVel;
 
     [Header("Size")]
-    public float minimumSize = 3;
-    public float maximumSize = 100;
-    public float skinWidth = 1;
-    float newOSize;
+    public float sizeMin = 3;
+    public float sizeMax = 100;
+    public float sizeGoal = 4;
     float smoothVelocitySize;
-    public Vector2 size;
-
-    public bool lockSize;
-    public float sizeSmoothTime;
-    float smoothVelocity0Size;
-
-    Player player;
-    GravitySystem currentSystem;
+    public float sizeSmoothTime = 0.1f;
+    public float zoomScale = 0.1f;
 
     private void Awake()
     {
         instance = this;
     }
-    private void Start()
-    {
-        player = Player.instance;
-    }
 
     private void Update()
     {
-        if (!currentSystem)
-            return;
-        //Move to position
-        Vector3 focusPosition = middle;
-        focusPosition.z = transform.position.z;
-        focusPosition.x = Mathf.SmoothDamp(transform.position.x, focusPosition.x, ref smoothVelocityX, horizontalSmoothTime);
-        focusPosition.x = lockX ? 0 : focusPosition.x;
-        focusPosition.y = Mathf.SmoothDamp(transform.position.y, focusPosition.y, ref smoothVelocityY, verticalSmoothTime);
-        transform.position = (Vector3)focusPosition;
-
-        //Size 
-        float oSize =  Mathf.SmoothDamp(Camera.main.orthographicSize, newOSize, ref smoothVelocitySize, sizeSmoothTime,1000,Time.fixedUnscaledDeltaTime);
-        Camera.main.orthographicSize = Mathf.Clamp(oSize, minimumSize,maximumSize);
+        ManageInput();
+        FollowTarget();
+        FollowSize();
     }
 
-    public void FixedUpdate()
+    void ManageInput()
     {
-        currentSystem = player.GetCurrentSystem();
-        if (!currentSystem)
-            return;
-
-        //Position
-        middle = currentSystem.transform.position;
-
-        //Size
-        size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
-        PredictionDrawer predictionDrawer = player.dynamicBody.predictionDrawer;
-        if(predictionDrawer.systemCount <= 1 || true)
+        if (Input.touchCount >= 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
         {
-            middle = currentSystem.transform.position;
-            size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
-            if (!currentSystem.parentSystem)
-            {
-                //print("SUN");
-                GravitySystem furtherSystem = currentSystem.GetFurtherSystem(player.transform.localPosition);
-                if (furtherSystem)
-                {
+            Touch firstTouch = Input.GetTouch(0);
+            Touch secondTouch = Input.GetTouch(1);
 
-                    //print("SUNNY: " + furtherSystem.name);
-                    size = Vector2.one * furtherSystem.localStartPosition.magnitude * 2 * 1.2f;
-                }
-            }
-            else
-            {
-                //print("One System");
-            }
-        }
-        else if(predictionDrawer.systemCount > 1){
-            //print("TRANSFER");
-            //middle = (predictionDrawer.min + predictionDrawer.max) / 2;
-            //size = (predictionDrawer.max - predictionDrawer.min) * 1.2f;
+            Vector2 firstPrevPos = firstTouch.position - firstTouch.deltaPosition;
+            Vector2 secondPrevPos = secondTouch.position - secondTouch.deltaPosition;
+
+            float touchesPrevPosDif = (firstPrevPos - secondPrevPos).magnitude;
+            float touchesCurPosDif = (firstTouch.position - secondTouch.position).magnitude;
+
+            float zoomDelta = (firstTouch.deltaPosition - secondTouch.deltaPosition).magnitude * zoomScale;
+
+            if (touchesPrevPosDif > touchesCurPosDif)
+                sizeGoal += zoomDelta;
+            if (touchesPrevPosDif < touchesCurPosDif)
+                sizeGoal -= zoomDelta;
         }
 
-        newOSize = ToOrthographicSize(size);
-    }
-
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(transform.position, size);
-    }
-
-    public float ToOrthographicSize(Vector2 size)
-    {
-        float oSize = 0;
-        size = new Vector2(size.x + skinWidth, size.y + skinWidth);
-        size = size * 1;
-
-        if (size.x > size.y * Camera.main.aspect)
+        //Mouse
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
-            size.y = size.x / Camera.main.aspect;
+            sizeGoal -= zoomScale * 100;
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+        {
+            sizeGoal += zoomScale * 100;
         }
 
-        oSize = size.y / 2;
+        sizeGoal = Mathf.Clamp(sizeGoal, sizeMin, sizeMax);
 
-        return oSize;
+    }
+    void FollowTarget()
+    {
+        // Nothing to follow
+        if (!target)
+            return;
+
+        //Decrease Delta
+        targetDelta.x = Mathf.SmoothDamp(targetDelta.x, 0, ref targetSmoothVel.x, horizontalSmoothTime);
+        targetDelta.y = Mathf.SmoothDamp(targetDelta.y, 0, ref targetSmoothVel.y, verticalSmoothTime);
+
+        // Init Position
+        Vector3 position = (Vector2)target.position + targetOffset + targetDelta;
+        position.z = transform.position.z;
+
+        transform.position = position;
+    }
+    void FollowSize()
+    {
+        float oSize = Mathf.SmoothDamp(Camera.main.orthographicSize, sizeGoal, ref smoothVelocitySize, sizeSmoothTime);
+        Camera.main.orthographicSize = Mathf.Clamp(oSize, sizeMin, sizeMax);
+    }
+
+
+    public static void SetTarget(Transform target)
+    {
+        instance.target = target;
+
+        if (!target)
+            return;
+
+        instance.targetDelta = (Vector2)instance.transform.position - ((Vector2)target.position) ;
+    }
+    public static void LockTarget(Transform target)
+    {
+        instance.target = target;
+
+        if (!target)
+            return;
+
+        instance.targetDelta = Vector2.zero;
     }
 }

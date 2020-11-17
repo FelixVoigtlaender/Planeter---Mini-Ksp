@@ -25,12 +25,12 @@ public class DynamicBody : MonoBehaviour
     Vector2 startPosition;
     
 
-    public void Awake()
+    public void Start()
     {
         startParent = transform.parent;
         startPosition = transform.position;
 
-        Setup();
+        Reset();
 
         GameManager.OnGameEnd += Reset;
     }
@@ -49,15 +49,15 @@ public class DynamicBody : MonoBehaviour
 
 
         // Init StartPrediction
-        //startPrediction = startPrediction != null ? startPrediction : new OrbitMath.OrbitPrediction();
+        startPrediction = startPrediction != null ? startPrediction : new OrbitMath.OrbitPrediction();
 
         // Setup StartPrediction
-        //startPrediction.localPosition = GravitySystem.sunSystem.PointToSystem(OTime.time, transform.position);
-        //startPrediction.gravitySystem = GravitySystem.sunSystem.PointToGravitySystem(OTime.time, transform.position);
+        startPrediction.localPosition = GravitySystem.sunSystem.PointToSystem(OTime.time, transform.position);
+        startPrediction.gravitySystem = GravitySystem.sunSystem.PointToGravitySystem(OTime.time, transform.position);
         
         if (startPrediction != null && startPrediction.gravitySystem)
         {
-            startPrediction.localPosition = startPrediction.gravitySystem.PointToSystem(0, transform.position);
+        //    startPrediction.localPosition = startPrediction.gravitySystem.PointToSystem(0, transform.position);
         }
 
         predictions = new OrbitMath.OrbitPrediction[predictionCount];
@@ -84,13 +84,14 @@ public class DynamicBody : MonoBehaviour
 
         //
         //currentIndex = (currentIndex + 1) % predictions.Length;
+        //
 
         int skipSteps = (int)((OTime.time - predictions[currentIndex].time) / OTime.fixedDeltaTime);
         currentIndex = (currentIndex + skipSteps) % predictions.Length;
         OrbitMath.OrbitPrediction prediction = predictions[currentIndex];
 
         transform.parent = prediction.gravitySystem.transform;
-        transform.localPosition = prediction.gravitySystem.PointToWorld(prediction.time,prediction.localPosition);
+        transform.localPosition = prediction.localPosition;
 
         DrawPath(predictions, currentIndex, maxIndex);
 

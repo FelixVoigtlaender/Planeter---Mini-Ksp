@@ -151,6 +151,11 @@ public class GravitySystem : PointMass
     /// <param name="time"> Time for prediction </param>
     /// <param name="position"> WorldSpace position </param>
     /// <returns></returns>
+    /// 
+    public OrbitMath.OrbitPrediction SetupPrediciton(OrbitMath.OrbitPrediction prediction)
+    {
+        return null;
+    }
     public Vector2 PointToSystem(float time, Vector2 position)
     {
         OrbitMath.OrbitPrediction prediction = GetPrediction(time);
