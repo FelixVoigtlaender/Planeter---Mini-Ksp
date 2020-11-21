@@ -1802,9 +1802,11 @@ namespace UnityEditor.UI
             slidrImage.fillOrigin = 3;
             slidrImage.color = Color.red;
             slidrImage.fillAmount = 0;
-            RadialSlider slider = SliderControl.AddComponent<RadialSlider>();
-            slider.StartColor = Color.green;
-            slider.EndColor = Color.red;
+            //RadialSlider slider = SliderControl.AddComponent<RadialSlider>();
+            //slider.StartColor = Color.green;
+            //slider.EndColor = Color.red;
+			
+            Debug.LogError("Removed due to Modern UI Pack");
 
             RectTransform sliderRectTransform = SliderControl.GetComponent<RectTransform>();
             sliderRectTransform.anchorMin = Vector2.zero;
