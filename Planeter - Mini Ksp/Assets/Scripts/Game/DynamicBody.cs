@@ -10,6 +10,7 @@ public class DynamicBody : MonoBehaviour
     public int predictionCount = 2000;
 
     public OrbitMath.OrbitPrediction startPrediction;
+    public OrbitMath.OrbitPrediction currentPrediction;
 
 
 
@@ -49,16 +50,8 @@ public class DynamicBody : MonoBehaviour
 
 
         // Init StartPrediction
-        startPrediction = startPrediction != null ? startPrediction : new OrbitMath.OrbitPrediction();
-
-        // Setup StartPrediction
-        startPrediction.localPosition = GravitySystem.sunSystem.PointToSystem(OTime.time, transform.position);
-        startPrediction.gravitySystem = GravitySystem.sunSystem.PointToGravitySystem(OTime.time, transform.position);
-        
-        if (startPrediction != null && startPrediction.gravitySystem)
-        {
-        //    startPrediction.localPosition = startPrediction.gravitySystem.PointToSystem(0, transform.position);
-        }
+        startPrediction.localPosition = startPosition;
+        startPrediction = GravitySystem.sunSystem.SetupPrediction(startPrediction);
 
         predictions = new OrbitMath.OrbitPrediction[predictionCount];
         for (int i = 0; i < predictions.Length; i++)
@@ -86,17 +79,23 @@ public class DynamicBody : MonoBehaviour
         //currentIndex = (currentIndex + 1) % predictions.Length;
         //
 
-        int skipSteps = (int)((OTime.time - predictions[currentIndex].time) / OTime.fixedDeltaTime);
+        int skipSteps = (int)((OTime.time - predictions[currentIndex].time) / OTime.fixedTimeSteps);
         currentIndex = (currentIndex + skipSteps) % predictions.Length;
         OrbitMath.OrbitPrediction prediction = predictions[currentIndex];
+        OrbitMath.OrbitPrediction nextPrediction = predictions[(currentIndex + 1) % predictions.Length];
+
+        float percent = (OTime.time - prediction.time) / OTime.fixedTimeSteps;
+        percent = Mathf.Clamp01(percent);
+        Vector2 localTweenPosition = Vector2.Lerp(prediction.localPosition, nextPrediction.localPosition, percent);
 
         transform.parent = prediction.gravitySystem.transform;
-        transform.localPosition = prediction.localPosition;
+        transform.localPosition = localTweenPosition;
 
         DrawPath(predictions, currentIndex, maxIndex);
 
 
 #if UNITY_EDITOR
+        this.currentPrediction = prediction;
         Grapher.Log(prediction.localGravity.magnitude, "Gravity", prediction.time);
         Grapher.Log(prediction.localGravity.magnitude, prediction.gravitySystem.name, prediction.gravitySystem.renderer.color, prediction.time);
 #endif
@@ -163,6 +162,13 @@ public class DynamicBody : MonoBehaviour
     {
         OrbitMath.OrbitPrediction nextPrediction = currentPrediction.Clone();
         
+
+        // Movement
+        float deltaTime = OTime.fixedTimeSteps;
+        nextPrediction.time += deltaTime;
+        nextPrediction.localVelocity += nextPrediction.localGravity * deltaTime;
+        nextPrediction.localPosition += nextPrediction.localVelocity * deltaTime;
+
         // Collision
         if (nextPrediction.localPosition.magnitude < nextPrediction.gravitySystem.radius)
         {
@@ -175,13 +181,6 @@ public class DynamicBody : MonoBehaviour
                 nextPrediction.isGrounded = true;
             }
         }
-        // Movement
-        float deltaTime = OTime.fixedDeltaTime;
-        nextPrediction.time += deltaTime;
-        nextPrediction.localVelocity += nextPrediction.localGravity * deltaTime;
-        nextPrediction.localPosition += nextPrediction.localVelocity * deltaTime;
-
-
 
         nextPrediction = nextPrediction.gravitySystem.DynamicPrediction(nextPrediction, mass);
 

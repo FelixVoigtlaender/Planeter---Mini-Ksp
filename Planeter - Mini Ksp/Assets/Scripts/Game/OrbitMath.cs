@@ -4,13 +4,39 @@ using UnityEngine;
 
 public class OrbitMath : MonoBehaviour
 {
-    public static OrbitMath instance;
-    public float gravityConstant;
+    // s_Instance is used to cache the instance found in the scene so we don't have to look it up every time.
+    private static OrbitMath s_Instance = null;
 
-    private void Awake()
+
+    // A static property that finds or creates an instance of the manager object and returns it.
+    public static OrbitMath instance
     {
-        instance = this;
+        get
+        {
+            if (s_Instance == null)
+            {
+                // FindObjectOfType() returns the first AManager object in the scene.
+                s_Instance = FindObjectOfType(typeof(OrbitMath)) as OrbitMath;
+            }
+
+            // If it is still null, create a new instance
+            if (s_Instance == null)
+            {
+                var obj = new GameObject("Manager");
+                s_Instance = obj.AddComponent<OrbitMath>();
+            }
+
+            return s_Instance;
+        }
     }
+
+
+    // Ensure that the instance is destroyed when the game is stopped in the editor.
+    void OnApplicationQuit()
+    {
+        s_Instance = null;
+    }
+    public float gravityConstant;
 
     public static float MassOfCircle(float radius, float massScale)
     {
@@ -99,7 +125,7 @@ public class OrbitMath : MonoBehaviour
         GravitySystem parentSystem = gravitySystem.parentSystem;
         // No Central body, thus no prediction
         if (!parentSystem)
-            return 0;
+            return -1;
 
         float x = gravitySystem.localStartPosition.x;
         float y = gravitySystem.localStartPosition.y;
@@ -116,7 +142,7 @@ public class OrbitMath : MonoBehaviour
         s += "Y: " + y + " yT0: " + yt0 + "\n";
         print(s);
 
-        float t0 = 0;
+        float t0;
         t0 = y > 0 ? xt0 : yt0;
         t0 = y < 0 && x < 0 ? -xt0: t0;
 
@@ -224,7 +250,4 @@ public class OrbitMath : MonoBehaviour
         }
 
     }
-
-
-
 }

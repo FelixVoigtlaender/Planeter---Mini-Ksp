@@ -6,7 +6,8 @@ using UnityEngine.UI.Extensions.Tweens;
 public class OTime : MonoBehaviour
 {
     public static float time;
-    public static float fixedDeltaTime = 0.05f;
+    public static float fixedTimeSteps = 0.5f;
+    public static float deltaTime = 0.01f;
     public static float timeScale = 1;
     public static bool isPaused = false;
 
@@ -17,7 +18,9 @@ public class OTime : MonoBehaviour
 
         if (!GameManager.isGameActive)
             return;
-        time += fixedDeltaTime * timeScale;
+        //deltaTime = Time.fixedDeltaTime;
+
+        time += deltaTime * timeScale;
     }
 
     public void Skip(float delta)
