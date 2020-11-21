@@ -1735,6 +1735,7 @@ GameObject:
   - component: {fileID: 515661932}
   - component: {fileID: 515661933}
   - component: {fileID: 515661931}
+  - component: {fileID: 515661934}
   m_Layer: 0
   m_Name: Mars
   m_TagString: Untagged
@@ -2393,6 +2394,20 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &515661934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515661929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1fbb45c1fbd0004880ff13a3882a1f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pixelRadius: 100
+  selectOnStart: 0
 --- !u!1 &543345684
 GameObject:
   m_ObjectHideFlags: 0
@@ -3287,6 +3302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 704996548}
   - component: {fileID: 704996547}
+  - component: {fileID: 704996549}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -3335,6 +3351,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &704996549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704996546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1fbb45c1fbd0004880ff13a3882a1f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pixelRadius: 100
+  selectOnStart: 0
 --- !u!1 &718498605
 GameObject:
   m_ObjectHideFlags: 0
@@ -4470,6 +4500,7 @@ GameObject:
   m_Component:
   - component: {fileID: 941473875}
   - component: {fileID: 941473877}
+  - component: {fileID: 941473876}
   m_Layer: 0
   m_Name: Phobos
   m_TagString: Untagged
@@ -4493,6 +4524,20 @@ Transform:
   m_Father: {fileID: 515661930}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &941473876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941473874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1fbb45c1fbd0004880ff13a3882a1f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pixelRadius: 100
+  selectOnStart: 0
 --- !u!114 &941473877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6796,7 +6841,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
-  predictionCount: 1000
+  predictionCount: 2000
+  pretendPredictionCount: 1000
   startPrediction:
     time: 0
     localPosition: {x: 0, y: 0}
@@ -6991,6 +7037,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1463209964}
   - component: {fileID: 1463209966}
+  - component: {fileID: 1463209965}
   m_Layer: 0
   m_Name: Deimos
   m_TagString: Untagged
@@ -7014,6 +7061,20 @@ Transform:
   m_Father: {fileID: 515661930}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1463209965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463209963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1fbb45c1fbd0004880ff13a3882a1f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pixelRadius: 100
+  selectOnStart: 0
 --- !u!114 &1463209966
 MonoBehaviour:
   m_ObjectHideFlags: 0

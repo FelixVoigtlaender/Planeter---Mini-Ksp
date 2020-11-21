@@ -28,8 +28,55 @@ public class PredictionDrawer : MonoBehaviour
             GameObject lineObject = Instantiate(subsectionPrefab);
             subsections[i] = lineObject.GetComponent<PathSubsection>();
         }
-    }
+    }    
+
+    
     public void DrawPrediction(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
+    {
+        int startI = curI;
+        int switches = 0;
+        int count = OrbitMath.ModuloDistance(curI, maxI, predictions.Length) - 1;
+
+        // Draw Paths of each System
+        for(int steps = 0; steps < count; steps++)
+        {
+            // All swithces reached
+            if(switches>= maxSwitches)
+            {
+                break;
+            }
+
+            int i = (steps + curI) % predictions.Length;
+            int prevI = (i - 1 + predictions.Length) % predictions.Length;
+            // System Changed
+            if(predictions[i].gravitySystem != predictions[startI].gravitySystem)
+            {
+                subsections[switches].DrawSubsection(predictions, startI, prevI);
+                subsections[switches].gameObject.SetActive(true);
+                switches++;
+
+                startI = i;
+                continue;
+            }
+            // Last index reached
+            if(steps == count - 1)
+            {
+                subsections[switches].DrawSubsection(predictions, startI, i);
+                subsections[switches].gameObject.SetActive(true);
+                switches++;
+                
+                continue;
+            }
+        }
+        // Disable unused subsections
+        for (int i = switches; i < subsections.Length;i++)
+        {
+            subsections[i].gameObject.SetActive(false);
+        }
+    }
+
+
+    public void DrawPredictionA(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
     {
         Vector2 start = predictions[curI].gravitySystem.PointToWorld(predictions[curI].time, predictions[curI].localPosition);
 
@@ -102,6 +149,7 @@ public class PredictionDrawer : MonoBehaviour
             subsections[i].gameObject.SetActive(false);
         }
     }
+
 
     public void Hide()
     {

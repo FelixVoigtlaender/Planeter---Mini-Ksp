@@ -8,6 +8,7 @@ public class DynamicBody : MonoBehaviour
     public float mass = 1;
 
     public int predictionCount = 2000;
+    public int pretendPredictionCount = 2000;
 
     public OrbitMath.OrbitPrediction startPrediction;
     public OrbitMath.OrbitPrediction currentPrediction;
@@ -202,12 +203,12 @@ public class DynamicBody : MonoBehaviour
     {
         Debug.DrawRay(transform.position, velocity * 10);
 
-        OrbitMath.OrbitPrediction[] path = new OrbitMath.OrbitPrediction[500];
+        OrbitMath.OrbitPrediction[] path = new OrbitMath.OrbitPrediction[pretendPredictionCount];
         path[0] = predictions[currentIndex].Clone();
         path[0].localVelocity += velocity;
 
-        path = PredictPath(path, 0, 499);
-        PretendDrawPath(path, 0, 499);
+        path = PredictPath(path, 0, path.Length-1);
+        PretendDrawPath(path, 0, path.Length-1);
     }
     /// <summary>
     /// Adds relative velocity to the current velocity thus that
