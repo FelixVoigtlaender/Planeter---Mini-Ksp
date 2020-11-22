@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Modern UI Pack/Scenes/Demo.unity
+- path: Assets/Scenes/JoinedScene.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
