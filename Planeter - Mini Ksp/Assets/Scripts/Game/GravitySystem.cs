@@ -16,6 +16,8 @@ public class GravitySystem : PointMass
     public Vector2 localStartPosition;
     public float t0 = 0;
 
+    public OrbitElements orbitElements;
+
     //In Game
     GravitySystem[] childSystems;
 

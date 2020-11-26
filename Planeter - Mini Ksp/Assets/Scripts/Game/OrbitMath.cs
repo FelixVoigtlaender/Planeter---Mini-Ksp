@@ -84,27 +84,42 @@ public class OrbitMath : MonoBehaviour
      * q = G * M
     */
 
-    public static OrbitPrediction GetStaticOrbitPrediction(float t, GravitySystem gravitySystem)
+    public static OrbitPrediction GetStaticOrbitPrediction(float time, GravitySystem gravitySystem)
     {
         GravitySystem parentSystem = gravitySystem.parentSystem;
         // No Central body, thus no prediction
         if (!parentSystem)
-            return new OrbitPrediction(t,gravitySystem);
+            return new OrbitPrediction(time,gravitySystem);
 
         float q = instance.gravityConstant * parentSystem.GetMass();
         float a = gravitySystem.localStartPosition.magnitude;
         float T = 2 * Mathf.PI * Mathf.Sqrt(Mathf.Pow(a, 3) / q);
         float t0 = gravitySystem.t0;
-        float x = a * Mathf.Cos((2 * Mathf.PI * (t - t0)) / T);
-        float y = a * Mathf.Sin((2 * Mathf.PI * (t - t0)) / T);
+        float x = a * Mathf.Cos((2 * Mathf.PI * (time - t0)) / T);
+        float y = a * Mathf.Sin((2 * Mathf.PI * (time - t0)) / T);
 
-        float xV = -a * Mathf.Sin((2 * Mathf.PI * (t - t0)) / T) * (2 * Mathf.PI) / T;
-        float yV = a * Mathf.Cos((2 * Mathf.PI * (t - t0)) / T) * (2 * Mathf.PI) / T;
+        float xV = -a * Mathf.Sin((2 * Mathf.PI * (time - t0)) / T) * (2 * Mathf.PI) / T;
+        float yV = a * Mathf.Cos((2 * Mathf.PI * (time - t0)) / T) * (2 * Mathf.PI) / T;
 
         Vector2 localPosition = new Vector2(x, y);
         Vector2 localVelocity = new Vector2(xV,yV);
 
-        return new OrbitPrediction(t,localPosition, localVelocity);
+        return new OrbitPrediction(time,localPosition, localVelocity);
+    }
+
+    public static OrbitPrediction GetStaticOrbitPredictionA(float time, GravitySystem gravitySystem) {
+
+        OrbitElements orbitElements = gravitySystem.orbitElements;
+        float mu = instance.gravityConstant * orbitElements.mass;
+
+        float M = Mathf.Sqrt(mu / Mathf.Pow(orbitElements.a_semiMajorAxis, 3)) * time;
+
+
+
+
+
+        return new OrbitPrediction(time, Vector2.zero, Vector2.zero);
+
     }
 
     public static float GetOrbitTime(GravitySystem gravitySystem)

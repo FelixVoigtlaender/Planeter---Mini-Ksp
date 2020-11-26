@@ -10,6 +10,14 @@ public class OTime : MonoBehaviour
     public static float deltaTime = 0.01f;
     public static float timeScale = 1;
     public static bool isPaused = false;
+    public static float quickSaveTime;
+
+
+    private void Start()
+    {
+        GameManager.OnLoadQuickSave += OnLoadQuickSave;
+        GameManager.OnQuicksave += OnQuickSave;
+    }
 
     private void FixedUpdate()
     {
@@ -40,5 +48,14 @@ public class OTime : MonoBehaviour
     public void SetPause(bool value)
     {
         isPaused = value;
+    }
+
+    public void OnLoadQuickSave()
+    {
+        time = quickSaveTime;
+    }
+    public void OnQuickSave()
+    {
+        quickSaveTime = time;
     }
 }

@@ -10,11 +10,23 @@ public class GameManager : MonoBehaviour
 
     public static event Action OnGameStart;
     public static event Action OnGameEnd;
+    public static event Action OnQuicksave;
+    public static event Action OnLoadQuickSave;
     // Start is called before the first frame update
 
     private void Awake()
     {
         instance = this;
+    }
+
+    public void Quicksave()
+    {
+        OnQuicksave?.Invoke();
+    }
+
+    public void LoadQuickSave()
+    {
+        OnLoadQuickSave?.Invoke();
     }
 
 

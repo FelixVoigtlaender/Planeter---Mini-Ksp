@@ -12,6 +12,7 @@ public class DynamicBody : MonoBehaviour
 
     public OrbitMath.OrbitPrediction startPrediction;
     public OrbitMath.OrbitPrediction currentPrediction;
+    public OrbitMath.OrbitPrediction quicksavePrediction;
 
 
 
@@ -34,6 +35,8 @@ public class DynamicBody : MonoBehaviour
 
         Reset();
 
+        GameManager.OnQuicksave += OnQuickSave;
+        GameManager.OnLoadQuickSave += OnLoadQuickSave;
         GameManager.OnGameEnd += Reset;
     }
 
@@ -229,6 +232,23 @@ public class DynamicBody : MonoBehaviour
         Vector2 myDir = predictions[currentIndex].isGrounded ? predictions[currentIndex].localPosition : predictions[currentIndex].localVelocity;
         myDir.Normalize();
         return myDir * relativeDelta.y  - Vector2.Perpendicular(myDir) * relativeDelta.x;
+    }
+
+    /// <summary>
+    /// Save Load System
+    /// </summary>
+    /// 
+    public void OnQuickSave()
+    {
+        quicksavePrediction = predictions[currentIndex].Clone();
+    }
+    public void OnLoadQuickSave()
+    {
+        predictions[currentIndex] = quicksavePrediction;
+        maxIndex = currentIndex;
+
+        if (pretendPredictionDrawer)
+            pretendPredictionDrawer.Hide();
     }
 
 

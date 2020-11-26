@@ -8,7 +8,7 @@ public class Stage : MonoBehaviour
 
     public Vector2 Ignite(Vector2 direction)
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
         return CalculateThrust(direction);
     }
 
