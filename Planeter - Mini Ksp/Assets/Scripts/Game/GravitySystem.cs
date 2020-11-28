@@ -16,7 +16,7 @@ public class GravitySystem : PointMass
     public Vector2 localStartPosition;
     public float t0 = 0;
 
-    public OrbitElements orbitElements;
+    public OrbitElements orbitElements = new OrbitElements();
 
     //In Game
     GravitySystem[] childSystems;
@@ -53,7 +53,7 @@ public class GravitySystem : PointMass
 
     public void FixedUpdate()
     {
-        OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(OTime.time, this);
+        OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(OTime.time, this,true);
         transform.localPosition = prediction.localPosition;
     }
 
@@ -310,21 +310,21 @@ public class GravitySystem : PointMass
             return;
 
         //Prediction
-        int count = 500;
-        float orbitTime = OrbitMath.GetOrbitTime(this);
+        int count = 1000;
+        float orbitTime = OrbitMath.GetOrbitPeriodA(this);
         float timeSteps = orbitTime / (count-1);
         print(timeSteps);
         Vector3[] path = new Vector3[count];
         for (int i = 0; i < path.Length; i++)
         {
-            path[i] = OrbitMath.GetStaticOrbitPrediction(i * timeSteps, this).localPosition;
+            path[i] = OrbitMath.GetStaticOrbitPrediction(i * timeSteps, this,false).localPosition;
         }
 
         //Linerenderer Setup
         lineRenderer.positionCount = path.Length;
         lineRenderer.SetPositions(path);
         Color color = renderer.color;
-        color.a = 0.1f;
+        color.a = 0.8f;
         lineRenderer.endColor = lineRenderer.startColor = color;
 
     }

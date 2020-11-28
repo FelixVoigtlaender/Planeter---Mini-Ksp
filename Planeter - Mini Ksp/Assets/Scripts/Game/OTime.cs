@@ -8,7 +8,7 @@ public class OTime : MonoBehaviour
     public static float time;
     public static float fixedTimeSteps = 0.1f;
     public static float deltaTime = 0.01f;
-    public static float timeScale = 1;
+    public static float timeScale = 2;
     public static bool isPaused = false;
     public static float quickSaveTime;
 

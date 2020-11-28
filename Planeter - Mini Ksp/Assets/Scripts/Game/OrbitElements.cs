@@ -6,6 +6,7 @@ using UnityEngine;
 public class OrbitElements
 {
 
+    public GravitySystem centerSystem;
     public string name = "OrbitElement";
     public float a_semiMajorAxis;
     public float rp_radiusPericenter;

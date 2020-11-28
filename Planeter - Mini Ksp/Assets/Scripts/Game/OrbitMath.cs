@@ -84,7 +84,7 @@ public class OrbitMath : MonoBehaviour
      * q = G * M
     */
 
-    public static OrbitPrediction GetStaticOrbitPrediction(float time, GravitySystem gravitySystem)
+    public static OrbitPrediction GetStaticOrbitPredictionA(float time, GravitySystem gravitySystem)
     {
         GravitySystem parentSystem = gravitySystem.parentSystem;
         // No Central body, thus no prediction
@@ -107,19 +107,89 @@ public class OrbitMath : MonoBehaviour
         return new OrbitPrediction(time,localPosition, localVelocity);
     }
 
-    public static OrbitPrediction GetStaticOrbitPredictionA(float time, GravitySystem gravitySystem) {
+
+    public static OrbitPrediction GetStaticOrbitPrediction(float time, GravitySystem gravitySystem, bool setData = false) {
+        
+        OrbitElements orbitElements = gravitySystem.orbitElements;
+        if (!orbitElements.centerSystem)
+            return new OrbitPrediction(time, gravitySystem);
+        float mu = instance.gravityConstant * orbitElements.centerSystem.orbitElements.mass;
+        float rp = orbitElements.rp_radiusPericenter;
+        float a = orbitElements.a_semiMajorAxis;
+        float e =  1 - (rp / a);
+
+        float M = (Mathf.Sqrt(mu / Mathf.Pow(a, 3)) * time) % (2*Mathf.PI);
+
+        float E_start = 5;
+        float E = E_start;
+
+        int E_iterations = 250;
+        /// Newton Iteration
+        for(int i = 0; i < E_iterations; i++)
+        {
+            float func =    (M - E + e * Mathf.Sin(E));
+            //              ---------------------------
+            float funcDer =   (-1 + e * Mathf.Cos(E));
+
+            float newEs = E - (func / funcDer);
+            if (Mathf.Abs(newEs - E) < 0.00001f)
+            {
+                E_iterations = i;
+                break;
+            }
+            E = newEs;
+        }
+
+
+
+
+        float f = 2 * Mathf.Atan(Mathf.Sqrt((1 + e) / (1 - e)) * Mathf.Tan(E / 2));
+
+        float r = (a * (1 - Mathf.Pow(e, 2))) / (1 + (e * Mathf.Cos(f)));
+
+
+
+        Vector2 dir = (Vector2)(Quaternion.Euler(0, 0, Mathf.Rad2Deg * f) * Vector2.right);
+
+        Vector2 localPosition = r * dir;
+        Vector2 velocity = Vector2.Perpendicular(dir) *  Mathf.Sqrt((2 * mu / r) - (mu / a));
+
+        if(setData)
+        {
+            float dataTime = time;
+            Grapher.Log(Mathf.Sin(time), "SINUS" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(mu, "mu" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(rp, "rp" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(a, "a" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(e, "e" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(M, "M" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(E, "E" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(f, "f" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(r, "r" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(velocity.magnitude, "vel_mag" + "_" + orbitElements.name, dataTime);
+
+            Grapher.Log(E_iterations, "E_iterations" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(E, "E" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(E_start, "E_start" + "_" + orbitElements.name, dataTime);
+        }
+        //Grapher.Log(dir, "dir", time);
+        //Grapher.Log(velocity, "vel", time);
+        //Grapher.Log(localPosition, "localPosition", time);
+
+        return new OrbitPrediction(time, localPosition, velocity);
+
+    }
+    public static float GetOrbitPeriodA(GravitySystem gravitySystem)
+    {
 
         OrbitElements orbitElements = gravitySystem.orbitElements;
-        float mu = instance.gravityConstant * orbitElements.mass;
+        if (!orbitElements.centerSystem)
+            return 0;
+        float a = orbitElements.a_semiMajorAxis;
+        float mu = instance.gravityConstant * orbitElements.centerSystem.orbitElements.mass;
+        float P = Mathf.Sqrt((4 * Mathf.Pow(Mathf.PI, 2) * Mathf.Pow(a, 3))/(mu));
 
-        float M = Mathf.Sqrt(mu / Mathf.Pow(orbitElements.a_semiMajorAxis, 3)) * time;
-
-
-
-
-
-        return new OrbitPrediction(time, Vector2.zero, Vector2.zero);
-
+        return P;
     }
 
     public static float GetOrbitTime(GravitySystem gravitySystem)
