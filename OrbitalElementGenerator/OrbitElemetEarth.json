@@ -1,0 +1,10 @@
+{
+      "planet": {
+            "name": "Earth",
+            "center": "Sun",
+            "a_semiMajorAxis": 1.000003,
+            "e_eccentricity": 0.01671,
+            "mass": 1.0,
+            "radius": 1.0
+      }
+}
