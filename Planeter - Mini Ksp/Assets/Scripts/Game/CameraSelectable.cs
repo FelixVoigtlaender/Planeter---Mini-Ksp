@@ -19,7 +19,7 @@ public class CameraSelectable : MonoBehaviour
             CameraController.SetTarget(transform);
     }
 
-    private void Update()
+    public void OnInput()
     {
         // Phone Input
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)

@@ -37,17 +37,19 @@ public class GravitySystem : PointMass
                 systems.Add(system);
         }
         childSystems = systems.ToArray();
-    }
 
 
-    public void Start()
-    {
         //Orbit Prediction Setup
         localStartPosition = transform.localPosition;
         t0 = OrbitMath.GetT0(this);
 
         //Draw Orbit
         CheckOrbit();
+    }
+
+
+    public void Start()
+    {
     }
 
 

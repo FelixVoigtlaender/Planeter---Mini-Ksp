@@ -6,6 +6,8 @@ public class Stage : MonoBehaviour
 {
     public float thrust = 1;
 
+    bool quickSaveActive = true;
+
     public Vector2 Ignite(Vector2 direction)
     {
         gameObject.SetActive(false);
@@ -21,5 +23,15 @@ public class Stage : MonoBehaviour
     {
         return direction.normalized * thrust;
 
+    }
+
+    public void OnQuickSave()
+    {
+        quickSaveActive = gameObject.activeSelf;
+    }
+    public void OnLoadQuickSave()
+    {
+
+        gameObject.SetActive(quickSaveActive);
     }
 }

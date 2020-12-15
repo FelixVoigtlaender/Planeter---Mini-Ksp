@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -31,13 +32,20 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        ManageInput();
         FollowTarget();
         FollowSize();
     }
 
-    void ManageInput()
+    public void ManagePointerClick()
     {
+
+    }
+    public void ManageDrag()
+    {
+
+        zoomScale = sizeGoal / (50 * 10);
+
+
         if (Input.touchCount >= 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
         {
             Touch firstTouch = Input.GetTouch(0);
@@ -48,6 +56,7 @@ public class CameraController : MonoBehaviour
 
             float touchesPrevPosDif = (firstPrevPos - secondPrevPos).magnitude;
             float touchesCurPosDif = (firstTouch.position - secondTouch.position).magnitude;
+
 
             float zoomDelta = (firstTouch.deltaPosition - secondTouch.deltaPosition).magnitude * zoomScale;
 
@@ -69,6 +78,23 @@ public class CameraController : MonoBehaviour
 
         sizeGoal = Mathf.Clamp(sizeGoal, sizeMin, sizeMax);
 
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        print("DRAGGING");
+    }
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        print("DRAG END");
+    }
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        print("POINTER DOWN");
+    }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        print("POINTER UP");
     }
     void FollowTarget()
     {

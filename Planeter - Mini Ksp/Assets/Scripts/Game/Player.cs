@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
         if (!currentStage)
             return;
 
-        Vector2 dir = -joystick.Direction;
+        Vector2 dir = joystick.Direction;
         print(dir);
 
         Vector2 thrust = currentStage.Ignite(dir);
@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
         if (!currentStage)
             return;
 
-        Vector2 dir = -joystick.Direction;
+        Vector2 dir = joystick.Direction;
         Vector2 thrust = currentStage.PretendIgnite(dir);
         //thrust = dir * deltaV;
 
