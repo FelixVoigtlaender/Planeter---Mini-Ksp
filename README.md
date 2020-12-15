@@ -7,6 +7,7 @@ Space Programm. For the static orbit prediction of planets Keplerian elements
 and their laws of planetary motion are used. The dynamic predictions for the
 user-controlled spaceship use a performance adapted gravity system approach
 and simple Newtonian calculations. 
+
 ---
 To reduce the risk of feature creeping three design pillars have been defined that
 need to be addressed and may not be contradicted by additional features or
