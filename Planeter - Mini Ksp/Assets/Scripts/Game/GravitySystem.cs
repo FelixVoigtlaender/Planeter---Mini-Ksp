@@ -223,6 +223,8 @@ public class GravitySystem : PointMass
     /// </summary>
     public void CheckSystem()
     {
+        CheckChildSystems();
+
         mass = 0;
         if (!renderer)
             renderer = GetComponentInChildren<SpriteRenderer>();
@@ -444,8 +446,8 @@ public class GravitySystem : PointMass
 
         if (transform.parent)
         {
-            Gizmos.DrawWireSphere(transform.parent.position, Vector2.Distance(transform.position, transform.parent.position) - radiusOfInfluence);
-            Gizmos.DrawWireSphere(transform.parent.position, Vector2.Distance(transform.position, transform.parent.position) + radiusOfInfluence);
+            //Gizmos.DrawWireSphere(transform.parent.position, Vector2.Distance(transform.position, transform.parent.position) - radiusOfInfluence);
+            //Gizmos.DrawWireSphere(transform.parent.position, Vector2.Distance(transform.position, transform.parent.position) + radiusOfInfluence);
         }
     }
 }

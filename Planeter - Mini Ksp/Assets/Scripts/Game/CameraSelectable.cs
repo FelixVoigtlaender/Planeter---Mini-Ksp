@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraSelectable : MonoBehaviour
 {
@@ -10,27 +11,29 @@ public class CameraSelectable : MonoBehaviour
 
     public bool useWorldSpace = true;
 
-
+    public FieldTrigger fieldTrigger;
     
 
     private void Start()
     {
+        if (!fieldTrigger)
+            fieldTrigger = FindObjectOfType<FieldTrigger>();
+        if (fieldTrigger)
+        {
+            fieldTrigger.onPointerUp += OnPointerUp;
+        }
+
+
         if (selectOnStart)
             CameraController.SetTarget(transform);
     }
 
-    public void OnInput()
+    public void OnPointerUp(PointerEventData eventData)
     {
-        // Phone Input
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            ManageInput(Input.GetTouch(0).position);
-        }
-        // Mouse Input
-        if (Input.GetMouseButtonDown(0))
-        {
-            ManageInput(Input.mousePosition);
-        }
+        if (eventData.dragging && Input.touchCount <2)
+            return;
+
+        ManageInput(eventData.position);
     }
 
     public void ManageInput(Vector2 touchPixelPos)

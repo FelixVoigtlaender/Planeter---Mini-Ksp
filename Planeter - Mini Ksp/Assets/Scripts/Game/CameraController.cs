@@ -25,26 +25,52 @@ public class CameraController : MonoBehaviour
     public float sizeSmoothTime = 0.1f;
     public float zoomScale = 0.1f;
 
+    [Header("Input")]
+    public FieldTrigger fieldTrigger;
+
     private void Awake()
     {
         instance = this;
+
+        if (fieldTrigger)
+        {
+            fieldTrigger.onDrag += OnDrag;
+            //fieldTrigger.onEndDrag += OnEndDrag;
+            //fieldTrigger.onPointerDown += OnPointerDown;
+            //fieldTrigger.onPointerUp += OnPointerUp;
+        }
     }
 
     private void Update()
     {
         FollowTarget();
         FollowSize();
+        MouseInput();
     }
 
-    public void ManagePointerClick()
-    {
 
+    public void MouseInput()
+    {
+        float deltaZoom = 0;
+        //Mouse
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+        {
+            deltaZoom = -100;
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+        {
+            deltaZoom = 100;
+        }
+
+        DeltaZoom(deltaZoom);
     }
     public void ManageDrag()
     {
 
         zoomScale = sizeGoal / (50 * 10);
 
+
+        float deltaZoom = 0;
 
         if (Input.touchCount >= 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
         {
@@ -61,40 +87,24 @@ public class CameraController : MonoBehaviour
             float zoomDelta = (firstTouch.deltaPosition - secondTouch.deltaPosition).magnitude * zoomScale;
 
             if (touchesPrevPosDif > touchesCurPosDif)
-                sizeGoal += zoomDelta;
+                deltaZoom = zoomDelta;
             if (touchesPrevPosDif < touchesCurPosDif)
-                sizeGoal -= zoomDelta;
+                deltaZoom = -zoomDelta;
         }
 
-        //Mouse
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
-        {
-            sizeGoal -= zoomScale * 100;
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
-        {
-            sizeGoal += zoomScale * 100;
-        }
-
+        
+        DeltaZoom(deltaZoom);
+    }
+    public void DeltaZoom(float delta)
+    {
+        zoomScale = sizeGoal / (50 * 10);
+        sizeGoal += delta * zoomScale;
         sizeGoal = Mathf.Clamp(sizeGoal, sizeMin, sizeMax);
-
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        print("DRAGGING");
-    }
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        print("DRAG END");
-    }
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        print("POINTER DOWN");
-    }
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        print("POINTER UP");
+        ManageDrag();
     }
     void FollowTarget()
     {

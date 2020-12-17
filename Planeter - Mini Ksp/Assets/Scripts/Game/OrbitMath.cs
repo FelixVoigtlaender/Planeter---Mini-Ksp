@@ -154,6 +154,8 @@ public class OrbitMath : MonoBehaviour
         Vector2 localPosition = r * dir;
         Vector2 velocity = Vector2.Perpendicular(dir) *  Mathf.Sqrt((2 * mu / r) - (mu / a));
 
+
+#if UNITY_EDITOR
         if(setData)
         {
             float dataTime = time;
@@ -172,9 +174,7 @@ public class OrbitMath : MonoBehaviour
             Grapher.Log(E, "E" + "_" + orbitElements.name, dataTime);
             Grapher.Log(E_start, "E_start" + "_" + orbitElements.name, dataTime);
         }
-        //Grapher.Log(dir, "dir", time);
-        //Grapher.Log(velocity, "vel", time);
-        //Grapher.Log(localPosition, "localPosition", time);
+#endif
 
         return new OrbitPrediction(time, localPosition, velocity);
 
