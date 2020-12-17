@@ -6,7 +6,6 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
     public Stage currentStage;
-    public ContentCopy contentCopy;
 
     private void Start()
     {
@@ -22,8 +21,11 @@ public class StageManager : MonoBehaviour
     }
     public void OnGameEnd()
     {
-        contentCopy.ClearContent();
-        contentCopy.FillContent();
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(true);
+        }
     }
 
     public void OnQuickSave()

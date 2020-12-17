@@ -88,12 +88,22 @@ public class DynamicBody : MonoBehaviour
         OrbitMath.OrbitPrediction prediction = predictions[currentIndex];
         OrbitMath.OrbitPrediction nextPrediction = predictions[(currentIndex + 1) % predictions.Length];
 
-        float percent = (OTime.time - prediction.time) / OTime.fixedTimeSteps;
-        percent = Mathf.Clamp01(percent);
-        Vector2 localTweenPosition = Vector2.Lerp(prediction.localPosition, nextPrediction.localPosition, percent);
+
+        Vector2 position = transform.localPosition;
+        if(prediction.gravitySystem == nextPrediction.gravitySystem)
+        {
+
+            float percent = (OTime.time - prediction.time) / OTime.fixedTimeSteps;
+            percent = Mathf.Clamp01(percent);
+            position = Vector2.Lerp(prediction.localPosition, nextPrediction.localPosition, percent);
+        }
+        else
+        {
+            position = prediction.localPosition;
+        }
 
         transform.parent = prediction.gravitySystem.transform;
-        transform.localPosition = localTweenPosition;
+        transform.localPosition = position;
 
         DrawPath(predictions, currentIndex, maxIndex);
 

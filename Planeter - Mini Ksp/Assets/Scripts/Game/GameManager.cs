@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static bool isGameActive = false;
-    public PageSwiper pageSwiper;
 
     public static event Action OnGameStart;
     public static event Action OnGameEnd;
@@ -40,7 +39,6 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         isGameActive = true;
-        pageSwiper.enabled = false;
         OTime.time = 0;
 
         OnGameStart?.Invoke();
@@ -49,7 +47,6 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         isGameActive = false;
-        pageSwiper.enabled = true;
 
         OnGameEnd?.Invoke();
     }

@@ -19,7 +19,7 @@ public class GravitySystem : PointMass
     public OrbitElements orbitElements = new OrbitElements();
 
     //In Game
-    GravitySystem[] childSystems;
+    public GravitySystem[] childSystems;
 
     public void Awake()
     {
@@ -237,7 +237,7 @@ public class GravitySystem : PointMass
         }
         if (parentSystem)
         {
-            float distToParentSytem = ((Vector2)parentSystem.transform.position - (Vector2)transform.position).magnitude;
+            float distToParentSytem = orbitElements.a_semiMajorAxis;
             radiusOfInfluence = OrbitMath.CircleOfInfluence(distToParentSytem, GetMass(), parentSystem.GetMass());
 
             if (!sphereOfInfluence)
@@ -413,7 +413,7 @@ public class GravitySystem : PointMass
 
     public float GetCenterMass()
     {
-        float centerMass = OrbitMath.MassOfCircle(radius, massScale);
+        float centerMass = orbitElements.mass;
         return centerMass;
     }
 
