@@ -52,7 +52,7 @@ public class CameraController : MonoBehaviour
     public void MouseInput()
     {
         float deltaZoom = 0;
-        //Mouse
+        //Mouse Zoom
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
             deltaZoom = -100;
@@ -61,19 +61,23 @@ public class CameraController : MonoBehaviour
         {
             deltaZoom = 100;
         }
+        // Mouse move Camera
+        if (Input.GetMouseButtonDown(0))
+        {
+        }
 
         DeltaZoom(deltaZoom);
     }
-    public void ManageDrag()
+    public void ManageDrag(PointerEventData eventData)
     {
 
         zoomScale = sizeGoal / (50 * 10);
-
 
         float deltaZoom = 0;
 
         if (Input.touchCount >= 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
         {
+            // Zoom
             Touch firstTouch = Input.GetTouch(0);
             Touch secondTouch = Input.GetTouch(1);
 
@@ -91,6 +95,14 @@ public class CameraController : MonoBehaviour
             if (touchesPrevPosDif < touchesCurPosDif)
                 deltaZoom = -zoomDelta;
         }
+        else if(eventData.clickCount == 1)
+        {
+            // Move Camera
+            Vector2 startPosition = Camera.main.ScreenToWorldPoint(eventData.position + eventData.delta);
+            Vector2 endPosition = Camera.main.ScreenToWorldPoint(eventData.position);
+            Vector2 worldDelta = endPosition - startPosition;
+            targetOffset += worldDelta;
+        }
 
         
         DeltaZoom(deltaZoom);
@@ -104,7 +116,8 @@ public class CameraController : MonoBehaviour
 
     public void OnDrag(PointerEventData eventData)
     {
-        ManageDrag();
+        ManageDrag(eventData);
+        print(eventData.position + " " + eventData.delta);
     }
     void FollowTarget()
     {
@@ -136,6 +149,7 @@ public class CameraController : MonoBehaviour
         if (!target)
             return;
 
+        instance.targetOffset = Vector2.zero;
         instance.targetDelta = (Vector2)instance.transform.position - ((Vector2)target.position) ;
     }
     public static void LockTarget(Transform target)
@@ -145,6 +159,7 @@ public class CameraController : MonoBehaviour
         if (!target)
             return;
 
+        instance.targetOffset = Vector2.zero;
         instance.targetDelta = Vector2.zero;
     }
 }
