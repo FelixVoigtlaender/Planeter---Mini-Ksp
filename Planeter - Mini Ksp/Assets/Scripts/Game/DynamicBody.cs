@@ -69,10 +69,7 @@ public class DynamicBody : MonoBehaviour
             return;
 
 
-        if (predictions.CanAddPrediction())
-        {
-            PredictPath(predictions, 3);
-        }
+        
 
         OrbitMath.OrbitPrediction prediction = predictions.GetLerpedPredicitonT(OTime.time);
         transform.parent = prediction.gravitySystem.transform;
@@ -82,6 +79,11 @@ public class DynamicBody : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (predictions.CanAddPrediction())
+        {
+            PredictPath(predictions, 10);
+        }
+
         DrawPath(predictionDrawer,predictions);
     }
 
@@ -220,7 +222,8 @@ public class DynamicBody : MonoBehaviour
 
         if (predictions == null)
             return;
-
+        if (predictions.PredictionCount() == 0)
+            return;
 
         OrbitMath.OrbitPrediction currentPrediction = predictions.GetCurrentPrediction();
         Gizmos.color = Color.red;

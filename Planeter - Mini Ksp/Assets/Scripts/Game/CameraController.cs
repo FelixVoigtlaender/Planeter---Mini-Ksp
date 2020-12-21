@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
     public Transform target;
     public Vector2 targetDelta;
     public Vector2 targetOffset;
+    public float maxOffset = 500f;
     public float horizontalSmoothTime;
     public float verticalSmoothTime;
     Vector2 targetSmoothVel;
@@ -102,6 +103,10 @@ public class CameraController : MonoBehaviour
             Vector2 endPosition = Camera.main.ScreenToWorldPoint(eventData.position);
             Vector2 worldDelta = endPosition - startPosition;
             targetOffset += worldDelta;
+            if(targetOffset.magnitude > maxOffset)
+            {
+                targetOffset = targetOffset.normalized * maxOffset;
+            }
         }
 
         

@@ -124,6 +124,8 @@ public class Predictions
 
     public int CheckIndex(int index)
     {
+        if (predictions.Length == 0)
+            return 0;
         return (index + predictions.Length) % predictions.Length;
     }
     public int CheckIndexT(float time)
