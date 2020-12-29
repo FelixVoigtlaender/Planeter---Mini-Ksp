@@ -18,7 +18,10 @@ public class GravitySystemEditor : Editor
         {
             gravitySytem.CheckSystem();
         }
-
+        if (GUILayout.Button("Check Orbit"))
+        {
+            gravitySytem.CheckOrbit();
+        }
 
         //gravitySytem.CheckSystem();
 
