@@ -14,10 +14,6 @@ public class PointMass : MonoBehaviour
     public Transform body;
     public GameObject bodyPrefab;
 
-    public void Start()
-    {
-        SetUp();
-    }
 
     public Vector2 GravityForce(Vector2 position, float mass = 1)
     {
@@ -46,7 +42,7 @@ public class PointMass : MonoBehaviour
     
     public virtual float GetMass()
     {
-        mass = OrbitMath.MassOfCircle(radius, massScale);
+        //mass = OrbitMath.MassOfCircle(radius, massScale);
         return mass;
     }
 }

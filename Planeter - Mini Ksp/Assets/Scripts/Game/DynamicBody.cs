@@ -74,7 +74,7 @@ public class DynamicBody : MonoBehaviour
         {
             PredictPath(predictions, 10);
         }
-        OrbitMath.OrbitPrediction prediction = predictions.GetCurrentPrediction();
+        OrbitMath.OrbitPrediction prediction = predictions.GetLerpedPredicitonT(OTime.time);
         transform.parent = prediction.gravitySystem.transform;
         transform.localPosition = prediction.localPosition;
         DrawPath(predictionDrawer,predictions);

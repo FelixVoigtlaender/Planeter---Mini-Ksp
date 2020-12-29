@@ -38213,7 +38213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 50
   massScale: 1
-  mass: 8288.981
+  mass: 0
   renderer: {fileID: 829415355}
   body: {fileID: 829415354}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,

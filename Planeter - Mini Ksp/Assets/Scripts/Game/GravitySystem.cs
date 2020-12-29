@@ -25,6 +25,8 @@ public class GravitySystem : PointMass
 
     public void Awake()
     {
+
+        base.mass = orbitElements.mass;
         if (transform.parent)
             parentSystem = transform.parent.GetComponent<GravitySystem>();
         else
@@ -47,6 +49,11 @@ public class GravitySystem : PointMass
 
         //Draw Orbit
         CheckOrbit();
+    }
+
+    private void Start()
+    {
+        CheckSystem();
     }
 
 
@@ -145,7 +152,7 @@ public class GravitySystem : PointMass
         if (!parentSystem)
             return new OrbitMath.OrbitPrediction(time, transform.localPosition, Vector2.zero);
 
-        return predictions.GetPredictionT(time);
+        return predictions.GetLerpedPredicitonT(time);
     }
 
     /// <summary>
@@ -223,6 +230,7 @@ public class GravitySystem : PointMass
     public void CheckSystem()
     {
         CheckChildSystems();
+
 
         mass = 0;
         if (!renderer)
