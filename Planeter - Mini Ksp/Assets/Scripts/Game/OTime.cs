@@ -40,6 +40,10 @@ public class OTime : MonoBehaviour
     {
         timeScale = scale;
     }
+    public void SetLogarithmicTimeScale(float n)
+    {
+        timeScale = Mathf.Pow(10, n);
+    }
 
     public void TogglePause()
     {

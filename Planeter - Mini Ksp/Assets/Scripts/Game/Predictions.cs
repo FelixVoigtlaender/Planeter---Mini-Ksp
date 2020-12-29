@@ -125,7 +125,8 @@ public class Predictions
     {
         int i = CheckIndexT(time);
         int nextI = CheckIndex(i + 1);
-        float percent = (time - predictions[i].time) / OTime.fixedTimeSteps;
+        float timeDelta = time - OTime.fixedTimeSteps * (Mathf.Floor(time / OTime.fixedTimeSteps));
+        float percent = (timeDelta) / OTime.fixedTimeSteps;
         OrbitMath.OrbitPrediction lerpedPrediction = predictions[i].Clone();
         if(predictions[i].gravitySystem == predictions[nextI].gravitySystem)
         {
