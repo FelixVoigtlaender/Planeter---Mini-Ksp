@@ -42,7 +42,7 @@ public class ContentCopy : MonoBehaviour
                 continue;
             if (child.gameObject.name.Contains("Fake"))
                 continue;
-            Instantiate(child, content);
+            Instantiate(child, content).transform.localScale = Vector3.one;
         }
     }
 

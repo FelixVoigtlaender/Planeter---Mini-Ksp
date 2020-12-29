@@ -3,7 +3,7 @@
     public class UpdateRadialValue : MonoBehaviour
     {
         public InputField input;
-        public RadialSlider slider;
+        //public RadialSlider slider;
 
         // Use this for initialization
         void Start()
@@ -16,14 +16,18 @@
         {
             float value;
             float.TryParse(input.text, out value);
-            slider.Value = value;
+            //slider.Value = value;
+
+            Debug.LogError("Removed due to Modern UI Pack");
         }
 
         public void UpdateSliderAndle()
         {
             int value;
             int.TryParse(input.text, out value);
-            slider.Angle = value;
+            //slider.Angle = value;
+            
+            Debug.LogError("Removed due to Modern UI Pack");
         }
     }
 }

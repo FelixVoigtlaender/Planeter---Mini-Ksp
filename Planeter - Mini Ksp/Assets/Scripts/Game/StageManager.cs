@@ -6,14 +6,13 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
     public Stage currentStage;
-    public ContentCopy contentCopy;
-
-    public GameObject[] startStages;
 
     private void Start()
     {
         GameManager.OnGameStart += OnGameStart;
         GameManager.OnGameEnd += OnGameEnd;
+        GameManager.OnQuicksave += OnQuickSave;
+        GameManager.OnLoadQuickSave += OnLoadQuickSave;
     }
 
     public void OnGameStart()
@@ -22,10 +21,30 @@ public class StageManager : MonoBehaviour
     }
     public void OnGameEnd()
     {
-        contentCopy.ClearContent();
-        contentCopy.FillContent();
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(true);
+        }
     }
 
+    public void OnQuickSave()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            child.GetComponent<Stage>().OnQuickSave();
+
+        }
+    }
+    public void OnLoadQuickSave()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            child.GetComponent<Stage>().OnLoadQuickSave();
+        }
+    }
     public Stage GetCurrentStage()
     {
         if (IsStagesEmpty())
@@ -33,12 +52,24 @@ public class StageManager : MonoBehaviour
         if (currentStage && currentStage.isActiveAndEnabled)
             return currentStage;
 
-        Transform lastChild = transform.GetChild(transform.childCount - 1);
-        currentStage = lastChild.GetComponent<Stage>();
-        return currentStage;
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.gameObject.activeSelf)
+                return child.GetComponent<Stage>();
+
+        }
+        return null;
     }
     public bool IsStagesEmpty()
     {
-        return transform.childCount == 0;
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.gameObject.activeSelf)
+                return false;
+
+        }
+        return true;
     }
 }

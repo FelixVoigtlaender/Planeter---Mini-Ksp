@@ -9,15 +9,24 @@ public class PlanetShadow : MonoBehaviour
     private Quaternion _lookRotation;
     private Vector3 _direction;
     Transform planetTransform;
+    public RectTransform rectTransform;
+    public float rotationOffset = 0;
+
     private void Awake()
     {
         planetTransform = transform.parent.parent;
+        rectTransform = GetComponent<RectTransform>();
     }
     // Update is called once per frame
     void Update()
     {
-        
-        transform.right = - transform.position;
+        Vector3 position = rectTransform ? -rectTransform.localPosition : -transform.position;
+        position = position.magnitude > 0 ? position : Vector3.down;
+        transform.right = -position;
+
+        Quaternion rotation = transform.rotation;
+        rotation *= Quaternion.Euler(0,0,rotationOffset);
+        transform.rotation = rotation;
 
         // float angle = Vector2.Angle(Vector2.up, planetTransform.position);
         // transform.rotation = Quaternion.Euler(0, 0, angle);

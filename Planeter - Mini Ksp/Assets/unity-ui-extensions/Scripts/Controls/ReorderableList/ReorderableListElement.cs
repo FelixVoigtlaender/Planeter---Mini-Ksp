@@ -323,6 +323,7 @@ namespace UnityEngine.UI.Extensions
             }
 
             _draggingObject.sizeDelta = size;
+            _draggingObject.localScale = Vector3.one;
             _fakeElementLE.preferredHeight = _draggingObjectLE.preferredHeight = size.y;
             _fakeElementLE.preferredWidth = _draggingObjectLE.preferredWidth = size.x;
         }

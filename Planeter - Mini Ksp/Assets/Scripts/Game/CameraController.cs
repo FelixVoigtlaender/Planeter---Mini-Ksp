@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -9,117 +10,161 @@ public class CameraController : MonoBehaviour
 
 
     [Header("Movement")]
-    public bool lockX;
+    public Transform target;
+    public Vector2 targetDelta;
+    public Vector2 targetOffset;
+    public float maxOffset = 500f;
     public float horizontalSmoothTime;
     public float verticalSmoothTime;
-    public Vector2 offset;
-    float smoothVelocityX;
-    float smoothVelocityY;
-    Vector3 middle;
+    Vector2 targetSmoothVel;
 
     [Header("Size")]
-    public float minimumSize = 3;
-    public float maximumSize = 100;
-    public float skinWidth = 1;
-    float newOSize;
+    public float sizeMin = 3;
+    public float sizeMax = 100;
+    public float sizeGoal = 4;
     float smoothVelocitySize;
-    public Vector2 size;
+    public float sizeSmoothTime = 0.1f;
+    public float zoomScale = 0.1f;
 
-    public bool lockSize;
-    public float sizeSmoothTime;
-    float smoothVelocity0Size;
-
-    Player player;
-    GravitySystem currentSystem;
+    [Header("Input")]
+    public FieldTrigger fieldTrigger;
 
     private void Awake()
     {
         instance = this;
-    }
-    private void Start()
-    {
-        player = Player.instance;
+
+        if (fieldTrigger)
+        {
+            fieldTrigger.onDrag += OnDrag;
+            //fieldTrigger.onEndDrag += OnEndDrag;
+            //fieldTrigger.onPointerDown += OnPointerDown;
+            //fieldTrigger.onPointerUp += OnPointerUp;
+        }
     }
 
     private void Update()
     {
-        if (!currentSystem)
-            return;
-        //Move to position
-        Vector3 focusPosition = middle;
-        focusPosition.z = transform.position.z;
-        focusPosition.x = Mathf.SmoothDamp(transform.position.x, focusPosition.x, ref smoothVelocityX, horizontalSmoothTime);
-        focusPosition.x = lockX ? 0 : focusPosition.x;
-        focusPosition.y = Mathf.SmoothDamp(transform.position.y, focusPosition.y, ref smoothVelocityY, verticalSmoothTime);
-        transform.position = (Vector3)focusPosition;
-
-        //Size 
-        float oSize =  Mathf.SmoothDamp(Camera.main.orthographicSize, newOSize, ref smoothVelocitySize, sizeSmoothTime,1000,Time.fixedUnscaledDeltaTime);
-        Camera.main.orthographicSize = Mathf.Clamp(oSize, minimumSize,maximumSize);
+        FollowTarget();
+        FollowSize();
+        MouseInput();
     }
 
-    public void FixedUpdate()
+
+    public void MouseInput()
     {
-        currentSystem = player.GetCurrentSystem();
-        if (!currentSystem)
-            return;
-
-        //Position
-        middle = currentSystem.transform.position;
-
-        //Size
-        size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
-        PredictionDrawer predictionDrawer = player.dynamicBody.predictionDrawer;
-        if(predictionDrawer.systemCount <= 1 || true)
+        float deltaZoom = 0;
+        //Mouse Zoom
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
-            middle = currentSystem.transform.position;
-            size = Vector2.one * currentSystem.radiusOfInfluence * 2 * 1.2f;
-            if (!currentSystem.parentSystem)
-            {
-                //print("SUN");
-                GravitySystem furtherSystem = currentSystem.GetFurtherSystem(player.transform.localPosition);
-                if (furtherSystem)
-                {
-
-                    //print("SUNNY: " + furtherSystem.name);
-                    size = Vector2.one * furtherSystem.localStartPosition.magnitude * 2 * 1.2f;
-                }
-            }
-            else
-            {
-                //print("One System");
-            }
+            deltaZoom = -100;
         }
-        else if(predictionDrawer.systemCount > 1){
-            //print("TRANSFER");
-            //middle = (predictionDrawer.min + predictionDrawer.max) / 2;
-            //size = (predictionDrawer.max - predictionDrawer.min) * 1.2f;
-        }
-
-        newOSize = ToOrthographicSize(size);
-    }
-
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(transform.position, size);
-    }
-
-    public float ToOrthographicSize(Vector2 size)
-    {
-        float oSize = 0;
-        size = new Vector2(size.x + skinWidth, size.y + skinWidth);
-        size = size * 1;
-
-        if (size.x > size.y * Camera.main.aspect)
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
         {
-            size.y = size.x / Camera.main.aspect;
+            deltaZoom = 100;
+        }
+        // Mouse move Camera
+        if (Input.GetMouseButtonDown(0))
+        {
         }
 
-        oSize = size.y / 2;
+        DeltaZoom(deltaZoom);
+    }
+    public void ManageDrag(PointerEventData eventData)
+    {
 
-        return oSize;
+        zoomScale = sizeGoal / (50 * 10);
+
+        float deltaZoom = 0;
+
+        if (Input.touchCount >= 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            // Zoom
+            Touch firstTouch = Input.GetTouch(0);
+            Touch secondTouch = Input.GetTouch(1);
+
+            Vector2 firstPrevPos = firstTouch.position - firstTouch.deltaPosition;
+            Vector2 secondPrevPos = secondTouch.position - secondTouch.deltaPosition;
+
+            float touchesPrevPosDif = (firstPrevPos - secondPrevPos).magnitude;
+            float touchesCurPosDif = (firstTouch.position - secondTouch.position).magnitude;
+
+
+            float zoomDelta = (firstTouch.deltaPosition - secondTouch.deltaPosition).magnitude * zoomScale;
+
+            if (touchesPrevPosDif > touchesCurPosDif)
+                deltaZoom = zoomDelta;
+            if (touchesPrevPosDif < touchesCurPosDif)
+                deltaZoom = -zoomDelta;
+        }
+        else if(eventData.clickCount == 1)
+        {
+            // Move Camera
+            Vector2 startPosition = Camera.main.ScreenToWorldPoint(eventData.position + eventData.delta);
+            Vector2 endPosition = Camera.main.ScreenToWorldPoint(eventData.position);
+            Vector2 worldDelta = endPosition - startPosition;
+            targetOffset += worldDelta;
+            if(targetOffset.magnitude > maxOffset)
+            {
+                targetOffset = targetOffset.normalized * maxOffset;
+            }
+        }
+
+        
+        DeltaZoom(deltaZoom);
+    }
+    public void DeltaZoom(float delta)
+    {
+        zoomScale = sizeGoal / (50 * 10);
+        sizeGoal += delta * zoomScale;
+        sizeGoal = Mathf.Clamp(sizeGoal, sizeMin, sizeMax);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        ManageDrag(eventData);
+        print(eventData.position + " " + eventData.delta);
+    }
+    void FollowTarget()
+    {
+        // Nothing to follow
+        if (!target)
+            return;
+
+        //Decrease Delta
+        targetDelta.x = Mathf.SmoothDamp(targetDelta.x, 0, ref targetSmoothVel.x, horizontalSmoothTime);
+        targetDelta.y = Mathf.SmoothDamp(targetDelta.y, 0, ref targetSmoothVel.y, verticalSmoothTime);
+
+        // Init Position
+        Vector3 position = (Vector2)target.position + targetOffset + targetDelta;
+        position.z = transform.position.z;
+
+        transform.position = position;
+    }
+    void FollowSize()
+    {
+        float oSize = Mathf.SmoothDamp(Camera.main.orthographicSize, sizeGoal, ref smoothVelocitySize, sizeSmoothTime);
+        Camera.main.orthographicSize = Mathf.Clamp(oSize, sizeMin, sizeMax);
+    }
+
+
+    public static void SetTarget(Transform target)
+    {
+        instance.target = target;
+
+        if (!target)
+            return;
+
+        instance.targetOffset = Vector2.zero;
+        instance.targetDelta = (Vector2)instance.transform.position - ((Vector2)target.position) ;
+    }
+    public static void LockTarget(Transform target)
+    {
+        instance.target = target;
+
+        if (!target)
+            return;
+
+        instance.targetOffset = Vector2.zero;
+        instance.targetDelta = Vector2.zero;
     }
 }

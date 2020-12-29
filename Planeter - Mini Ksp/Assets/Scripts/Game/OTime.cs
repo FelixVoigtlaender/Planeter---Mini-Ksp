@@ -6,9 +6,18 @@ using UnityEngine.UI.Extensions.Tweens;
 public class OTime : MonoBehaviour
 {
     public static float time;
-    public static float fixedDeltaTime = 0.05f;
-    public static float timeScale = 1;
+    public static float fixedTimeSteps = 0.1f;
+    public static float deltaTime = 0.01f;
+    public static float timeScale = 2;
     public static bool isPaused = false;
+    public static float quickSaveTime;
+
+
+    private void Start()
+    {
+        GameManager.OnLoadQuickSave += OnLoadQuickSave;
+        GameManager.OnQuicksave += OnQuickSave;
+    }
 
     private void FixedUpdate()
     {
@@ -17,7 +26,9 @@ public class OTime : MonoBehaviour
 
         if (!GameManager.isGameActive)
             return;
-        time += fixedDeltaTime * timeScale;
+        //deltaTime = Time.fixedDeltaTime;
+
+        time += deltaTime * timeScale;
     }
 
     public void Skip(float delta)
@@ -29,6 +40,10 @@ public class OTime : MonoBehaviour
     {
         timeScale = scale;
     }
+    public void SetLogarithmicTimeScale(float n)
+    {
+        timeScale = Mathf.Pow(10, n);
+    }
 
     public void TogglePause()
     {
@@ -37,5 +52,14 @@ public class OTime : MonoBehaviour
     public void SetPause(bool value)
     {
         isPaused = value;
+    }
+
+    public void OnLoadQuickSave()
+    {
+        time = quickSaveTime;
+    }
+    public void OnQuickSave()
+    {
+        quickSaveTime = time;
     }
 }

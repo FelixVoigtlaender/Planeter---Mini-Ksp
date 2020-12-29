@@ -6,15 +6,26 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static bool isGameActive = false;
-    public PageSwiper pageSwiper;
 
     public static event Action OnGameStart;
     public static event Action OnGameEnd;
+    public static event Action OnQuicksave;
+    public static event Action OnLoadQuickSave;
     // Start is called before the first frame update
 
     private void Awake()
     {
         instance = this;
+    }
+
+    public void Quicksave()
+    {
+        OnQuicksave?.Invoke();
+    }
+
+    public void LoadQuickSave()
+    {
+        OnLoadQuickSave?.Invoke();
     }
 
 
@@ -27,9 +38,8 @@ public class GameManager : MonoBehaviour
     }
     public void StartGame()
     {
-        isGameActive = true;
-        pageSwiper.enabled = false;
         OTime.time = 0;
+        isGameActive = true;
 
         OnGameStart?.Invoke();
     }
@@ -37,7 +47,6 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         isGameActive = false;
-        pageSwiper.enabled = true;
 
         OnGameEnd?.Invoke();
     }
