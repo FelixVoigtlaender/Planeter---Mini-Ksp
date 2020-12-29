@@ -25,7 +25,7 @@ public class CameraSelectable : MonoBehaviour
 
 
         if (selectOnStart)
-            CameraController.SetTarget(transform);
+            Select();
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -53,9 +53,15 @@ public class CameraSelectable : MonoBehaviour
 
         if (pixelDistance < pixelRadius)
         {
-            CameraController.SetTarget(transform);
+            Select();
         }
     }
+
+    public void Select()
+    {
+        CameraController.SetTarget(transform);
+    }
+
     /// <summary>
     /// Uses lossy scale as radius!
     /// </summary>
