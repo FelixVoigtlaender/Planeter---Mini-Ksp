@@ -6,6 +6,9 @@ using UnityEngine;
 public class Predictions
 {
     public int maxI;
+    public int curI;
+    public int free;
+    public int filled;
     public OrbitMath.OrbitPrediction[] predictions;
     //
     // Setup
@@ -38,10 +41,13 @@ public class Predictions
     /// </summary>
     /// <param name="prediction"></param>
     /// <param name="index"></param>
-    public void AddPredictionI(OrbitMath.OrbitPrediction prediction, int index)
+    public void AddPredictionI(OrbitMath.OrbitPrediction prediction, int index, bool allowOverride = false)
     {
-        if (!CanAddPrediction() && maxI == index)
+        if (!CanAddPrediction(index) && !allowOverride)
+        {
+            Debug.LogError("Couldn't add prediction");
             return;
+        }
         index = CheckIndex(index);
         maxI = CheckIndex(index + 1);
         predictions[index] = prediction;
@@ -66,12 +72,17 @@ public class Predictions
     public void SetCurrentPrediction(OrbitMath.OrbitPrediction prediction)
     {
         int index = CheckIndexT(OTime.time);
-        AddPredictionI(prediction, index);
+        AddPredictionI(prediction, index, true);
+    }
+    public bool CanAddPrediction(int i)
+    {
+        if (GetPredictionI(i) == null || GetCurrentPrediction() == null)
+            return true;
+        return i != GetCurrentIndex(); 
     }
     public bool CanAddPrediction()
     {
-        int dist = ModuloDistance(maxI, GetCurrentIndex() , predictions.Length);
-        return dist > 1;
+        return CanAddPrediction(maxI);
     }
 
 
@@ -93,18 +104,20 @@ public class Predictions
     {
         return GetPredictionT(OTime.time);
     }
-    public OrbitMath.OrbitPrediction GetLastPrediciton()
+    public OrbitMath.OrbitPrediction GetLastPrediction()
     {
         return GetPredictionI(GetLastIndex());
     }
     public int GetCurrentIndex()
     {
-        return CheckIndexT(OTime.time);
+        curI = CheckIndexT(OTime.time);
+        free = ModuloDistance(maxI, curI);
+        return curI;
     }
     public int GetLastIndex()
     {
         if (maxI == GetCurrentIndex())
-            return GetCurrentIndex();
+            return maxI;
         return CheckIndex(maxI - 1);
     }
 
@@ -131,6 +144,12 @@ public class Predictions
     public int CheckIndexT(float time)
     {
         return CheckIndex(Mathf.FloorToInt(time / OTime.fixedTimeSteps));
+    }
+    public int Mod(int x , int m)
+    {
+        if (m < 0) m = -m;
+        int r = x % m;
+        return r < 0 ? r + m : r;
     }
     public int ModuloDistance(int a, int b, int m)
     {

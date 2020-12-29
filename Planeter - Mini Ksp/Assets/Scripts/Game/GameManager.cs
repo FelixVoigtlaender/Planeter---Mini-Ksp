@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
     }
     public void StartGame()
     {
-        isGameActive = true;
         OTime.time = 0;
+        isGameActive = true;
 
         OnGameStart?.Invoke();
     }

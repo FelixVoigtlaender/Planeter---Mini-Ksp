@@ -17,8 +17,6 @@ public class DynamicBody : MonoBehaviour
 
 
     public bool showLocal = false;
-    public int maxIndex;
-    public int currentIndex;
     public Predictions predictions;
     public Predictions pretendPredictions;
     public PredictionDrawer predictionDrawer;
@@ -34,11 +32,16 @@ public class DynamicBody : MonoBehaviour
         startParent = transform.parent;
         startPosition = transform.position;
 
+
+        //Init predictions
+        predictions = new Predictions(predictionCount);
+        pretendPredictions = new Predictions(pretendPredictionCount);
+
         Reset();
 
         GameManager.OnQuicksave += OnQuickSave;
         GameManager.OnLoadQuickSave += OnLoadQuickSave;
-        GameManager.OnGameEnd += Reset;
+        GameManager.OnGameStart += Reset;
     }
 
     public void Reset()
@@ -51,29 +54,17 @@ public class DynamicBody : MonoBehaviour
 
     public void Setup()
     {
-        maxIndex = currentIndex = 0;
-
-
         // Init StartPrediction
         startPrediction.localPosition = startPosition;
         startPrediction = GravitySystem.sunSystem.SetupPrediction(startPrediction);
-
-        //Init predictions
-        predictions = new Predictions(predictionCount, startPrediction);
-        pretendPredictions = new Predictions(pretendPredictionCount);
+        predictions.SetCurrentPrediction(startPrediction);
     }
 
     public void Update()
     {
         if (!GameManager.isGameActive)
             return;
-
-
-        
-
-        OrbitMath.OrbitPrediction prediction = predictions.GetLerpedPredicitonT(OTime.time);
-        transform.parent = prediction.gravitySystem.transform;
-        transform.localPosition = prediction.localPosition;
+     
     }
 
 
@@ -83,7 +74,9 @@ public class DynamicBody : MonoBehaviour
         {
             PredictPath(predictions, 10);
         }
-
+        OrbitMath.OrbitPrediction prediction = predictions.GetCurrentPrediction();
+        transform.parent = prediction.gravitySystem.transform;
+        transform.localPosition = prediction.localPosition;
         DrawPath(predictionDrawer,predictions);
     }
 
@@ -120,7 +113,7 @@ public class DynamicBody : MonoBehaviour
         {
             if (!predictions.CanAddPrediction())
                 return;
-            predictions.AddPredictionN(CalculateNextPrediction(predictions.GetLastPrediciton()));
+            predictions.AddPredictionN(CalculateNextPrediction(predictions.GetLastPrediction()));
         }
     }
 
@@ -239,6 +232,6 @@ public class DynamicBody : MonoBehaviour
 
     public OrbitMath.OrbitPrediction GetLastPrediction()
     {
-        return predictions.GetLastPrediciton();
+        return predictions.GetLastPrediction();
     }
 }

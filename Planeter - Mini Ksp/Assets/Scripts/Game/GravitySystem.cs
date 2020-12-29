@@ -320,7 +320,7 @@ public class GravitySystem : PointMass
         for (int i = 0; i < stepCount; i++)
         {
             OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(i * OTime.fixedTimeSteps, this, false);
-            predictions.AddPredictionN(prediction);
+            predictions.AddPredictionI(prediction,i,true);
             path[i] = prediction.localPosition;
         }
 
