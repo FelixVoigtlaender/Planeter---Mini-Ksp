@@ -49,9 +49,9 @@ public class PathSubsection : MonoBehaviour
         exitPoint.color = color;
     }
 
-    public void DrawSubsection(OrbitMath.OrbitPrediction[] predictions, int startI, int endI){
+    public void DrawSubsection(Predictions predictions, int startI, int endI){
         //Convert Predictions to Vector3 Array
-        int count = OrbitMath.ModuloDistance(startI, endI, predictions.Length) - 1;
+        int count =predictions.ModuloDistance(startI,endI) - 1;
         if(count <=0)
         {
             gameObject.SetActive(false);
@@ -60,16 +60,16 @@ public class PathSubsection : MonoBehaviour
         Vector3[] path = new Vector3[count];
         for(int steps = 0; steps < count; steps++)
         {
-            int i = (steps + startI) % predictions.Length;
-            path[steps] = predictions[i].localPosition;
+            int i = predictions.CheckIndex(startI + steps);
+            path[steps] = predictions.GetPredictionI(i).localPosition;
         }
 
         // Set GravitySystem as parent
-        transform.parent = predictions[startI].gravitySystem.transform;
+        transform.parent = predictions.GetPredictionI(startI).gravitySystem.transform;
         transform.localPosition = Vector2.zero;
 
         //Color
-        Color color = predictions[startI].gravitySystem.renderer.color;
+        Color color = predictions.GetPredictionI(startI).gravitySystem.renderer.color;
         color.a = alpha;
 
         // Set Linerenderer

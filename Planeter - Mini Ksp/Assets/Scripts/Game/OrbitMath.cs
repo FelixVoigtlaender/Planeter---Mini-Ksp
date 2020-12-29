@@ -107,25 +107,35 @@ public class OrbitMath : MonoBehaviour
         return new OrbitPrediction(time,localPosition, localVelocity);
     }
 
-
+    /// <summary>
+    /// Returns for a given time the Prediction with position and velocity of a static orbit
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="gravitySystem"></param>
+    /// <param name="setData"></param>
+    /// <returns></returns>
     public static OrbitPrediction GetStaticOrbitPrediction(float time, GravitySystem gravitySystem, bool setData = false) {
         
+        // Orbit elements from Gravity system
         OrbitElements orbitElements = gravitySystem.orbitElements;
+
+        // No Prediction for Sun
         if (!orbitElements.centerSystem)
             return new OrbitPrediction(time, gravitySystem);
+
+        // Constants
         float mu = instance.gravityConstant * orbitElements.centerSystem.orbitElements.mass;
         float rp = orbitElements.rp_radiusPericenter;
         float a = orbitElements.a_semiMajorAxis;
         float e =  1 - (rp / a);
-
         float M = (Mathf.Sqrt(mu / Mathf.Pow(a, 3)) * time) % (2*Mathf.PI);
 
+        // Newton Iteration Setup
         float E_start = 5;
         float E = E_start;
-
-        int E_iterations = 250;
+        int E_iterationsMax = 250;
         /// Newton Iteration
-        for(int i = 0; i < E_iterations; i++)
+        for(int i = 0; i < E_iterationsMax; i++)
         {
             float func =    (M - E + e * Mathf.Sin(E));
             //              ---------------------------
@@ -134,29 +144,24 @@ public class OrbitMath : MonoBehaviour
             float newEs = E - (func / funcDer);
             if (Mathf.Abs(newEs - E) < 0.00001f)
             {
-                E_iterations = i;
+                E_iterationsMax = i;
                 break;
             }
             E = newEs;
         }
-
-
-
-
         float f = 2 * Mathf.Atan(Mathf.Sqrt((1 + e) / (1 - e)) * Mathf.Tan(E / 2));
-
         float r = (a * (1 - Mathf.Pow(e, 2))) / (1 + (e * Mathf.Cos(f)));
 
-
-
+        // Prediction setup
         Vector2 dir = (Vector2)(Quaternion.Euler(0, 0, Mathf.Rad2Deg * f) * Vector2.right);
-
         Vector2 localPosition = r * dir;
         Vector2 velocity = Vector2.Perpendicular(dir) *  Mathf.Sqrt((2 * mu / r) - (mu / a));
+        OrbitMath.OrbitPrediction prediction = new OrbitMath.OrbitPrediction(time, localPosition, velocity);
+        prediction.gravitySystem = gravitySystem.parentSystem;
 
-
+        //Debug
 #if UNITY_EDITOR
-        if(setData)
+        if (setData)
         {
             float dataTime = time;
             Grapher.Log(Mathf.Sin(time), "SINUS" + "_" + orbitElements.name, dataTime);
@@ -170,13 +175,13 @@ public class OrbitMath : MonoBehaviour
             Grapher.Log(r, "r" + "_" + orbitElements.name, dataTime);
             Grapher.Log(velocity.magnitude, "vel_mag" + "_" + orbitElements.name, dataTime);
 
-            Grapher.Log(E_iterations, "E_iterations" + "_" + orbitElements.name, dataTime);
+            Grapher.Log(E_iterationsMax, "E_iterations" + "_" + orbitElements.name, dataTime);
             Grapher.Log(E, "E" + "_" + orbitElements.name, dataTime);
             Grapher.Log(E_start, "E_start" + "_" + orbitElements.name, dataTime);
         }
 #endif
 
-        return new OrbitPrediction(time, localPosition, velocity);
+        return prediction;
 
     }
     public static float GetOrbitPeriodA(GravitySystem gravitySystem)

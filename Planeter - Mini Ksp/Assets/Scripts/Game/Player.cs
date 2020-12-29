@@ -77,9 +77,6 @@ public class Player : MonoBehaviour
 
 
         dynamicBody.PretendAddRelativeVelocity(thrust);
-
-
-        //Line Renderer
     }
 
     public GravitySystem GetCurrentSystem()

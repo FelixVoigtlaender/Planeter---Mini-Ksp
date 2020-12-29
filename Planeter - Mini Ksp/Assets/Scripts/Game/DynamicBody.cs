@@ -17,9 +17,8 @@ public class DynamicBody : MonoBehaviour
 
 
     public bool showLocal = false;
-    public int maxIndex;
-    public int currentIndex;
-    public OrbitMath.OrbitPrediction[] predictions;
+    public Predictions predictions;
+    public Predictions pretendPredictions;
     public PredictionDrawer predictionDrawer;
     public PredictionDrawer pretendPredictionDrawer;
 
@@ -33,11 +32,16 @@ public class DynamicBody : MonoBehaviour
         startParent = transform.parent;
         startPosition = transform.position;
 
+
+        //Init predictions
+        predictions = new Predictions(predictionCount);
+        pretendPredictions = new Predictions(pretendPredictionCount);
+
         Reset();
 
         GameManager.OnQuicksave += OnQuickSave;
         GameManager.OnLoadQuickSave += OnLoadQuickSave;
-        GameManager.OnGameEnd += Reset;
+        GameManager.OnGameStart += Reset;
     }
 
     public void Reset()
@@ -50,87 +54,37 @@ public class DynamicBody : MonoBehaviour
 
     public void Setup()
     {
-        maxIndex = currentIndex = 0;
-
-
         // Init StartPrediction
         startPrediction.localPosition = startPosition;
         startPrediction = GravitySystem.sunSystem.SetupPrediction(startPrediction);
+        predictions.SetCurrentPrediction(startPrediction);
+    }
 
-        predictions = new OrbitMath.OrbitPrediction[predictionCount];
-        for (int i = 0; i < predictions.Length; i++)
-        {
-            predictions[i] = new OrbitMath.OrbitPrediction();
-        }
-        predictions[0] = startPrediction;
+    public void Update()
+    {
+        if (!GameManager.isGameActive)
+            return;
+     
     }
 
 
     public void FixedUpdate()
     {
-        if (!GameManager.isGameActive)
-            return;
-        //Predict path
-        int currentPredictionCount = ModuloDistance(currentIndex, maxIndex, predictions.Length);
-        int newPredictionCount = Mathf.Max(100 - currentPredictionCount, 10);
-        if (ModuloDistance(currentIndex, maxIndex, predictions.Length) < predictions.Length - newPredictionCount-2)
+        if (predictions.CanAddPrediction())
         {
-            predictions = PredictPath(predictions, maxIndex, newPredictionCount);
-            maxIndex = (maxIndex + newPredictionCount) % predictions.Length;
+            PredictPath(predictions, 10);
         }
-
-        //
-        //currentIndex = (currentIndex + 1) % predictions.Length;
-        //
-
-        int skipSteps = (int)((OTime.time - predictions[currentIndex].time) / OTime.fixedTimeSteps);
-        currentIndex = (currentIndex + skipSteps) % predictions.Length;
-        OrbitMath.OrbitPrediction prediction = predictions[currentIndex];
-        OrbitMath.OrbitPrediction nextPrediction = predictions[(currentIndex + 1) % predictions.Length];
-
-
-        Vector2 position = transform.localPosition;
-        if(prediction.gravitySystem == nextPrediction.gravitySystem)
-        {
-
-            float percent = (OTime.time - prediction.time) / OTime.fixedTimeSteps;
-            percent = Mathf.Clamp01(percent);
-            position = Vector2.Lerp(prediction.localPosition, nextPrediction.localPosition, percent);
-        }
-        else
-        {
-            position = prediction.localPosition;
-        }
-
+        OrbitMath.OrbitPrediction prediction = predictions.GetLerpedPredicitonT(OTime.time);
         transform.parent = prediction.gravitySystem.transform;
-        transform.localPosition = position;
-
-        DrawPath(predictions, currentIndex, maxIndex);
-
-
-#if UNITY_EDITOR
-        this.currentPrediction = prediction;
-        Grapher.Log(prediction.localGravity.magnitude, "Gravity", prediction.time);
-        Grapher.Log(prediction.localGravity.magnitude, prediction.gravitySystem.name, prediction.gravitySystem.renderer.color, prediction.time);
-#endif
+        transform.localPosition = prediction.localPosition;
+        DrawPath(predictionDrawer,predictions);
     }
 
-    public void DrawPath(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
+    public void DrawPath(PredictionDrawer drawer, Predictions predictions)
     {
-        if (predictionDrawer)
-        {
-            predictionDrawer.DrawPrediction(predictions, curI, maxI);
+        if (!drawer || predictions == null)
             return;
-        }
-    }
-
-    public void PretendDrawPath(OrbitMath.OrbitPrediction[] predictions, int curI, int maxI)
-    {
-        if (pretendPredictionDrawer)
-        {
-            pretendPredictionDrawer.DrawPrediction(predictions, curI, maxI);
-            return;
-        }
+        drawer.DrawPath(predictions);
     }
 
     public Vector2 RelativeTimePositionToWorld(OrbitMath.OrbitPrediction curPrediciton, List<OrbitMath.OrbitPrediction> entryPredictions)
@@ -153,23 +107,14 @@ public class DynamicBody : MonoBehaviour
         return curPrediciton.gravitySystem.PointToWorld(entryPredictions[0].time,curPrediciton.localPosition);
     }
 
-    public OrbitMath.OrbitPrediction[] PredictPath(OrbitMath.OrbitPrediction[] predictions, int index, int steps)
+    public void PredictPath(Predictions predictions, int steps)
     {
         for(int i = 0; i < steps; i++)
         {
-            int nextMaxIndex = (index + 1) % predictions.Length;
-            predictions[nextMaxIndex] = CalculateNextPrediction(predictions[index]);
-            index = nextMaxIndex;
+            if (!predictions.CanAddPrediction())
+                return;
+            predictions.AddPredictionN(CalculateNextPrediction(predictions.GetLastPrediction()));
         }
-        return predictions;
-    }
-
-    int ModuloDistance(int a, int b, int m)
-    {
-        if (a <= b)
-            return b - a;
-        else
-            return (m - a) + b;
     }
 
     public OrbitMath.OrbitPrediction CalculateNextPrediction(OrbitMath.OrbitPrediction currentPrediction)
@@ -206,22 +151,25 @@ public class DynamicBody : MonoBehaviour
     /// <param name="deltaVelocity"></param>
     public void AddVelocity(Vector2 deltaVelocity)
     {
-        predictions[currentIndex].localVelocity += deltaVelocity;
-        maxIndex = currentIndex;
+        // Alters current Prediction (Reset of all predictions is handled by SetCurrentPrediction)
+        OrbitMath.OrbitPrediction prediction = predictions.GetCurrentPrediction();
+        prediction.localVelocity += deltaVelocity;
+        predictions.SetCurrentPrediction(prediction);
 
+        // Hides PretendPredictionDrawer
         if (pretendPredictionDrawer)
             pretendPredictionDrawer.Hide();
     }
-    public void PretendAddVelocity(Vector2 velocity)
+    public void PretendAddVelocity(Vector2 deltaVelocity)
     {
-        Debug.DrawRay(transform.position, velocity * 10);
+        Debug.DrawRay(transform.position, deltaVelocity * 10);
 
-        OrbitMath.OrbitPrediction[] path = new OrbitMath.OrbitPrediction[pretendPredictionCount];
-        path[0] = predictions[currentIndex].Clone();
-        path[0].localVelocity += velocity;
+        OrbitMath.OrbitPrediction prediction = predictions.GetCurrentPrediction().Clone();
+        prediction.localVelocity += deltaVelocity;
+        pretendPredictions.SetCurrentPrediction(prediction);
 
-        path = PredictPath(path, 0, path.Length-1);
-        PretendDrawPath(path, 0, path.Length-1);
+        PredictPath(pretendPredictions, pretendPredictions.predictions.Length);
+        DrawPath(pretendPredictionDrawer, pretendPredictions);
     }
     /// <summary>
     /// Adds relative velocity to the current velocity thus that
@@ -239,7 +187,8 @@ public class DynamicBody : MonoBehaviour
     }
     public Vector2 RelativeToWorldVelocity(Vector2 relativeDelta)
     {
-        Vector2 myDir = predictions[currentIndex].isGrounded ? predictions[currentIndex].localPosition : predictions[currentIndex].localVelocity;
+        OrbitMath.OrbitPrediction currentPrediction = predictions.GetCurrentPrediction();
+        Vector2 myDir = currentPrediction.isGrounded ? currentPrediction.localPosition : currentPrediction.localVelocity;
         myDir.Normalize();
         return myDir * relativeDelta.y  - Vector2.Perpendicular(myDir) * relativeDelta.x;
     }
@@ -250,12 +199,11 @@ public class DynamicBody : MonoBehaviour
     /// 
     public void OnQuickSave()
     {
-        quicksavePrediction = predictions[currentIndex].Clone();
+        quicksavePrediction = predictions.GetCurrentPrediction().Clone();
     }
     public void OnLoadQuickSave()
     {
-        predictions[currentIndex] = quicksavePrediction;
-        maxIndex = currentIndex;
+        predictions.SetCurrentPrediction(quicksavePrediction);
 
         if (pretendPredictionDrawer)
             pretendPredictionDrawer.Hide();
@@ -267,22 +215,23 @@ public class DynamicBody : MonoBehaviour
 
         if (predictions == null)
             return;
-        if (predictions.Length < predictionCount)
+        if (predictions.PredictionCount() == 0)
             return;
 
+        OrbitMath.OrbitPrediction currentPrediction = predictions.GetCurrentPrediction();
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, predictions[currentIndex].localVelocity);
+        Gizmos.DrawRay(transform.position, currentPrediction.localVelocity);
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position, predictions[currentIndex].localGravity);
+        Gizmos.DrawRay(transform.position, currentPrediction.localGravity);
     }
 
     public OrbitMath.OrbitPrediction GetCurrentPrediction()
     {
-        return predictions[currentIndex];
+        return predictions.GetCurrentPrediction();
     }
 
     public OrbitMath.OrbitPrediction GetLastPrediction()
     {
-        return predictions[maxIndex];
+        return predictions.GetLastPrediction();
     }
 }

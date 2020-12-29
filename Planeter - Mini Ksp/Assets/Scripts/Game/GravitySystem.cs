@@ -18,11 +18,15 @@ public class GravitySystem : PointMass
 
     public OrbitElements orbitElements = new OrbitElements();
 
+
+    public Predictions predictions;
     //In Game
     public GravitySystem[] childSystems;
 
     public void Awake()
     {
+
+        base.mass = orbitElements.mass;
         if (transform.parent)
             parentSystem = transform.parent.GetComponent<GravitySystem>();
         else
@@ -47,15 +51,15 @@ public class GravitySystem : PointMass
         CheckOrbit();
     }
 
-
-    public void Start()
+    private void Start()
     {
+        CheckSystem();
     }
 
 
     public void FixedUpdate()
     {
-        OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(OTime.time, this,true);
+        OrbitMath.OrbitPrediction prediction = GetPrediction(OTime.time);
         transform.localPosition = prediction.localPosition;
     }
 
@@ -145,8 +149,10 @@ public class GravitySystem : PointMass
     }
     public OrbitMath.OrbitPrediction GetPrediction(float time)
     {
-        //Todo Cache
-        return OrbitMath.GetStaticOrbitPrediction(time, this);
+        if (!parentSystem)
+            return new OrbitMath.OrbitPrediction(time, transform.localPosition, Vector2.zero);
+
+        return predictions.GetLerpedPredicitonT(time);
     }
 
     /// <summary>
@@ -224,6 +230,7 @@ public class GravitySystem : PointMass
     public void CheckSystem()
     {
         CheckChildSystems();
+
 
         mass = 0;
         if (!renderer)
@@ -314,14 +321,15 @@ public class GravitySystem : PointMass
             return;
 
         //Prediction
-        int count = 1000;
         float orbitTime = OrbitMath.GetOrbitPeriodA(this);
-        float timeSteps = orbitTime / (count-1);
-        print(timeSteps);
-        Vector3[] path = new Vector3[count];
-        for (int i = 0; i < path.Length; i++)
+        int stepCount = Mathf.FloorToInt(orbitTime / OTime.fixedTimeSteps);
+        predictions = new Predictions(stepCount);
+        Vector3[] path = new Vector3[stepCount];
+        for (int i = 0; i < stepCount; i++)
         {
-            path[i] = OrbitMath.GetStaticOrbitPrediction(i * timeSteps, this,false).localPosition;
+            OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(i * OTime.fixedTimeSteps, this, false);
+            predictions.AddPredictionI(prediction,i,true);
+            path[i] = prediction.localPosition;
         }
 
         //Linerenderer Setup

@@ -14,16 +14,14 @@ public class GravitySystemEditor : Editor
 
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("SetUp System"))
-        {
-            gravitySytem.SetUp();
-        }
-
         if (GUILayout.Button("Check System"))
         {
             gravitySytem.CheckSystem();
         }
-
+        if (GUILayout.Button("Check Orbit"))
+        {
+            gravitySytem.CheckOrbit();
+        }
 
         //gravitySytem.CheckSystem();
 
