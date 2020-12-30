@@ -14,11 +14,6 @@ public class PointMassEditor : Editor
 
         PointMass pointMass = (PointMass)target;
 
-        if (GUILayout.Button("SetUp Point Mass"))
-        {
-            pointMass.SetUp();
-        }
-
 
         if (pointMass.body)
             pointMass.body.localScale = Vector3.one * 2 * pointMass.radius;

@@ -85,7 +85,7 @@ public class PredictionDrawer : MonoBehaviour
 
     public Vector2 RelativeTimePositionToWorld(OrbitMath.OrbitPrediction curPrediciton, List<OrbitMath.OrbitPrediction> entryPredictions)
     {
-        if (curPrediciton.gravitySystem.parentSystem == null)
+        if (curPrediciton.gravitySystem.centerSystem == null)
         {
             return curPrediciton.localPosition;
         }
@@ -97,7 +97,7 @@ public class PredictionDrawer : MonoBehaviour
             {
                 Vector2 relativePosition = entryPred.gravitySystem.PointToParentSystem(entryPred.time, curPrediciton.localPosition);
                 OrbitMath.OrbitPrediction relativePred = new OrbitMath.OrbitPrediction(curPrediciton.time, relativePosition, curPrediciton.localVelocity);
-                relativePred.gravitySystem = entryPred.gravitySystem.parentSystem;
+                relativePred.gravitySystem = entryPred.gravitySystem.centerSystem;
                 return RelativeTimePositionToWorld(relativePred, entryPredictions);
             }
         }

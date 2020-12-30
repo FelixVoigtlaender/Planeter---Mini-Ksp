@@ -10,13 +10,13 @@ public class GravitySystem : PointMass
     public static GravitySystem sunSystem;
     [Header("My Mass")]
     public float radiusOfInfluence = 0;
-    public GravitySystem parentSystem;
+    public GravitySystem centerSystem;
     public SpriteRenderer sphereOfInfluence;
 
     public Vector2 localStartPosition;
     public float t0 = 0;
 
-    public OrbitElements orbitElements = new OrbitElements();
+    public OrbitElement orbitElement = new OrbitElement();
 
 
     public Predictions predictions;
@@ -26,9 +26,9 @@ public class GravitySystem : PointMass
     public void Awake()
     {
 
-        base.mass = orbitElements.mass;
+        base.mass = orbitElement.mass;
         if (transform.parent)
-            parentSystem = transform.parent.GetComponent<GravitySystem>();
+            centerSystem = transform.parent.GetComponent<GravitySystem>();
         else
             sunSystem = this;
 
@@ -69,8 +69,8 @@ public class GravitySystem : PointMass
         prediction.ChangeSystem(this);
 
         //Outside of system
-        if (prediction.localPosition.magnitude > radiusOfInfluence && parentSystem)
-            return parentSystem.DynamicPrediction(prediction, mass);
+        if (prediction.localPosition.magnitude > radiusOfInfluence && centerSystem)
+            return centerSystem.DynamicPrediction(prediction, mass);
 
         //Inside of child system
         foreach(GravitySystem childSystem in childSystems)
@@ -104,17 +104,17 @@ public class GravitySystem : PointMass
     /// <returns></returns>
     public Vector2 ParentGravity(float time, Vector2 localPosition, float mass = 1)
     {
-        if (!parentSystem)
+        if (!centerSystem)
             return Vector2.zero;
 
         Vector2 myLocalPosition = GetPrediction(time).localPosition;
         Vector2 parentLocalPosition = localPosition + myLocalPosition;
         float distance = parentLocalPosition.magnitude;
-        float parentMass = parentSystem.GetCenterMass();
+        float parentMass = centerSystem.GetCenterMass();
         Vector2 gravity = OrbitMath.GravityForce(parentLocalPosition,Vector2.zero,mass,parentMass);
 
 
-        return gravity + parentSystem.ParentGravity(time, parentLocalPosition, mass);
+        return gravity + centerSystem.ParentGravity(time, parentLocalPosition, mass);
     }
     
 
@@ -149,7 +149,7 @@ public class GravitySystem : PointMass
     }
     public OrbitMath.OrbitPrediction GetPrediction(float time)
     {
-        if (!parentSystem)
+        if (!centerSystem)
             return new OrbitMath.OrbitPrediction(time, transform.localPosition, Vector2.zero);
 
         return predictions.GetLerpedPredicitonT(time);
@@ -182,8 +182,8 @@ public class GravitySystem : PointMass
     public Vector2 PointToSystem(float time, Vector2 position)
     {
         OrbitMath.OrbitPrediction prediction = GetPrediction(time);
-        if (parentSystem)
-            return parentSystem.PointToSystem(time, position - prediction.localPosition);
+        if (centerSystem)
+            return centerSystem.PointToSystem(time, position - prediction.localPosition);
         else
             return position;
     }
@@ -202,15 +202,15 @@ public class GravitySystem : PointMass
     public Vector2 PointToWorld(float time, Vector2 localPosition)
     {
         OrbitMath.OrbitPrediction prediction = GetPrediction(time);
-        if (parentSystem)
-            return parentSystem.PointToWorld(time, localPosition + prediction.localPosition);
+        if (centerSystem)
+            return centerSystem.PointToWorld(time, localPosition + prediction.localPosition);
         else
             return localPosition;
     }
     public Vector2 PointToParentSystem(float time, Vector2 localPosition)
     {
         OrbitMath.OrbitPrediction prediction = GetPrediction(time);
-        if (parentSystem)
+        if (centerSystem)
             return localPosition + prediction.localPosition;
         else
             return localPosition;
@@ -218,10 +218,32 @@ public class GravitySystem : PointMass
     public Vector2 PointFromParentSystem(float time, Vector2 localPosition)
     {
         OrbitMath.OrbitPrediction prediction = GetPrediction(time);
-        if (parentSystem)
+        if (centerSystem)
             return localPosition - prediction.localPosition;
         else
             return localPosition;
+    }
+
+
+    public void Setup(OrbitElement element)
+    {
+        this.orbitElement = element;
+
+        //Name
+        gameObject.name = element.name;
+
+        // Center System
+        centerSystem =  GameObject.Find(element.center).GetComponent<GravitySystem>();
+        transform.SetParent(centerSystem.transform);
+
+        // Position - Puts planet at its Periapsis
+        transform.localPosition = Vector3.right * element.a_semiMajorAxis *(1- element.e_eccentricity);
+
+        // Body
+        body = GetBody();
+        body.localScale = Vector3.one * 2 * element.radius;
+        mass = element.mass;
+        radius = element.radius;
     }
 
     /// <summary>
@@ -237,17 +259,17 @@ public class GravitySystem : PointMass
             renderer = GetComponentInChildren<SpriteRenderer>();
 
         //Radius of Influence
-        parentSystem = null;
+        centerSystem = null;
         if (transform.parent)
         {
-            parentSystem = transform.parent.GetComponent<GravitySystem>();
+            centerSystem = transform.parent.GetComponent<GravitySystem>();
             
-            print("TEEEESSSTTT" +name + parentSystem.name);
+            print("TEEEESSSTTT" +name + centerSystem.name);
         }
-        if (parentSystem)
+        if (centerSystem)
         {
-            float distToParentSytem = orbitElements.a_semiMajorAxis;
-            radiusOfInfluence = OrbitMath.CircleOfInfluence(distToParentSytem, GetMass(), parentSystem.GetMass());
+            float distToParentSytem = orbitElement.a_semiMajorAxis;
+            radiusOfInfluence = OrbitMath.CircleOfInfluence(distToParentSytem, GetMass(), centerSystem.GetMass());
 
             if (!sphereOfInfluence)
             {
@@ -266,9 +288,9 @@ public class GravitySystem : PointMass
         }
 
         // Add Siblings in RadiusOfInfluence
-        if (parentSystem)
+        if (centerSystem)
         {
-            GravitySystem[] siblingSystems = parentSystem.GetChildSystems();
+            GravitySystem[] siblingSystems = centerSystem.GetChildSystems();
             foreach(GravitySystem siblingSystem in siblingSystems)
             {
                 if (siblingSystem == this)
@@ -289,17 +311,17 @@ public class GravitySystem : PointMass
         }
 
         // Check if this system exited another System
-        if (parentSystem)
+        if (centerSystem)
         {
-            float distance = Vector2.Distance(transform.position, parentSystem.transform.position);
-            if(distance > parentSystem.radiusOfInfluence)
+            float distance = Vector2.Distance(transform.position, centerSystem.transform.position);
+            if(distance > centerSystem.radiusOfInfluence)
             {
-                print(name + " entered " + parentSystem.transform.name + "  system");
-                transform.SetParent(parentSystem.transform.parent);
+                print(name + " entered " + centerSystem.transform.name + "  system");
+                transform.SetParent(centerSystem.transform.parent);
             }
         }
 
-        if (parentSystem)
+        if (centerSystem)
         {
             localStartPosition = transform.localPosition;
             t0 = OrbitMath.GetT0(this);
@@ -321,13 +343,14 @@ public class GravitySystem : PointMass
             return;
 
         //Prediction
-        float orbitTime = OrbitMath.GetOrbitPeriodA(this);
-        int stepCount = Mathf.FloorToInt(orbitTime / OTime.fixedTimeSteps);
+        float orbitTime = OrbitMath.GetOrbitPeriod(this);
+        int stepCount = Mathf.FloorToInt(orbitTime / OTime.fixedPlanetTimeSteps);
         predictions = new Predictions(stepCount);
+        predictions.fixedTimeSteps = OTime.fixedPlanetTimeSteps;
         Vector3[] path = new Vector3[stepCount];
         for (int i = 0; i < stepCount; i++)
         {
-            OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(i * OTime.fixedTimeSteps, this, false);
+            OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(i * OTime.fixedPlanetTimeSteps, this, false);
             predictions.AddPredictionI(prediction,i,true);
             path[i] = prediction.localPosition;
         }
@@ -423,7 +446,7 @@ public class GravitySystem : PointMass
 
     public float GetCenterMass()
     {
-        float centerMass = orbitElements.mass;
+        float centerMass = orbitElement.mass;
         return centerMass;
     }
 

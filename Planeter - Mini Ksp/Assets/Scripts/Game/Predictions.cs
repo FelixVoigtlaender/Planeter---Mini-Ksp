@@ -9,6 +9,8 @@ public class Predictions
     public int curI;
     public int free;
     public int filled;
+
+    public float fixedTimeSteps;
     public OrbitMath.OrbitPrediction[] predictions;
     //
     // Setup
@@ -16,11 +18,13 @@ public class Predictions
     public Predictions(int count)
     {
         SetupPredictions(count);
+        fixedTimeSteps = OTime.fixedTimeSteps;
     }
     public Predictions(int count, OrbitMath.OrbitPrediction startPrediction)
     {
         SetupPredictions(count);
         SetCurrentPrediction(startPrediction);
+        fixedTimeSteps = OTime.fixedTimeSteps;
     }
     void SetupPredictions(int count)
     {
@@ -125,8 +129,8 @@ public class Predictions
     {
         int i = CheckIndexT(time);
         int nextI = CheckIndex(i + 1);
-        float timeDelta = time - OTime.fixedTimeSteps * (Mathf.Floor(time / OTime.fixedTimeSteps));
-        float percent = (timeDelta) / OTime.fixedTimeSteps;
+        float timeDelta = time - fixedTimeSteps * (Mathf.Floor(time / fixedTimeSteps));
+        float percent = (timeDelta) / fixedTimeSteps;
         OrbitMath.OrbitPrediction lerpedPrediction = predictions[i].Clone();
         if(predictions[i].gravitySystem == predictions[nextI].gravitySystem)
         {
@@ -144,7 +148,7 @@ public class Predictions
     }
     public int CheckIndexT(float time)
     {
-        return CheckIndex(Mathf.FloorToInt(time / OTime.fixedTimeSteps));
+        return CheckIndex(Mathf.FloorToInt(time /fixedTimeSteps));
     }
     public int Mod(int x , int m)
     {

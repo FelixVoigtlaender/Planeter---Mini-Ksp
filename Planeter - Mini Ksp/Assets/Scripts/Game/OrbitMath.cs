@@ -86,7 +86,7 @@ public class OrbitMath : MonoBehaviour
 
     public static OrbitPrediction GetStaticOrbitPredictionA(float time, GravitySystem gravitySystem)
     {
-        GravitySystem parentSystem = gravitySystem.parentSystem;
+        GravitySystem parentSystem = gravitySystem.centerSystem;
         // No Central body, thus no prediction
         if (!parentSystem)
             return new OrbitPrediction(time,gravitySystem);
@@ -117,17 +117,16 @@ public class OrbitMath : MonoBehaviour
     public static OrbitPrediction GetStaticOrbitPrediction(float time, GravitySystem gravitySystem, bool setData = false) {
         
         // Orbit elements from Gravity system
-        OrbitElements orbitElements = gravitySystem.orbitElements;
+        OrbitElement orbitElements = gravitySystem.orbitElement;
 
         // No Prediction for Sun
-        if (!orbitElements.centerSystem)
+        if (!gravitySystem.centerSystem)
             return new OrbitPrediction(time, gravitySystem);
 
         // Constants
-        float mu = instance.gravityConstant * orbitElements.centerSystem.orbitElements.mass;
-        float rp = orbitElements.rp_radiusPericenter;
+        float mu = instance.gravityConstant * gravitySystem.centerSystem.orbitElement.mass;
         float a = orbitElements.a_semiMajorAxis;
-        float e =  1 - (rp / a);
+        float e =  orbitElements.e_eccentricity;
         float M = (Mathf.Sqrt(mu / Mathf.Pow(a, 3)) * time) % (2*Mathf.PI);
 
         // Newton Iteration Setup
@@ -157,7 +156,7 @@ public class OrbitMath : MonoBehaviour
         Vector2 localPosition = r * dir;
         Vector2 velocity = Vector2.Perpendicular(dir) *  Mathf.Sqrt((2 * mu / r) - (mu / a));
         OrbitMath.OrbitPrediction prediction = new OrbitMath.OrbitPrediction(time, localPosition, velocity);
-        prediction.gravitySystem = gravitySystem.parentSystem;
+        prediction.gravitySystem = gravitySystem.centerSystem;
 
         //Debug
 #if UNITY_EDITOR
@@ -166,7 +165,6 @@ public class OrbitMath : MonoBehaviour
             float dataTime = time;
             Grapher.Log(Mathf.Sin(time), "SINUS" + "_" + orbitElements.name, dataTime);
             Grapher.Log(mu, "mu" + "_" + orbitElements.name, dataTime);
-            Grapher.Log(rp, "rp" + "_" + orbitElements.name, dataTime);
             Grapher.Log(a, "a" + "_" + orbitElements.name, dataTime);
             Grapher.Log(e, "e" + "_" + orbitElements.name, dataTime);
             Grapher.Log(M, "M" + "_" + orbitElements.name, dataTime);
@@ -184,35 +182,22 @@ public class OrbitMath : MonoBehaviour
         return prediction;
 
     }
-    public static float GetOrbitPeriodA(GravitySystem gravitySystem)
+    public static float GetOrbitPeriod(GravitySystem gravitySystem)
     {
 
-        OrbitElements orbitElements = gravitySystem.orbitElements;
-        if (!orbitElements.centerSystem)
+        OrbitElement orbitElements = gravitySystem.orbitElement;
+        if (!gravitySystem.centerSystem)
             return 0;
         float a = orbitElements.a_semiMajorAxis;
-        float mu = instance.gravityConstant * orbitElements.centerSystem.orbitElements.mass;
+        float mu = instance.gravityConstant * gravitySystem.centerSystem.orbitElement.mass;
         float P = Mathf.Sqrt((4 * Mathf.Pow(Mathf.PI, 2) * Mathf.Pow(a, 3))/(mu));
 
         return P;
     }
 
-    public static float GetOrbitTime(GravitySystem gravitySystem)
-    {
-        GravitySystem parentSystem = gravitySystem.parentSystem;
-        if (!parentSystem)
-            return 0;
-
-        float q = instance.gravityConstant * parentSystem.GetMass();
-        float a = gravitySystem.localStartPosition.magnitude;
-        float T = 2 * Mathf.PI * Mathf.Sqrt(Mathf.Pow(a, 3) / q);
-
-        return T;
-    }
-
     public static float GetT0(GravitySystem gravitySystem)
     {
-        GravitySystem parentSystem = gravitySystem.parentSystem;
+        GravitySystem parentSystem = gravitySystem.centerSystem;
         // No Central body, thus no prediction
         if (!parentSystem)
             return -1;
@@ -300,7 +285,7 @@ public class OrbitMath : MonoBehaviour
             // From World Space
             if (!gravitySystem)
             {
-                if (!newSystem.parentSystem)
+                if (!newSystem.centerSystem)
                 {
                     //Sun
                     gravitySystem = newSystem;
@@ -317,7 +302,7 @@ public class OrbitMath : MonoBehaviour
             }
 
             // From ParentSystem
-            if (gravitySystem == newSystem.parentSystem)
+            if (gravitySystem == newSystem.centerSystem)
             {
                 localPosition -= newSystemPrediction.localPosition;
                 localVelocity -= newSystemPrediction.localVelocity;
@@ -325,7 +310,7 @@ public class OrbitMath : MonoBehaviour
                 return;
             }
             // From Child System
-            if (gravitySystem.parentSystem = newSystem)
+            if (gravitySystem.centerSystem = newSystem)
             {
 
                 OrbitMath.OrbitPrediction childPrediction = gravitySystem.GetPrediction(time);
