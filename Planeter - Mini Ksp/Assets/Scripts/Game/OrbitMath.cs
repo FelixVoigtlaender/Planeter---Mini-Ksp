@@ -62,7 +62,7 @@ public class OrbitMath : MonoBehaviour
         // r * ( Mp / Ms ) ^(2/5)
         if(planetMass > sunMass)
         {
-            print("Planet is heavier than sun???");
+            Debug.LogError("Planet is heavier than sun???");
         }
         print("Planet: " + planetMass + " Sun: " + sunMass);
 

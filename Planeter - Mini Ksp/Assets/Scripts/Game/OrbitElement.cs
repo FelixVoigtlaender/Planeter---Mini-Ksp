@@ -11,6 +11,7 @@ public class OrbitElement
     public float e_eccentricity;
     public float mass;
     public float radius;
+    public string color;
     public static OrbitElement CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<OrbitElement>(jsonString);

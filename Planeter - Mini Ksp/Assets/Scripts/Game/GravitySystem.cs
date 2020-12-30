@@ -242,6 +242,10 @@ public class GravitySystem : PointMass
         // Body
         body = GetBody();
         body.localScale = Vector3.one * 2 * element.radius;
+        Color color = new Color();
+        ColorUtility.TryParseHtmlString(element.color, out color);
+        renderer.color = color;
+
         mass = element.mass;
         radius = element.radius;
     }
@@ -284,7 +288,7 @@ public class GravitySystem : PointMass
         }
         else
         {
-            radiusOfInfluence = 10000;
+            //radiusOfInfluence = 10000000000;
         }
 
         // Add Siblings in RadiusOfInfluence
@@ -344,13 +348,14 @@ public class GravitySystem : PointMass
 
         //Prediction
         float orbitTime = OrbitMath.GetOrbitPeriod(this);
-        int stepCount = Mathf.FloorToInt(orbitTime / OTime.fixedPlanetTimeSteps);
+        //int stepCount = Mathf.FloorToInt(orbitTime / OTime.fixedPlanetTimeSteps);
+        int stepCount = 360;
         predictions = new Predictions(stepCount);
-        predictions.fixedTimeSteps = OTime.fixedPlanetTimeSteps;
+        predictions.fixedTimeSteps = (orbitTime / (float) (stepCount));
         Vector3[] path = new Vector3[stepCount];
         for (int i = 0; i < stepCount; i++)
         {
-            OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(i * OTime.fixedPlanetTimeSteps, this, false);
+            OrbitMath.OrbitPrediction prediction = OrbitMath.GetStaticOrbitPrediction(i * predictions.fixedTimeSteps, this, false);
             predictions.AddPredictionI(prediction,i,true);
             path[i] = prediction.localPosition;
         }
@@ -359,7 +364,7 @@ public class GravitySystem : PointMass
         lineRenderer.positionCount = path.Length;
         lineRenderer.SetPositions(path);
         Color color = renderer.color;
-        color.a = 0.8f;
+        color.a = 0.1f;
         lineRenderer.endColor = lineRenderer.startColor = color;
 
     }

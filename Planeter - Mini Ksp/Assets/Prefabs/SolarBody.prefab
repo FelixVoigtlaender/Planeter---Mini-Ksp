@@ -147,6 +147,7 @@ MonoBehaviour:
   pixelRadius: 100
   selectOnStart: 0
   useWorldSpace: 1
+  fieldTrigger: {fileID: 0}
 --- !u!1 &5813122494615350341
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,10 +203,26 @@ MonoBehaviour:
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
   radiusOfInfluence: 36.642838
-  parentSystem: {fileID: 0}
+  centerSystem: {fileID: 0}
   sphereOfInfluence: {fileID: 5813122494532787875}
   localStartPosition: {x: 232.6, y: 0}
   t0: -0
+  orbitElement:
+    name: OrbitElement
+    center: Sun
+    a_semiMajorAxis: 0
+    e_eccentricity: 0
+    mass: 0
+    radius: 0
+    color: 
+  predictions:
+    maxI: 0
+    curI: 0
+    free: 0
+    filled: 0
+    fixedTimeSteps: 0
+    predictions: []
+  childSystems: []
 --- !u!120 &5813122494615350336
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -800,7 +817,7 @@ LineRenderer:
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
-  m_Loop: 0
+  m_Loop: 1
 --- !u!114 &5813122494615350343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -940,6 +957,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd1e364f0ced0864b8b1551e516359ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  rotationOffset: 180
 --- !u!1 &5813122495749246321
 GameObject:
   m_ObjectHideFlags: 0
