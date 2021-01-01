@@ -18,3 +18,6 @@ content. These **design pillars** are:
 Users are able to download the latest prototypes/builds from [Google Drive](
 https://drive.google.com/drive/folders/1-CI-kAiKsY4FEDwQmcAWbDM9oTFoPtvh). and
 sessions in which the user is observed while using the prototype are done.
+
+
+See ![Link](https://felixvoigtlaender.github.io/planeter.html) for more information.
