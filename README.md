@@ -20,4 +20,4 @@ https://drive.google.com/drive/folders/1-CI-kAiKsY4FEDwQmcAWbDM9oTFoPtvh). and
 sessions in which the user is observed while using the prototype are done.
 
 
-See ![Link](https://felixvoigtlaender.github.io/planeter.html) for more information.
+See [Link](https://felixvoigtlaender.github.io/planeter.html) for more information.
