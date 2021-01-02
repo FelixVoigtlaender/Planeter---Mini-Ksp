@@ -127,6 +127,7 @@ public class Predictions
 
     public OrbitMath.OrbitPrediction GetLerpedPredicitonT(float time)
     {
+        time %= fixedTimeSteps * predictions.Length;
         int i = CheckIndexT(time);
         int nextI = CheckIndex(i + 1);
         float timeDelta = time - fixedTimeSteps * (Mathf.Floor(time / fixedTimeSteps));
@@ -134,8 +135,8 @@ public class Predictions
         OrbitMath.OrbitPrediction lerpedPrediction = predictions[i].Clone();
         if(predictions[i].gravitySystem == predictions[nextI].gravitySystem)
         {
-            lerpedPrediction.localVelocity = predictions[i].localVelocity + percent * (predictions[nextI].localVelocity- predictions[i].localVelocity);
-            lerpedPrediction.localPosition = predictions[i].localPosition + percent * (predictions[nextI].localPosition-predictions[i].localPosition);
+            lerpedPrediction.localVelocity = predictions[i].localVelocity + percent * (predictions[nextI].localVelocity - predictions[i].localVelocity);
+            lerpedPrediction.localPosition = predictions[i].localPosition + percent * (predictions[nextI].localPosition - predictions[i].localPosition);
         }
         return lerpedPrediction;
     }
@@ -148,6 +149,7 @@ public class Predictions
     }
     public int CheckIndexT(float time)
     {
+        time %= fixedTimeSteps * predictions.Length;
         return CheckIndex(Mathf.FloorToInt(time /fixedTimeSteps));
     }
     public int Mod(int x , int m)

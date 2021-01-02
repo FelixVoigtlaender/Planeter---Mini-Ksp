@@ -72,7 +72,7 @@ public class DynamicBody : MonoBehaviour
     {
         if (predictions.CanAddPrediction())
         {
-            PredictPath(predictions, 10);
+            PredictPath(predictions, Mathf.CeilToInt(10*OTime.timeScale));
         }
         OrbitMath.OrbitPrediction prediction = predictions.GetLerpedPredicitonT(OTime.time);
         transform.parent = prediction.gravitySystem.transform;

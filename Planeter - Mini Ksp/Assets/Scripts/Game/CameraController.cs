@@ -122,7 +122,6 @@ public class CameraController : MonoBehaviour
     public void OnDrag(PointerEventData eventData)
     {
         ManageDrag(eventData);
-        print(eventData.position + " " + eventData.delta);
     }
     void FollowTarget()
     {
@@ -168,7 +167,7 @@ public class CameraController : MonoBehaviour
         instance.targetDelta = Vector2.zero;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(Vector3.zero, maxOffset);
