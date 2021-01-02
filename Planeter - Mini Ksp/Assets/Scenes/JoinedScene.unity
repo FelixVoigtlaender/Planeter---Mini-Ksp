@@ -367,11 +367,11 @@ MonoBehaviour:
   target: {fileID: 0}
   targetDelta: {x: 0, y: 0}
   targetOffset: {x: 0, y: 0}
-  maxOffset: 30000
+  maxOffset: 200000
   horizontalSmoothTime: 0.5
   verticalSmoothTime: 0.5
   sizeMin: 10
-  sizeMax: 60000
+  sizeMax: 400000
   sizeGoal: 50
   sizeSmoothTime: 0.1
   zoomScale: 0.1
@@ -4499,9 +4499,9 @@ RectTransform:
   m_Father: {fileID: 1025399941}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 157.34491, y: -300}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &86568571
@@ -25583,7 +25583,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451488087}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1072.44, y: 0, z: 0}
+  m_LocalPosition: {x: 3574.8, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1863635658}
@@ -26219,15 +26219,15 @@ MonoBehaviour:
   body: {fileID: 1863635658}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 35.97442
+  radiusOfInfluence: 51.371094
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1483496423}
-  localStartPosition: {x: 1072.44, y: 0}
+  localStartPosition: {x: 3574.8, y: 0}
   t0: -0
   orbitElement:
     name: Venus
     center: Sun
-    a_semiMajorAxis: 1080
+    a_semiMajorAxis: 3600.0002
     e_eccentricity: 0.007
     mass: 8.1
     radius: 4.745
@@ -34024,7 +34024,7 @@ Transform:
   m_GameObject: {fileID: 596769116}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10189.111, y: 10189.111, z: 10189.111}
+  m_LocalScale: {x: 14549.945, y: 14549.945, z: 14549.945}
   m_Children: []
   m_Father: {fileID: 2069859069}
   m_RootOrder: 1
@@ -34526,8 +34526,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1444816971}
   m_HandleRect: {fileID: 1444816968}
   m_Direction: 2
-  m_Value: 0.999999
-  m_Size: 0.8831553
+  m_Value: 1
+  m_Size: 0.88315535
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -39661,15 +39661,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d91af84c7d4c34cae17f250d67383f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 100
+  radius: 545
   massScale: 1
-  mass: 40000
+  mass: 0
   renderer: {fileID: 829415355}
   body: {fileID: 829415354}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
   radiusOfInfluence: 300100
-  centerSystem: {fileID: 704996547}
+  centerSystem: {fileID: 0}
   sphereOfInfluence: {fileID: 0}
   localStartPosition: {x: 0, y: 0}
   t0: 0
@@ -39678,8 +39678,8 @@ MonoBehaviour:
     center: Sun
     a_semiMajorAxis: 0
     e_eccentricity: 0
-    mass: 40000
-    radius: 100
+    mass: 333000
+    radius: 545
     color: '#ffc700'
   predictions:
     maxI: 0
@@ -42351,7 +42351,7 @@ Transform:
   m_GameObject: {fileID: 763085162}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 13.760123, y: 13.760123, z: 13.760123}
+  m_LocalScale: {x: 19.649311, y: 19.649311, z: 19.649311}
   m_Children: []
   m_Father: {fileID: 953857716}
   m_RootOrder: 1
@@ -45382,7 +45382,7 @@ Transform:
   m_GameObject: {fileID: 829415353}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 200, y: 200, z: 200}
+  m_LocalScale: {x: 1090, y: 1090, z: 1090}
   m_Children: []
   m_Father: {fileID: 704996548}
   m_RootOrder: 0
@@ -46528,7 +46528,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862880820}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7425.5996, y: 0, z: 0}
+  m_LocalPosition: {x: 24752, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1490268357}
@@ -47164,15 +47164,15 @@ MonoBehaviour:
   body: {fileID: 1490268357}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 2832.3604
+  radiusOfInfluence: 4044.5813
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1697607156}
-  localStartPosition: {x: 7425.5996, y: 0}
+  localStartPosition: {x: 24752, y: 0}
   t0: -0
   orbitElement:
     name: Jupiter
     center: Sun
-    a_semiMajorAxis: 7799.9995
+    a_semiMajorAxis: 26000
     e_eccentricity: 0.048
     mass: 3178.2998
     radius: 56.045
@@ -48106,10 +48106,10 @@ RectTransform:
   m_Father: {fileID: 1512493488}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 207.34491, y: -674.77905}
+  m_SizeDelta: {x: 314.68982, y: 1249.5581}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &881883873
 MonoBehaviour:
@@ -50606,9 +50606,9 @@ RectTransform:
   m_Father: {fileID: 1025399941}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 157.34491, y: -500}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &918373985
@@ -52304,7 +52304,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 953857715}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 464.49002, y: 0, z: 0}
+  m_LocalPosition: {x: 1548.2999, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1422873196}
@@ -52940,15 +52940,15 @@ MonoBehaviour:
   body: {fileID: 1422873196}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 6.8800616
+  radiusOfInfluence: 9.824656
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 763085166}
-  localStartPosition: {x: 464.49002, y: 0}
+  localStartPosition: {x: 1548.2999, y: 0}
   t0: -0
   orbitElement:
     name: Mercury
     center: Sun
-    a_semiMajorAxis: 585
+    a_semiMajorAxis: 1949.9999
     e_eccentricity: 0.206
     mass: 0.59999996
     radius: 1.915
@@ -64322,7 +64322,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1167381241}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 27432.105, y: 0, z: 0}
+  m_LocalPosition: {x: 91440.35, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1982153156}
@@ -64958,15 +64958,15 @@ MonoBehaviour:
   body: {fileID: 1982153156}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 3043.4626
+  radiusOfInfluence: 4346.033
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1191629799}
-  localStartPosition: {x: 27432.105, y: 0}
+  localStartPosition: {x: 91440.35, y: 0}
   t0: -0
   orbitElement:
     name: Uranus
     center: Sun
-    a_semiMajorAxis: 28785
+    a_semiMajorAxis: 95950
     e_eccentricity: 0.047
     mass: 145.4
     radius: 20.035
@@ -66435,7 +66435,7 @@ Transform:
   m_GameObject: {fileID: 1191629795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6086.9253, y: 6086.9253, z: 6086.9253}
+  m_LocalScale: {x: 8692.066, y: 8692.066, z: 8692.066}
   m_Children: []
   m_Father: {fileID: 1167381242}
   m_RootOrder: 1
@@ -68305,7 +68305,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213577358}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2067.96, y: 0, z: 0}
+  m_LocalPosition: {x: 6893.2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1234912933}
@@ -68941,15 +68941,15 @@ MonoBehaviour:
   body: {fileID: 1234912933}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 34.171803
+  radiusOfInfluence: 48.796978
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1973826393}
-  localStartPosition: {x: 2067.96, y: 0}
+  localStartPosition: {x: 6893.2, y: 0}
   t0: -0
   orbitElement:
     name: Mars
     center: Sun
-    a_semiMajorAxis: 2280
+    a_semiMajorAxis: 7600
     e_eccentricity: 0.093
     mass: 1.1
     radius: 2.66
@@ -69534,7 +69534,7 @@ Transform:
   m_GameObject: {fileID: 1220279721}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6415.454, y: 6415.454, z: 6415.454}
+  m_LocalScale: {x: 9161.202, y: 9161.202, z: 9161.202}
   m_Children: []
   m_Father: {fileID: 2131204381}
   m_RootOrder: 1
@@ -74663,7 +74663,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.00012207031}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1306532701
@@ -78123,7 +78123,7 @@ Transform:
   m_GameObject: {fileID: 1398306852}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 108.71695, y: 108.71695, z: 108.71695}
+  m_LocalScale: {x: 155.24667, y: 155.24667, z: 155.24667}
   m_Children: []
   m_Father: {fileID: 2063071244}
   m_RootOrder: 1
@@ -78970,14 +78970,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
-  predictionCount: 1000
-  pretendPredictionCount: 1000
+  predictionCount: 2500
+  pretendPredictionCount: 2500
   startPrediction:
     time: 0
     localPosition: {x: 0, y: 0}
     localVelocity: {x: 0, y: 0}
     localGravity: {x: 0, y: 0}
-    gravitySystem: {fileID: 704996547}
+    gravitySystem: {fileID: 2063071247}
     isGrounded: 0
   currentPrediction:
     time: 0
@@ -82032,7 +82032,7 @@ Transform:
   m_GameObject: {fileID: 1483496419}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 71.94884, y: 71.94884, z: 71.94884}
+  m_LocalScale: {x: 102.74219, y: 102.74219, z: 102.74219}
   m_Children: []
   m_Father: {fileID: 451488088}
   m_RootOrder: 1
@@ -91927,7 +91927,7 @@ Transform:
   m_GameObject: {fileID: 1697607152}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5664.7207, y: 5664.7207, z: 5664.7207}
+  m_LocalScale: {x: 8089.1626, y: 8089.1626, z: 8089.1626}
   m_Children: []
   m_Father: {fileID: 862880821}
   m_RootOrder: 1
@@ -99146,10 +99146,10 @@ RectTransform:
   m_Father: {fileID: 940739268}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 207.34491, y: -674.77905}
+  m_SizeDelta: {x: 314.68982, y: 1249.5581}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1845054839
 MonoBehaviour:
@@ -99232,65 +99232,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff24972813c15f48bb5ee55c6fae88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleSemiMajorAxis: 1500
+  scaleSemiMajorAxis: 5000
   scaleMass: 10
   scaleRadius: 5
   planetPrefab: {fileID: 5813122494615350341, guid: 541755f775342aa478728b272c316a09,
     type: 3}
   orbitElements:
     planets:
+    - name: Sun
+      center: Sun
+      a_semiMajorAxis: 0
+      e_eccentricity: 0
+      mass: 333000
+      radius: 545
+      color: '#ffc700'
     - name: Mercury
       center: Sun
-      a_semiMajorAxis: 585
+      a_semiMajorAxis: 1949.9999
       e_eccentricity: 0.206
       mass: 0.59999996
       radius: 1.915
       color: '#cbcaff'
     - name: Venus
       center: Sun
-      a_semiMajorAxis: 1080
+      a_semiMajorAxis: 3600.0002
       e_eccentricity: 0.007
       mass: 8.1
       radius: 4.745
       color: '#ff751e'
     - name: Earth
       center: Sun
-      a_semiMajorAxis: 1500
+      a_semiMajorAxis: 5000
       e_eccentricity: 0.017
       mass: 10
       radius: 5
       color: '#5e74ff'
     - name: Mars
       center: Sun
-      a_semiMajorAxis: 2280
+      a_semiMajorAxis: 7600
       e_eccentricity: 0.093
       mass: 1.1
       radius: 2.66
       color: '#e50101'
     - name: Jupiter
       center: Sun
-      a_semiMajorAxis: 7799.9995
+      a_semiMajorAxis: 26000
       e_eccentricity: 0.048
       mass: 3178.2998
       radius: 56.045
       color: '#fd2812'
     - name: Saturn
       center: Sun
-      a_semiMajorAxis: 14310
+      a_semiMajorAxis: 47700
       e_eccentricity: 0.054
       mass: 951.60004
       radius: 47.245003
       color: '#f7dbb9'
     - name: Uranus
       center: Sun
-      a_semiMajorAxis: 28785
+      a_semiMajorAxis: 95950
       e_eccentricity: 0.047
       mass: 145.4
       radius: 20.035
       color: '#70fcfd'
     - name: Neptune
       center: Sun
-      a_semiMajorAxis: 45105
+      a_semiMajorAxis: 150350
       e_eccentricity: 0.009
       mass: 171.5
       radius: 19.414999
@@ -105594,7 +105601,7 @@ Transform:
   m_GameObject: {fileID: 1973826389}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 68.343605, y: 68.343605, z: 68.343605}
+  m_LocalScale: {x: 97.593956, y: 97.593956, z: 97.593956}
   m_Children: []
   m_Father: {fileID: 1213577359}
   m_RootOrder: 1
@@ -107872,9 +107879,9 @@ RectTransform:
   m_Father: {fileID: 1025399941}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 157.34491, y: -100}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2021483958
@@ -109881,7 +109888,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2063071243}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1474.5, y: 0, z: 0}
+  m_LocalPosition: {x: 4915, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 609774590}
@@ -110517,15 +110524,15 @@ MonoBehaviour:
   body: {fileID: 609774590}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 54.358475
+  radiusOfInfluence: 77.62334
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1398306856}
-  localStartPosition: {x: 1474.5, y: 0}
+  localStartPosition: {x: 4915, y: 0}
   t0: -0
   orbitElement:
     name: Earth
     center: Sun
-    a_semiMajorAxis: 1500
+    a_semiMajorAxis: 5000
     e_eccentricity: 0.017
     mass: 10
     radius: 5
@@ -110972,7 +110979,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069859068}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44699.055, y: 0, z: 0}
+  m_LocalPosition: {x: 148996.84, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1843303466}
@@ -111608,15 +111615,15 @@ MonoBehaviour:
   body: {fileID: 1843303466}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 5094.5557
+  radiusOfInfluence: 7274.9727
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 596769120}
-  localStartPosition: {x: 44699.055, y: 0}
+  localStartPosition: {x: 148996.84, y: 0}
   t0: -0
   orbitElement:
     name: Neptune
     center: Sun
-    a_semiMajorAxis: 45105
+    a_semiMajorAxis: 150350
     e_eccentricity: 0.009
     mass: 171.5
     radius: 19.414999
@@ -114375,7 +114382,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2131204380}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13537.26, y: 0, z: 0}
+  m_LocalPosition: {x: 45124.2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1742049518}
@@ -115011,15 +115018,15 @@ MonoBehaviour:
   body: {fileID: 1742049518}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 3207.727
+  radiusOfInfluence: 4580.601
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1220279725}
-  localStartPosition: {x: 13537.26, y: 0}
+  localStartPosition: {x: 45124.2, y: 0}
   t0: -0
   orbitElement:
     name: Saturn
     center: Sun
-    a_semiMajorAxis: 14310
+    a_semiMajorAxis: 47700
     e_eccentricity: 0.054
     mass: 951.60004
     radius: 47.245003

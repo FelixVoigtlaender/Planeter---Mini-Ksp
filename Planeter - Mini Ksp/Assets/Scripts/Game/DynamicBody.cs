@@ -9,6 +9,7 @@ public class DynamicBody : MonoBehaviour
 
     public int predictionCount = 2000;
     public int pretendPredictionCount = 2000;
+    public int maxPretendPrediction = 1000;
 
     public OrbitMath.OrbitPrediction startPrediction;
     public OrbitMath.OrbitPrediction currentPrediction;
@@ -54,17 +55,18 @@ public class DynamicBody : MonoBehaviour
 
     public void Setup()
     {
-        // Init StartPrediction
-        startPrediction.localPosition = startPosition;
-        startPrediction = GravitySystem.sunSystem.SetupPrediction(startPrediction);
-        predictions.SetCurrentPrediction(startPrediction);
+        // Put player on planet of Start prediction
+        OrbitMath.OrbitPrediction prediction = startPrediction.Clone();
+        prediction.localPosition = Vector2.up * prediction.gravitySystem.orbitElement.radius;
+        prediction.localVelocity = Vector2.zero;
+
+        predictions.SetCurrentPrediction(prediction);
     }
 
     public void Update()
     {
         if (!GameManager.isGameActive)
             return;
-     
     }
 
 
