@@ -137,6 +137,7 @@ public class Predictions
         {
             lerpedPrediction.localVelocity = predictions[i].localVelocity + percent * (predictions[nextI].localVelocity - predictions[i].localVelocity);
             lerpedPrediction.localPosition = predictions[i].localPosition + percent * (predictions[nextI].localPosition - predictions[i].localPosition);
+            lerpedPrediction.time = predictions[i].time + percent * fixedTimeSteps;
         }
         return lerpedPrediction;
     }

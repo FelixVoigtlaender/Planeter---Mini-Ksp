@@ -42,7 +42,12 @@ public class DynamicBody : MonoBehaviour
         GameManager.OnQuicksave += OnQuickSave;
         GameManager.OnLoadQuickSave += OnLoadQuickSave;
         GameManager.OnGameStart += Reset;
+
+        IEnumerator enumerator = PathPrediction();
+        StartCoroutine(enumerator);
     }
+
+
 
     public void Reset()
     {
@@ -70,14 +75,25 @@ public class DynamicBody : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (predictions.CanAddPrediction())
-        {
-            PredictPath(predictions, Mathf.CeilToInt(10*OTime.timeScale));
-        }
+        
         OrbitMath.OrbitPrediction prediction = predictions.GetLerpedPredicitonT(OTime.time);
-        transform.parent = prediction.gravitySystem.transform;
+        if (transform.parent != prediction.gravitySystem.transform)
+            transform.parent = prediction.gravitySystem.transform;
+
         transform.localPosition = prediction.localPosition;
         DrawPath(predictionDrawer,predictions);
+    }
+
+    private IEnumerator PathPrediction()
+    {
+        while (true)
+        {
+            if (predictions.CanAddPrediction())
+            {
+                PredictPath(predictions, Mathf.CeilToInt(10 * OTime.timeScale));
+            }
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     public void DrawPath(PredictionDrawer drawer, Predictions predictions)

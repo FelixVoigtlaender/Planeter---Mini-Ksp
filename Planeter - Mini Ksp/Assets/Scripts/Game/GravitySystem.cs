@@ -18,6 +18,8 @@ public class GravitySystem : PointMass
 
     public OrbitElement orbitElement = new OrbitElement();
 
+    public LineRenderer lineRenderer; 
+
 
     public Predictions predictions;
     //In Game
@@ -61,6 +63,31 @@ public class GravitySystem : PointMass
     {
         OrbitMath.OrbitPrediction prediction = GetPrediction(OTime.time);
         transform.localPosition = prediction.localPosition;
+
+
+        if (lineRenderer)
+        {
+            // Color
+            GradientColorKey colorStart = new GradientColorKey(renderer.color, 0);
+            GradientColorKey colorEnd = new GradientColorKey(renderer.color, 1);
+            // Alpha
+            float totalTime = (predictions.predictions.Length) * predictions.fixedTimeSteps;
+            float time = OTime.time % totalTime;
+            float percent = time / totalTime;
+            percent = predictions.GetCurrentIndex() / (float)predictions.predictions.Length;
+            float maxAlpha = 1f;
+            float minAlpha = 0.0f;
+            float difAlpha = maxAlpha - minAlpha;
+            GradientAlphaKey alphaMid0 = new GradientAlphaKey(maxAlpha,( percent) % 1.0f);
+            GradientAlphaKey alphaMid1 = new GradientAlphaKey(minAlpha, (percent + 0.000001f) % 1.0f);
+            GradientAlphaKey alphaStart = new GradientAlphaKey((1-percent)*difAlpha+minAlpha, 0);
+            GradientAlphaKey alphaEnd = new GradientAlphaKey((1-percent)*difAlpha+minAlpha, 1);
+            // Gradient
+            Gradient gradient = new Gradient();
+            gradient.colorKeys = new GradientColorKey[] { colorStart, colorEnd };
+            gradient.alphaKeys = new GradientAlphaKey[] { alphaMid0, alphaMid1, alphaStart, alphaEnd };
+            lineRenderer.colorGradient = gradient;
+        }
     }
 
     public OrbitMath.OrbitPrediction DynamicPrediction(OrbitMath.OrbitPrediction prediction, float mass = 1)
@@ -342,7 +369,7 @@ public class GravitySystem : PointMass
             return;
 
         //Linerenderer
-        LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer = GetComponent<LineRenderer>();
         if (!lineRenderer)
             return;
 

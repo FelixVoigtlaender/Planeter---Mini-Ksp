@@ -26195,7 +26195,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -26232,6 +26232,7 @@ MonoBehaviour:
     mass: 8.1
     radius: 4.745
     color: '#ff751e'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -34526,8 +34527,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1444816971}
   m_HandleRect: {fileID: 1444816968}
   m_Direction: 2
-  m_Value: 0.999999
-  m_Size: 0.8831553
+  m_Value: 1
+  m_Size: 0.88315535
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -39681,6 +39682,7 @@ MonoBehaviour:
     mass: 40000
     radius: 100
     color: '#ffc700'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -47140,7 +47142,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -47177,6 +47179,7 @@ MonoBehaviour:
     mass: 3178.2998
     radius: 56.045
     color: '#fd2812'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -52916,7 +52919,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -52953,6 +52956,7 @@ MonoBehaviour:
     mass: 0.59999996
     radius: 1.915
     color: '#cbcaff'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -64934,7 +64938,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -64971,6 +64975,7 @@ MonoBehaviour:
     mass: 145.4
     radius: 20.035
     color: '#70fcfd'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -68917,7 +68922,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -68954,6 +68959,7 @@ MonoBehaviour:
     mass: 1.1
     radius: 2.66
     color: '#e50101'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -74663,7 +74669,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.00012207031}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1306532701
@@ -78972,7 +78978,6 @@ MonoBehaviour:
   mass: 1
   predictionCount: 2500
   pretendPredictionCount: 2500
-  maxPretendPrediction: 1000
   startPrediction:
     time: 0
     localPosition: {x: 0, y: 0}
@@ -110494,7 +110499,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -110531,6 +110536,7 @@ MonoBehaviour:
     mass: 10
     radius: 5
     color: '#5e74ff'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -111585,7 +111591,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -111622,6 +111628,7 @@ MonoBehaviour:
     mass: 171.5
     radius: 19.414999
     color: '#6bfffe'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
@@ -114988,7 +114995,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
@@ -115025,6 +115032,7 @@ MonoBehaviour:
     mass: 951.60004
     radius: 47.245003
     color: '#f7dbb9'
+  lineRenderer: {fileID: 0}
   predictions:
     maxI: 0
     curI: 0
