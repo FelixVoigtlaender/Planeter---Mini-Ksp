@@ -76,6 +76,8 @@ namespace Michsky.UI.ModernUIPack
 
         public void OpenNotification()
         {
+            if (notificationAnimator == null)
+                notificationAnimator = gameObject.GetComponent<Animator>();
             notificationAnimator.Play("In");
 
             if (enableTimer == true)
