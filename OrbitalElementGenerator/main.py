@@ -39,6 +39,9 @@ def generatMoon(name, center, a_semiMajorAxis, e_eccentricity, mass, radius, col
 
 
 
+
+sun = generatePlanet("Sun", "Sun", 0,   0,  333000,   109,"#ffc700")
+
 #Planets
 #planet = = generatePlanet("Name","Center",semiMajoAxis,eccentricity,mass,radus)
 mercury = generatePlanet("Mercury", "Sun",  0.39,   0.206,  0.06,   0.383,"#cbcaff")
@@ -72,7 +75,7 @@ uranus = generatePlanet("Uranus",   "Sun",  19.19	,   0.047, 14.54,   4.007, "#7
 
 neptune = generatePlanet("Neptune", "Sun",  30.07   ,   0.009, 17.15,   3.883, "#6bfffe")
 
-planets = [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune]
+planets = [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune]
 
 #Moons
 #planet = = generatePlanet("Name","Center",semiMajoAxis,eccentricity,mass,radus)

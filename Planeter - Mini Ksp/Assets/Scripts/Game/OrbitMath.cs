@@ -268,6 +268,7 @@ public class OrbitMath : MonoBehaviour
             clone.localVelocity = localVelocity;
             clone.localGravity = localGravity;
             clone.gravitySystem = gravitySystem;
+            clone.isGrounded = isGrounded;
             return clone;
         }
 
