@@ -260,15 +260,21 @@ public class OrbitMath : MonoBehaviour
 
         }
 
+
+        public void SetPrediction(OrbitPrediction prediction)
+        {
+            time = prediction.time;
+            localPosition = prediction.localPosition;
+            localVelocity = prediction.localVelocity;
+            localGravity = prediction.localGravity;
+            gravitySystem = prediction.gravitySystem;
+            isGrounded = prediction.isGrounded;
+
+        }
         public OrbitPrediction Clone()
         {
             OrbitPrediction clone = new OrbitPrediction(time, localPosition, localVelocity);
-            clone.time = time;
-            clone.localPosition = localPosition;
-            clone.localVelocity = localVelocity;
-            clone.localGravity = localGravity;
-            clone.gravitySystem = gravitySystem;
-            clone.isGrounded = isGrounded;
+            clone.SetPrediction(this);
             return clone;
         }
 
@@ -311,7 +317,7 @@ public class OrbitMath : MonoBehaviour
                 return;
             }
             // From Child System
-            if (gravitySystem.centerSystem = newSystem)
+            if (gravitySystem.centerSystem == newSystem)
             {
 
                 OrbitMath.OrbitPrediction childPrediction = gravitySystem.GetPrediction(time);

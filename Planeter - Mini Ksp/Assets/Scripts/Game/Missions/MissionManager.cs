@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MissionManager : MonoBehaviour
 {
@@ -28,8 +29,14 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-    public Mission[] missions;
+    [Header("Display")]
+    public GameObject missionDisplayPrefab;
+    public Transform displayList;
+    public MissionDisplay stagingDisplay;
+    public UnityEvent onActiveMissionSelected;
+    [Header("Missions")]
     public Mission activeMission;
+    public Mission[] missions;
 
     private void Start()
     {
@@ -46,16 +53,34 @@ public class MissionManager : MonoBehaviour
     }
     public void GenerateMissions()
     {
+        ClearDisplayMissions();
         for (int i = 0; i < missions.Length; i++)
         {
             missions[i].GenerateMissionEvents();
+            DisplayMission(missions[i]);
+
         }
-        // Testing
-        SetActiveMission(missions[0]);
     }
+    public void ClearDisplayMissions()
+    {
+        foreach(Transform child in displayList)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+    public void DisplayMission(Mission mission)
+    {
+        GameObject missionObj = Instantiate(missionDisplayPrefab, displayList);
+        MissionDisplay display = missionObj.GetComponent<MissionDisplay>();
+        display.Setup(mission);
+    }
+
     public void SetActiveMission(Mission mission)
     {
         activeMission = mission;
+        stagingDisplay.Setup(mission);
+
+        onActiveMissionSelected?.Invoke();
     }
 
     public void Evaluate()
@@ -81,9 +106,11 @@ public class Mission
     [TextArea]
     public string description;
     public MissionEvent[] missionEvents;
+    public bool achieved = false;
 
     public void Evaluate()
     {
+        bool isMissionAchieved = true;
         for (int i = 0; i < missionEvents.Length; i++)
         {
             MissionEvent missionEvent = missionEvents[i];
@@ -98,6 +125,15 @@ public class Mission
             {
                 MissionManager.instance.GenerateNotification(missionEvent);
             }
+            else
+            {
+                isMissionAchieved = false;
+            }
+        }
+        if (isMissionAchieved)
+        {
+            NotificationCreator.instance.GenerateNotification(title.ToUpper() + " ACHIEVED!");
+            achieved = true;
         }
     }
     public void Reset()
@@ -113,7 +149,7 @@ public class Mission
     /// </summary>
     public void GenerateMissionEvents()
     {
-        string[] missionParts = description.Split('\n');
+        string[] missionParts = description.Split('.',',');
         List<MissionEvent> events = new List<MissionEvent>();
         string[] planets = OrbitBodyGenerator.instance.GetPlanetNames();
         MissionEvent[] allEvents = MissionEvent.GetAllMissionEvents();

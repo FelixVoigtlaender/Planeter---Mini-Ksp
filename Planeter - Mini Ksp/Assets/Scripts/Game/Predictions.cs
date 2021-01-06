@@ -54,7 +54,7 @@ public class Predictions
         }
         index = CheckIndex(index);
         maxI = CheckIndex(index + 1);
-        predictions[index] = prediction;
+        predictions[index].SetPrediction(prediction);
     }
     /// <summary>
     /// Puts prediction at given time
