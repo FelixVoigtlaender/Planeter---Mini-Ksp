@@ -60,8 +60,8 @@ public class DynamicBody : MonoBehaviour
     public void Setup()
     {
         // Init StartPrediction
-        startPrediction.localPosition = startPosition;
-        startPrediction = GravitySystem.sunSystem.SetupPrediction(startPrediction);
+        startPrediction.localPosition = startPrediction.gravitySystem.orbitElement.radius * 1.1f * Vector2.up;
+        startPrediction.localVelocity = Vector2.zero;
         predictions.SetCurrentPrediction(startPrediction);
     }
 
@@ -75,13 +75,19 @@ public class DynamicBody : MonoBehaviour
 
     public void FixedUpdate()
     {
-        
-        OrbitMath.OrbitPrediction prediction = predictions.GetLerpedPredicitonT(OTime.time);
-        if (transform.parent != prediction.gravitySystem.transform)
-            transform.parent = prediction.gravitySystem.transform;
+        OrbitMath.OrbitPrediction prevPredition = currentPrediction;
+        currentPrediction = predictions.GetLerpedPredicitonT(OTime.time);
+        if (transform.parent != currentPrediction.gravitySystem.transform)
+            transform.parent = currentPrediction.gravitySystem.transform;
 
-        transform.localPosition = prediction.localPosition;
+        transform.localPosition = currentPrediction.localPosition;
         DrawPath(predictionDrawer,predictions);
+
+        // Mission
+        if (prevPredition.isGrounded != currentPrediction.isGrounded)
+            MissionManager.instance.Evaluate();
+        if (prevPredition.gravitySystem != currentPrediction.gravitySystem)
+            MissionManager.instance.Evaluate();
     }
 
     private IEnumerator PathPrediction()
@@ -153,8 +159,12 @@ public class DynamicBody : MonoBehaviour
                 Vector2 position = nextPrediction.localPosition.normalized * nextPrediction.gravitySystem.radius;
                 nextPrediction.localPosition = position;
                 nextPrediction.localVelocity = Vector2.zero;
-                nextPrediction.isGrounded = true;
             }
+            nextPrediction.isGrounded = true;
+        }
+        else
+        {
+            nextPrediction.isGrounded = false;
         }
 
         nextPrediction = nextPrediction.gravitySystem.DynamicPrediction(nextPrediction, mass);
@@ -220,6 +230,8 @@ public class DynamicBody : MonoBehaviour
     public void OnLoadQuickSave()
     {
         predictions.SetCurrentPrediction(quicksavePrediction);
+        PredictPath(predictions, 10);
+
 
         if (pretendPredictionDrawer)
             pretendPredictionDrawer.Hide();

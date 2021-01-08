@@ -1,15 +1,6 @@
 {
     "planets": [
         {
-            "name": "Sun",
-            "center": "Sun",
-            "a_semiMajorAxis": 0,
-            "e_eccentricity": 0,
-            "mass": 333000,
-            "radius": 109,
-            "color": "#ffc700"
-        },
-        {
             "name": "Mercury",
             "center": "Sun",
             "a_semiMajorAxis": 0.39,
