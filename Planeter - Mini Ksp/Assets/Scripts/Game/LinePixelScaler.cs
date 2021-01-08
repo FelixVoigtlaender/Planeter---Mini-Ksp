@@ -14,9 +14,15 @@ public class LinePixelScaler : MonoBehaviour
     }
     public void Update()
     {
+
         // Line 
         float width = PixelScaler.Scale(lineWidthPx);
         lineRenderer.endWidth = lineRenderer.startWidth = width;
+        // Better Tiling
+        if (lineRenderer.textureMode == LineTextureMode.Tile)
+        {
+            lineRenderer.material.mainTextureScale = new Vector2(1f / width, 1.0f);
+        }
     }
 
 }
