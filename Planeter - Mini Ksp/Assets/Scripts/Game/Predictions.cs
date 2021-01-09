@@ -12,6 +12,7 @@ public class Predictions
 
     public float fixedTimeSteps;
     public OrbitMath.OrbitPrediction[] predictions;
+    public OrbitMath.OrbitPrediction dummyPrediction;
     //
     // Setup
     //
@@ -34,6 +35,12 @@ public class Predictions
         {
             predictions[i] = new OrbitMath.OrbitPrediction();
         }
+    }
+    public OrbitMath.OrbitPrediction GetDummy()
+    {
+        if (dummyPrediction == null)
+            dummyPrediction = new OrbitMath.OrbitPrediction();
+        return dummyPrediction;
     }
 
 
@@ -88,8 +95,6 @@ public class Predictions
     {
         return CanAddPrediction(maxI);
     }
-
-
     //
     // Getter
     //
@@ -112,6 +117,10 @@ public class Predictions
     {
         return GetPredictionI(GetLastIndex());
     }
+    public OrbitMath.OrbitPrediction GetMaxPrediction()
+    {
+        return GetPredictionI(GetMaxIndex());
+    }
     public int GetCurrentIndex()
     {
         curI = CheckIndexT(OTime.time);
@@ -124,6 +133,11 @@ public class Predictions
             return maxI;
         return CheckIndex(maxI - 1);
     }
+    public int GetMaxIndex()
+    {
+        maxI = CheckIndex(maxI);
+        return maxI;
+    }
 
     public OrbitMath.OrbitPrediction GetLerpedPredicitonT(float time)
     {
@@ -132,8 +146,9 @@ public class Predictions
         int nextI = CheckIndex(i + 1);
         float timeDelta = time - fixedTimeSteps * (Mathf.Floor(time / fixedTimeSteps));
         float percent = (timeDelta) / fixedTimeSteps;
-        OrbitMath.OrbitPrediction lerpedPrediction = predictions[i].Clone();
-        if(predictions[i].gravitySystem == predictions[nextI].gravitySystem)
+        OrbitMath.OrbitPrediction lerpedPrediction = GetDummy();
+        lerpedPrediction.SetPrediction(predictions[i]);
+        if (predictions[i].gravitySystem == predictions[nextI].gravitySystem)
         {
             lerpedPrediction.localVelocity = predictions[i].localVelocity + percent * (predictions[nextI].localVelocity - predictions[i].localVelocity);
             lerpedPrediction.localPosition = predictions[i].localPosition + percent * (predictions[nextI].localPosition - predictions[i].localPosition);

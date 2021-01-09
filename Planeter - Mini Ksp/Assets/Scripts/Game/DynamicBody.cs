@@ -131,19 +131,23 @@ public class DynamicBody : MonoBehaviour
 
     public void PredictPath(Predictions predictions, int steps)
     {
-        for(int i = 0; i < steps; i++)
+        OrbitMath.OrbitPrediction lastPrediction;
+        OrbitMath.OrbitPrediction nextPrediction;
+        for (int i = 0; i < steps; i++)
         {
             if (!predictions.CanAddPrediction())
                 return;
-            predictions.AddPredictionN(CalculateNextPrediction(predictions.GetLastPrediction()));
+
+            lastPrediction = predictions.GetLastPrediction();
+            nextPrediction = predictions.GetMaxPrediction();
+            nextPrediction = CalculateNextPrediction(lastPrediction, nextPrediction);
+            predictions.AddPredictionI(nextPrediction, predictions.GetMaxIndex());
         }
     }
 
-    public OrbitMath.OrbitPrediction CalculateNextPrediction(OrbitMath.OrbitPrediction currentPrediction)
+    public OrbitMath.OrbitPrediction CalculateNextPrediction(OrbitMath.OrbitPrediction currentPrediction, OrbitMath.OrbitPrediction nextPrediction)
     {
-        OrbitMath.OrbitPrediction nextPrediction = currentPrediction.Clone();
-        
-
+        nextPrediction.SetPrediction(currentPrediction);
         // Movement
         float deltaTime = OTime.fixedTimeSteps;
         nextPrediction.time += deltaTime;
@@ -167,7 +171,7 @@ public class DynamicBody : MonoBehaviour
             nextPrediction.isGrounded = false;
         }
 
-        nextPrediction = nextPrediction.gravitySystem.DynamicPrediction(nextPrediction, mass);
+        nextPrediction.gravitySystem.DynamicPrediction(nextPrediction, mass);
 
         return nextPrediction;
     }

@@ -117,6 +117,13 @@ public class GravitySystem : PointMass
     // LocalPosition to parent system
     public bool IsInSystem(float time, Vector2 parentLocalPosition)
     {
+        float distanceToCenter = parentLocalPosition.magnitude;
+        // Out of furthest path
+        if (distanceToCenter > orbitElement.a_semiMajorAxis + radiusOfInfluence)
+            return false;
+        if (distanceToCenter < orbitElement.a_semiMajorAxis * (1 - orbitElement.e_eccentricity) - radiusOfInfluence)
+            return false;
+
         Vector2 myLocalPosition = GetPrediction(time).localPosition;
         float distance = (parentLocalPosition - myLocalPosition).magnitude;
         return distance < radiusOfInfluence;
