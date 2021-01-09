@@ -110,7 +110,8 @@ public class Mission
 
     public void Evaluate()
     {
-
+        if (achieved)
+            return;
         bool isMissionAchieved = true;
         for (int i = 0; i < missionEvents.Length; i++)
         {

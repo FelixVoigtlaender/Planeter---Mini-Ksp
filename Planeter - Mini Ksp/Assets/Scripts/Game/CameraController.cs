@@ -72,8 +72,6 @@ public class CameraController : MonoBehaviour
     public void ManageDrag(PointerEventData eventData)
     {
 
-        zoomScale = Camera.main.orthographicSize * 0.1f;
-
         float deltaZoom = 0;
 
         if (Input.touchCount >= 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
@@ -89,7 +87,7 @@ public class CameraController : MonoBehaviour
             float touchesCurPosDif = (firstTouch.position - secondTouch.position).magnitude;
 
 
-            float zoomDelta = (firstTouch.deltaPosition - secondTouch.deltaPosition).magnitude * zoomScale;
+            float zoomDelta = (firstTouch.deltaPosition - secondTouch.deltaPosition).magnitude;
 
             if (touchesPrevPosDif > touchesCurPosDif)
                 deltaZoom = zoomDelta;
