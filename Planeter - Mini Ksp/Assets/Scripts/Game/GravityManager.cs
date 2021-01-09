@@ -31,7 +31,7 @@ public class GravityManager : MonoBehaviour
 
 
             count++;
-            gravityVector += OrbitMath.GravityForce(position, body.transform.position, mass, body.mass);
+            gravityVector += OMath.GravityForce(position, body.transform.position, mass, body.mass);
         }
         if (count == 0)
             return Vector2.zero;

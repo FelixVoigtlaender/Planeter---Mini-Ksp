@@ -49,7 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 2723756080924799076}
-  alpha: 1
+  alphaStart: 0.5
+  alphaEnd: 1
   entryPoint: {fileID: 4773107478559811480}
   exitPoint: {fileID: 1382793989152678288}
   pointSizePx: 12
@@ -96,7 +97,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 100, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.5
@@ -105,7 +106,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.23999977
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -215,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 0}
-  lineWidthPx: 6
+  lineWidthPx: 10
 --- !u!1 &5772907087495128165
 GameObject:
   m_ObjectHideFlags: 0

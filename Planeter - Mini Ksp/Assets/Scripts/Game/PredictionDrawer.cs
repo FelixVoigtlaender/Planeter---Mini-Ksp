@@ -83,21 +83,21 @@ public class PredictionDrawer : MonoBehaviour
         }
     }
 
-    public Vector2 RelativeTimePositionToWorld(OrbitMath.OrbitPrediction curPrediciton, List<OrbitMath.OrbitPrediction> entryPredictions)
+    public Vector2 RelativeTimePositionToWorld(OMath.OrbitPrediction curPrediciton, List<OMath.OrbitPrediction> entryPredictions)
     {
-        if (curPrediciton.gravitySystem.parentSystem == null)
+        if (curPrediciton.gravitySystem.centerSystem == null)
         {
             return curPrediciton.localPosition;
         }
 
         //if (entryPrediction == null && curPrediction.gravitySystem.parentSystem == prevPrediction.gravitySystem || entryPredictions.Count == 0)
-        foreach (OrbitMath.OrbitPrediction entryPred in entryPredictions)
+        foreach (OMath.OrbitPrediction entryPred in entryPredictions)
         {
             if (curPrediciton.gravitySystem == entryPred.gravitySystem)
             {
                 Vector2 relativePosition = entryPred.gravitySystem.PointToParentSystem(entryPred.time, curPrediciton.localPosition);
-                OrbitMath.OrbitPrediction relativePred = new OrbitMath.OrbitPrediction(curPrediciton.time, relativePosition, curPrediciton.localVelocity);
-                relativePred.gravitySystem = entryPred.gravitySystem.parentSystem;
+                OMath.OrbitPrediction relativePred = new OMath.OrbitPrediction(curPrediciton.time, relativePosition, curPrediciton.localVelocity);
+                relativePred.gravitySystem = entryPred.gravitySystem.centerSystem;
                 return RelativeTimePositionToWorld(relativePred, entryPredictions);
             }
         }

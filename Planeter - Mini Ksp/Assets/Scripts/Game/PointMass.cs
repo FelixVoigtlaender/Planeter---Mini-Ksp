@@ -17,27 +17,20 @@ public class PointMass : MonoBehaviour
 
     public Vector2 GravityForce(Vector2 position, float mass = 1)
     {
-        return OrbitMath.GravityForce(position, transform.position, this.mass, mass);
+        return OMath.GravityForce(position, transform.position, this.mass, mass);
     }
-    
 
-    public virtual void SetUp()
+    public Transform GetBody()
     {
-        if (radius <= 0)
-            return;
         if (!body)
         {
             GameObject bodyObject = Instantiate(bodyPrefab, transform);
             body = bodyObject.transform;
         }
-
         renderer = renderer ? renderer : body.GetComponent<SpriteRenderer>();
-
-
         body.localPosition = Vector3.zero;
-
         body.localScale = Vector3.one * radius * 2;
-        mass = GetMass();
+        return body;
     }
     
     public virtual float GetMass()

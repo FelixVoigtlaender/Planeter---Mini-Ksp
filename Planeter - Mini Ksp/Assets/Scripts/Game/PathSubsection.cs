@@ -7,7 +7,8 @@ public class PathSubsection : MonoBehaviour
     [Header("Line")]
     public LineRenderer lineRenderer;
     [Range(0,1f)]
-    public float alpha = 1;
+    public float alphaStart = 0.1f;
+    public float alphaEnd = 0.5f;
     [Header("Points")]
     public SpriteRenderer entryPoint;
     public SpriteRenderer exitPoint;
@@ -31,22 +32,24 @@ public class PathSubsection : MonoBehaviour
             return;
         }
 
-        Color color = gravitySystem.renderer.color;
-        color.a = alpha;
+        Color startColor = gravitySystem.renderer.color;
+        startColor.a = alphaStart;
+        Color endColor = gravitySystem.renderer.color;
+        endColor.a = alphaEnd;
 
         // Line
         lineRenderer.positionCount = path.Count;
         lineRenderer.SetPositions(path.ToArray());
-        lineRenderer.startColor = lineRenderer.endColor = color;
+        lineRenderer.startColor = lineRenderer.endColor = startColor;
 
 
 
         // EntryPoint
         entryPoint.transform.position = path[0];
-        entryPoint.color = color;
+        entryPoint.color = startColor;
         // ExitPoint
         exitPoint.transform.position = path[path.Count - 1];
-        exitPoint.color = color;
+        exitPoint.color = endColor;
     }
 
     public void DrawSubsection(Predictions predictions, int startI, int endI){
@@ -69,20 +72,23 @@ public class PathSubsection : MonoBehaviour
         transform.localPosition = Vector2.zero;
 
         //Color
-        Color color = predictions.GetPredictionI(startI).gravitySystem.renderer.color;
-        color.a = alpha;
+        Color startColor = predictions.GetPredictionI(startI).gravitySystem.renderer.color;
+        startColor.a = alphaStart;
+        Color endColor = startColor;
+        endColor.a = alphaEnd;
 
         // Set Linerenderer
         lineRenderer.positionCount = count;
         lineRenderer.SetPositions(path);
-        lineRenderer.startColor = lineRenderer.endColor = color;
+        lineRenderer.startColor = startColor;
+        lineRenderer.endColor = endColor;
         
         // Set Entry Point
         entryPoint.transform.localPosition = path[0];
-        entryPoint.color = color;
+        entryPoint.color = startColor;
 
         // Set Exit Point
         exitPoint.transform.localPosition = path[path.Length - 1];
-        exitPoint.color = color;
+        exitPoint.color = startColor;
     }
 }

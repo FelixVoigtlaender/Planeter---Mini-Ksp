@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
         dynamicBody = GetComponent<DynamicBody>();
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         OnPlanning();
     }
@@ -51,6 +51,8 @@ public class Player : MonoBehaviour
 
         dynamicBody.AddRelativeVelocity(thrust);
 
+        // Mission
+        MissionManager.instance.Evaluate();
     }
 
     public void OnPlanning()

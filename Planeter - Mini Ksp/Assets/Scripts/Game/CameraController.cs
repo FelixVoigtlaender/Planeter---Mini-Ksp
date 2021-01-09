@@ -72,7 +72,7 @@ public class CameraController : MonoBehaviour
     public void ManageDrag(PointerEventData eventData)
     {
 
-        zoomScale = sizeGoal / (50 * 10);
+        zoomScale = Camera.main.orthographicSize * 0.1f;
 
         float deltaZoom = 0;
 
@@ -122,7 +122,6 @@ public class CameraController : MonoBehaviour
     public void OnDrag(PointerEventData eventData)
     {
         ManageDrag(eventData);
-        print(eventData.position + " " + eventData.delta);
     }
     void FollowTarget()
     {
@@ -166,5 +165,16 @@ public class CameraController : MonoBehaviour
 
         instance.targetOffset = Vector2.zero;
         instance.targetDelta = Vector2.zero;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(Vector3.zero, maxOffset);
+
+        float screenAspect = (float)Screen.width / (float)Screen.height;
+        float screenHeightInUnits = sizeMax * 2;
+        float screenWidthInUnits = screenHeightInUnits * Camera.main.aspect; // basically height
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(screenWidthInUnits,screenHeightInUnits,screenHeightInUnits));
     }
 }

@@ -5,11 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class OrbitElements
 {
+    public OrbitElement[] planets;
+    public static OrbitElements CreateFromJSON(string jsonString)
+    {
+        return JsonUtility.FromJson<OrbitElements>(jsonString);
+    }
 
-    public GravitySystem centerSystem;
-    public string name = "OrbitElement";
-    public float a_semiMajorAxis;
-    public float rp_radiusPericenter;
-    public float mass;
-
+    public void ApplyScale(float scaleSemiMajorAxis, float scaleMass, float scaleRadius)
+    {
+        foreach(OrbitElement element in planets)
+        {
+            element.ApplyScale(scaleSemiMajorAxis, scaleMass, scaleRadius);
+        }
+    }
 }

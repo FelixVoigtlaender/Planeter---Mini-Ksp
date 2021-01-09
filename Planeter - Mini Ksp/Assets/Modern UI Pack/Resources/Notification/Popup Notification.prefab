@@ -247,7 +247,7 @@ MonoBehaviour:
   titleObj: {fileID: 114925847423053372}
   descriptionObj: {fileID: 114561549926398850}
   enableTimer: 1
-  timer: 2
+  timer: 4
   useCustomContent: 0
   useStacking: 0
   notificationStyle: 1

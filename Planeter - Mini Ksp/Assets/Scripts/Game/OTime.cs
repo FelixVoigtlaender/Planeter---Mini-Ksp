@@ -5,8 +5,10 @@ using UnityEngine.UI.Extensions.Tweens;
 
 public class OTime : MonoBehaviour
 {
+    public float debugTime;
     public static float time;
-    public static float fixedTimeSteps = 0.1f;
+    public static float fixedTimeSteps = 0.25f;
+    public static float fixedPlanetTimeSteps = 20f;
     public static float deltaTime = 0.01f;
     public static float timeScale = 2;
     public static bool isPaused = false;
@@ -29,6 +31,7 @@ public class OTime : MonoBehaviour
         //deltaTime = Time.fixedDeltaTime;
 
         time += deltaTime * timeScale;
+        debugTime = time;
     }
 
     public void Skip(float delta)

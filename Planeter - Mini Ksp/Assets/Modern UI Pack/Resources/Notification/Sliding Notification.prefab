@@ -624,7 +624,7 @@ MonoBehaviour:
   enableTimer: 1
   timer: 2
   useCustomContent: 0
-  useStacking: 0
+  useStacking: 1
   notificationStyle: 2
 --- !u!225 &225915968328216722
 CanvasGroup:

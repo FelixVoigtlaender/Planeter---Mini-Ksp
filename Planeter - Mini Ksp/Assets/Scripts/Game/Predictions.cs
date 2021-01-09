@@ -9,27 +9,38 @@ public class Predictions
     public int curI;
     public int free;
     public int filled;
-    public OrbitMath.OrbitPrediction[] predictions;
+
+    public float fixedTimeSteps;
+    public OMath.OrbitPrediction[] predictions;
+    public OMath.OrbitPrediction dummyPrediction;
     //
     // Setup
     //
     public Predictions(int count)
     {
         SetupPredictions(count);
+        fixedTimeSteps = OTime.fixedTimeSteps;
     }
-    public Predictions(int count, OrbitMath.OrbitPrediction startPrediction)
+    public Predictions(int count, OMath.OrbitPrediction startPrediction)
     {
         SetupPredictions(count);
         SetCurrentPrediction(startPrediction);
+        fixedTimeSteps = OTime.fixedTimeSteps;
     }
     void SetupPredictions(int count)
     {
         maxI = 0;
-        predictions = new OrbitMath.OrbitPrediction[count];
+        predictions = new OMath.OrbitPrediction[count];
         for (int i = 0; i < predictions.Length; i++)
         {
-            predictions[i] = new OrbitMath.OrbitPrediction();
+            predictions[i] = new OMath.OrbitPrediction();
         }
+    }
+    public OMath.OrbitPrediction GetDummy()
+    {
+        if (dummyPrediction == null)
+            dummyPrediction = new OMath.OrbitPrediction();
+        return dummyPrediction;
     }
 
 
@@ -41,7 +52,7 @@ public class Predictions
     /// </summary>
     /// <param name="prediction"></param>
     /// <param name="index"></param>
-    public void AddPredictionI(OrbitMath.OrbitPrediction prediction, int index, bool allowOverride = false)
+    public void AddPredictionI(OMath.OrbitPrediction prediction, int index, bool allowOverride = false)
     {
         if (!CanAddPrediction(index) && !allowOverride)
         {
@@ -50,13 +61,13 @@ public class Predictions
         }
         index = CheckIndex(index);
         maxI = CheckIndex(index + 1);
-        predictions[index] = prediction;
+        predictions[index].SetPrediction(prediction);
     }
     /// <summary>
     /// Puts prediction at given time
     /// </summary>
     /// <param name="prediction"></param>
-    public void AddPredictionT(OrbitMath.OrbitPrediction prediction)
+    public void AddPredictionT(OMath.OrbitPrediction prediction)
     {
         int index = CheckIndexT(prediction.time);
         AddPredictionI(prediction, index);
@@ -65,11 +76,11 @@ public class Predictions
     /// Puts prediction to next space
     /// </summary>
     /// <param name="prediction"></param>
-    public void AddPredictionN(OrbitMath.OrbitPrediction prediction)
+    public void AddPredictionN(OMath.OrbitPrediction prediction)
     {
         AddPredictionI(prediction,maxI);
     }
-    public void SetCurrentPrediction(OrbitMath.OrbitPrediction prediction)
+    public void SetCurrentPrediction(OMath.OrbitPrediction prediction)
     {
         int index = CheckIndexT(OTime.time);
         AddPredictionI(prediction, index, true);
@@ -84,29 +95,31 @@ public class Predictions
     {
         return CanAddPrediction(maxI);
     }
-
-
     //
     // Getter
     //
-    public OrbitMath.OrbitPrediction GetPredictionI(int index)
+    public OMath.OrbitPrediction GetPredictionI(int index)
     {
         index = CheckIndex(index);
         return predictions[index];
     }
-    public OrbitMath.OrbitPrediction GetPredictionT(float time)
+    public OMath.OrbitPrediction GetPredictionT(float time)
     {
         int index = CheckIndexT(time);
 
         return predictions[index];
     }
-    public OrbitMath.OrbitPrediction GetCurrentPrediction()
+    public OMath.OrbitPrediction GetCurrentPrediction()
     {
         return GetPredictionT(OTime.time);
     }
-    public OrbitMath.OrbitPrediction GetLastPrediction()
+    public OMath.OrbitPrediction GetLastPrediction()
     {
         return GetPredictionI(GetLastIndex());
+    }
+    public OMath.OrbitPrediction GetMaxPrediction()
+    {
+        return GetPredictionI(GetMaxIndex());
     }
     public int GetCurrentIndex()
     {
@@ -120,18 +133,26 @@ public class Predictions
             return maxI;
         return CheckIndex(maxI - 1);
     }
-
-    public OrbitMath.OrbitPrediction GetLerpedPredicitonT(float time)
+    public int GetMaxIndex()
     {
+        maxI = CheckIndex(maxI);
+        return maxI;
+    }
+
+    public OMath.OrbitPrediction GetLerpedPredicitonT(float time)
+    {
+        time %= fixedTimeSteps * predictions.Length;
         int i = CheckIndexT(time);
         int nextI = CheckIndex(i + 1);
-        float timeDelta = time - OTime.fixedTimeSteps * (Mathf.Floor(time / OTime.fixedTimeSteps));
-        float percent = (timeDelta) / OTime.fixedTimeSteps;
-        OrbitMath.OrbitPrediction lerpedPrediction = predictions[i].Clone();
-        if(predictions[i].gravitySystem == predictions[nextI].gravitySystem)
+        float timeDelta = time - fixedTimeSteps * (Mathf.Floor(time / fixedTimeSteps));
+        float percent = (timeDelta) / fixedTimeSteps;
+        OMath.OrbitPrediction lerpedPrediction = GetDummy();
+        lerpedPrediction.SetPrediction(predictions[i]);
+        if (predictions[i].gravitySystem == predictions[nextI].gravitySystem)
         {
-            lerpedPrediction.localVelocity = predictions[i].localVelocity + percent * (predictions[nextI].localVelocity- predictions[i].localVelocity);
-            lerpedPrediction.localPosition = predictions[i].localPosition + percent * (predictions[nextI].localPosition-predictions[i].localPosition);
+            lerpedPrediction.localVelocity = predictions[i].localVelocity + percent * (predictions[nextI].localVelocity - predictions[i].localVelocity);
+            lerpedPrediction.localPosition = predictions[i].localPosition + percent * (predictions[nextI].localPosition - predictions[i].localPosition);
+            lerpedPrediction.time = predictions[i].time + percent * fixedTimeSteps;
         }
         return lerpedPrediction;
     }
@@ -144,7 +165,8 @@ public class Predictions
     }
     public int CheckIndexT(float time)
     {
-        return CheckIndex(Mathf.FloorToInt(time / OTime.fixedTimeSteps));
+        time %= fixedTimeSteps * predictions.Length;
+        return CheckIndex(Mathf.FloorToInt(time /fixedTimeSteps));
     }
     public int Mod(int x , int m)
     {

@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
         isGameActive = true;
 
         OnGameStart?.Invoke();
+
+        Quicksave();
     }
 
     public void EndGame()
