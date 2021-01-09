@@ -17,7 +17,7 @@ public class PointMass : MonoBehaviour
 
     public Vector2 GravityForce(Vector2 position, float mass = 1)
     {
-        return OrbitMath.GravityForce(position, transform.position, this.mass, mass);
+        return OMath.GravityForce(position, transform.position, this.mass, mass);
     }
 
     public Transform GetBody()

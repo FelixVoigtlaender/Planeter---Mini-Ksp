@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OrbitMath : MonoBehaviour
+public class OMath : MonoBehaviour
 {
     // s_Instance is used to cache the instance found in the scene so we don't have to look it up every time.
-    private static OrbitMath s_Instance = null;
+    private static OMath s_Instance = null;
 
 
     // A static property that finds or creates an instance of the manager object and returns it.
-    public static OrbitMath instance
+    public static OMath instance
     {
         get
         {
             if (s_Instance == null)
             {
                 // FindObjectOfType() returns the first AManager object in the scene.
-                s_Instance = FindObjectOfType(typeof(OrbitMath)) as OrbitMath;
+                s_Instance = FindObjectOfType(typeof(OMath)) as OMath;
             }
 
             // If it is still null, create a new instance
             if (s_Instance == null)
             {
                 var obj = new GameObject("Manager");
-                s_Instance = obj.AddComponent<OrbitMath>();
+                s_Instance = obj.AddComponent<OMath>();
             }
 
             return s_Instance;
@@ -38,6 +38,11 @@ public class OrbitMath : MonoBehaviour
     }
     public float gravityConstant;
 
+
+    public static float Sqr(float value)
+    {
+        return value * value;
+    }
     public static float MassOfCircle(float radius, float massScale)
     {
         float area = Mathf.PI * Mathf.Pow(radius, 2);
@@ -48,10 +53,10 @@ public class OrbitMath : MonoBehaviour
     {
         // From pos A to pos B
         Vector2 dif = (posB - posA);
-        if (dif.magnitude < 0.1f)
+        if (dif.sqrMagnitude < OMath.Sqr(0.1f))
             return Vector2.zero;
-        float distance = dif.magnitude;
-        float gravity = instance.gravityConstant * massB * massA / Mathf.Pow(distance, 2);
+        float sqrDistance = dif.sqrMagnitude;
+        float gravity = instance.gravityConstant * massB * massA / sqrDistance;
         Vector2 gravityVector = dif.normalized * gravity;
         return gravityVector;
     }
@@ -155,7 +160,7 @@ public class OrbitMath : MonoBehaviour
         Vector2 dir = (Vector2)(Quaternion.Euler(0, 0, Mathf.Rad2Deg * f) * Vector2.right);
         Vector2 localPosition = r * dir;
         Vector2 velocity = Vector2.Perpendicular(dir) *  Mathf.Sqrt((2 * mu / r) - (mu / a));
-        OrbitMath.OrbitPrediction prediction = new OrbitMath.OrbitPrediction(time, localPosition, velocity);
+        OMath.OrbitPrediction prediction = new OMath.OrbitPrediction(time, localPosition, velocity);
         prediction.gravitySystem = gravitySystem.centerSystem;
 
         //Debug
@@ -320,7 +325,7 @@ public class OrbitMath : MonoBehaviour
             if (gravitySystem.centerSystem == newSystem)
             {
 
-                OrbitMath.OrbitPrediction childPrediction = gravitySystem.GetPrediction(time);
+                OMath.OrbitPrediction childPrediction = gravitySystem.GetPrediction(time);
                 localPosition += childPrediction.localPosition;
                 localVelocity += childPrediction.localVelocity;
                 gravitySystem = newSystem;

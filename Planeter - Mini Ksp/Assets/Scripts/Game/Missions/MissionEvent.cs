@@ -38,7 +38,7 @@ public class MissionEvent
     public virtual void GenerateMyObject()
     {
 
-        OrbitMath.OrbitPrediction prediction = Player.instance.dynamicBody.GetCurrentPrediction();
+        OMath.OrbitPrediction prediction = Player.instance.dynamicBody.GetCurrentPrediction();
         myObject = prediction.gravitySystem.name;
     }
 
@@ -63,7 +63,7 @@ public class MissionLand : MissionEvent
     // Evaluation
     public override bool Evaluate()
     {
-        OrbitMath.OrbitPrediction prediction = Player.instance.dynamicBody.currentPrediction;
+        OMath.OrbitPrediction prediction = Player.instance.dynamicBody.currentPrediction;
 
         bool correctSystem = prediction.gravitySystem.orbitElement.name == myObject;
         bool landed = prediction.isGrounded;
@@ -117,7 +117,7 @@ public class MissionEnter : MissionEvent
     // Evaluation
     public override bool Evaluate()
     {
-        OrbitMath.OrbitPrediction prediction = Player.instance.dynamicBody.currentPrediction;
+        OMath.OrbitPrediction prediction = Player.instance.dynamicBody.currentPrediction;
 
         bool correctSystem = prediction.gravitySystem.orbitElement.name == myObject;
 
