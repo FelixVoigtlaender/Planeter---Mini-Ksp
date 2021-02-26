@@ -220,7 +220,6 @@ public class OMath : MonoBehaviour
         string s = gravitySystem.name + "\n";
         s += "X: " + x + " xT0: " + xt0 + "\n";
         s += "Y: " + y + " yT0: " + yt0 + "\n";
-        print(s);
 
         float t0;
         t0 = y > 0 ? xt0 : yt0;

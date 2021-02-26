@@ -37,6 +37,10 @@ public class NotificationCreator : MonoBehaviour
     {
         GenerateNotification(title, "", null);
     }
+    public void GenerateNotificationDescrition(string title)
+    {
+        GenerateNotification(title, title, null);
+    }
     public void GenerateNotification(string title, string description)
     {
         GenerateNotification(title, description, null);

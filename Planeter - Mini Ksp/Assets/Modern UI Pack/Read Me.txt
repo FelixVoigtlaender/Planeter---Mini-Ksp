@@ -1,8 +1,7 @@
 Modern UI Pack - v4.3.1
 
 Import TextMesh Pro and its essentials from Package Manager if you haven't already!
-Online documentation: https://docs.google.com/document/d/1TMe
-cEhM6jYPWs9xyyIhugwIhLd8aV98KcasPDq6bApA
+Online documentation: https://docs.google.com/document/d/1TMecEhM6jYPWs9xyyIhugwIhLd8aV98KcasPDq6bApA
 
 Contact me via:
 E-mail: support@michsky.com

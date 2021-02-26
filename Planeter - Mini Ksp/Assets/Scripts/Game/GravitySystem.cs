@@ -300,7 +300,6 @@ public class GravitySystem : PointMass
         {
             centerSystem = transform.parent.GetComponent<GravitySystem>();
             
-            print("TEEEESSSTTT" +name + centerSystem.name);
         }
         if (centerSystem)
         {

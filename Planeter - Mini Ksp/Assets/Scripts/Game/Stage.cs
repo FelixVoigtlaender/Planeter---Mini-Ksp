@@ -5,6 +5,7 @@ using UnityEngine;
 public class Stage : MonoBehaviour
 {
     public float thrust = 1;
+    public int points = 1;
 
     bool quickSaveActive = true;
 
