@@ -89,7 +89,7 @@ public class Predictions
     {
         if (GetPredictionI(i) == null || GetCurrentPrediction() == null)
             return true;
-        return i != GetCurrentIndex(); 
+        return i+1 != GetCurrentIndex(); 
     }
     public bool CanAddPrediction()
     {

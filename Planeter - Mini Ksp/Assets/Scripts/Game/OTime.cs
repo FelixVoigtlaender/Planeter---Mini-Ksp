@@ -13,6 +13,7 @@ public class OTime : MonoBehaviour
     public static float timeScale = 2;
     public static bool isPaused = false;
     public static float quickSaveTime;
+    public static float maxTime;
 
 
     private void Start()
@@ -31,12 +32,14 @@ public class OTime : MonoBehaviour
         //deltaTime = Time.fixedDeltaTime;
 
         time += deltaTime * timeScale;
+        time = Mathf.Min(time, maxTime);
         debugTime = time;
     }
 
     public void Skip(float delta)
     {
         time += delta;
+        time = Mathf.Min(time, maxTime);
     }
 
     public void SetTimeScale(float scale)

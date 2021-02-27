@@ -24082,10 +24082,10 @@ MonoBehaviour:
   body: {fileID: 1863635658}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 41.096874
+  radiusOfInfluence: 77.42301
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1483496423}
-  localStartPosition: {x: 2859.8398, y: 0}
+  localStartPosition: {x: 2144.88, y: 0}
   t0: -0
   orbitElement:
     name: Venus
@@ -26919,7 +26919,7 @@ MonoBehaviour:
     spaceCount: 20
     wordCount: 21
     linkCount: 0
-    lineCount: 3
+    lineCount: 4
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -31079,7 +31079,7 @@ Transform:
   m_GameObject: {fileID: 596769116}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 11639.957, y: 11639.957, z: 11639.957}
+  m_LocalScale: {x: 21928.688, y: 21928.688, z: 21928.688}
   m_Children: []
   m_Father: {fileID: 2069859069}
   m_RootOrder: 1
@@ -36369,13 +36369,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 327
   massScale: 1
-  mass: 166500
+  mass: 0
   renderer: {fileID: 829415355}
   body: {fileID: 829415354}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
   radiusOfInfluence: 300100
-  centerSystem: {fileID: 704996547}
+  centerSystem: {fileID: 0}
   sphereOfInfluence: {fileID: 0}
   localStartPosition: {x: 0, y: 0}
   t0: 0
@@ -36384,7 +36384,7 @@ MonoBehaviour:
     center: Sun
     a_semiMajorAxis: 0
     e_eccentricity: 0
-    mass: 166500
+    mass: 16650
     radius: 327
     color: '#ffc700'
   lineRenderer: {fileID: 0}
@@ -38744,7 +38744,7 @@ Transform:
   m_GameObject: {fileID: 763085162}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 15.71945, y: 15.71945, z: 15.71945}
+  m_LocalScale: {x: 29.614105, y: 29.614105, z: 29.614105}
   m_Children: []
   m_Father: {fileID: 953857716}
   m_RootOrder: 1
@@ -43629,10 +43629,10 @@ MonoBehaviour:
   body: {fileID: 1490268357}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 3235.665
+  radiusOfInfluence: 6095.7173
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1697607156}
-  localStartPosition: {x: 19801.6, y: 0}
+  localStartPosition: {x: 14851.199, y: 0}
   t0: -0
   orbitElement:
     name: Jupiter
@@ -44475,10 +44475,10 @@ RectTransform:
   m_Father: {fileID: 1512493488}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 207.34491, y: -611.5043}
+  m_SizeDelta: {x: 314.68982, y: 1123.0085}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &881883873
 MonoBehaviour:
@@ -47117,12 +47117,12 @@ PrefabInstance:
     - target: {fileID: 224140982003034070, guid: 235c8a1eee61e2247a3a8554bad3c5e0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 440
+      value: 402.18982
       objectReference: {fileID: 0}
     - target: {fileID: 224140982003034070, guid: 235c8a1eee61e2247a3a8554bad3c5e0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 844
+      value: 768.37964
       objectReference: {fileID: 0}
     - target: {fileID: 224140982003034070, guid: 235c8a1eee61e2247a3a8554bad3c5e0,
         type: 3}
@@ -47192,7 +47192,7 @@ PrefabInstance:
     - target: {fileID: 224602918499771590, guid: 235c8a1eee61e2247a3a8554bad3c5e0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 490
+      value: 452.18982
       objectReference: {fileID: 0}
     - target: {fileID: 224602918499771590, guid: 235c8a1eee61e2247a3a8554bad3c5e0,
         type: 3}
@@ -47202,7 +47202,7 @@ PrefabInstance:
     - target: {fileID: 224602918499771590, guid: 235c8a1eee61e2247a3a8554bad3c5e0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 880
+      value: 804.37964
       objectReference: {fileID: 0}
     - target: {fileID: 224602918499771590, guid: 235c8a1eee61e2247a3a8554bad3c5e0,
         type: 3}
@@ -49073,10 +49073,10 @@ MonoBehaviour:
   body: {fileID: 1422873196}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 7.859725
+  radiusOfInfluence: 14.807053
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 763085166}
-  localStartPosition: {x: 1238.64, y: 0}
+  localStartPosition: {x: 928.98004, y: 0}
   t0: -0
   orbitElement:
     name: Mercury
@@ -59573,10 +59573,10 @@ MonoBehaviour:
   body: {fileID: 1982153156}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 3476.8264
+  radiusOfInfluence: 6550.045
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1191629799}
-  localStartPosition: {x: 73152.28, y: 0}
+  localStartPosition: {x: 54864.21, y: 0}
   t0: -0
   orbitElement:
     name: Uranus
@@ -60627,7 +60627,7 @@ Transform:
   m_GameObject: {fileID: 1191629795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6953.653, y: 6953.653, z: 6953.653}
+  m_LocalScale: {x: 13100.09, y: 13100.09, z: 13100.09}
   m_Children: []
   m_Father: {fileID: 1167381242}
   m_RootOrder: 1
@@ -62955,10 +62955,10 @@ MonoBehaviour:
   body: {fileID: 1234912933}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 39.037582
+  radiusOfInfluence: 73.54349
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1973826393}
-  localStartPosition: {x: 5514.56, y: 0}
+  localStartPosition: {x: 4135.92, y: 0}
   t0: -0
   orbitElement:
     name: Mars
@@ -63556,7 +63556,7 @@ Transform:
   m_GameObject: {fileID: 1220279721}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7328.9614, y: 7328.9614, z: 7328.9614}
+  m_LocalScale: {x: 13807.14, y: 13807.14, z: 13807.14}
   m_Children: []
   m_Father: {fileID: 2131204381}
   m_RootOrder: 1
@@ -63784,7 +63784,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2096206989}
   m_Direction: 2
   m_MinValue: 0
-  m_MaxValue: 3
+  m_MaxValue: 4
   m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
@@ -68137,7 +68137,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00024414062}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1306532701
@@ -71157,7 +71157,7 @@ Transform:
   m_GameObject: {fileID: 1398306852}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 124.197334, y: 124.197334, z: 124.197334}
+  m_LocalScale: {x: 233.9772, y: 233.9772, z: 233.9772}
   m_Children: []
   m_Father: {fileID: 2063071244}
   m_RootOrder: 1
@@ -74861,7 +74861,7 @@ Transform:
   m_GameObject: {fileID: 1483496419}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 82.19375, y: 82.19375, z: 82.19375}
+  m_LocalScale: {x: 154.84602, y: 154.84602, z: 154.84602}
   m_Children: []
   m_Father: {fileID: 451488088}
   m_RootOrder: 1
@@ -83839,7 +83839,7 @@ Transform:
   m_GameObject: {fileID: 1697607152}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6471.33, y: 6471.33, z: 6471.33}
+  m_LocalScale: {x: 12191.435, y: 12191.435, z: 12191.435}
   m_Children: []
   m_Father: {fileID: 862880821}
   m_RootOrder: 1
@@ -90463,10 +90463,10 @@ RectTransform:
   m_Father: {fileID: 940739268}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 207.34491, y: -611.5043}
+  m_SizeDelta: {x: 314.68982, y: 1123.0085}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1845054839
 MonoBehaviour:
@@ -90559,7 +90559,7 @@ MonoBehaviour:
       center: Sun
       a_semiMajorAxis: 0
       e_eccentricity: 0
-      mass: 166500
+      mass: 16650
       radius: 327
       color: '#ffc700'
     - name: Mercury
@@ -96170,7 +96170,7 @@ Transform:
   m_GameObject: {fileID: 1973826389}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 78.075165, y: 78.075165, z: 78.075165}
+  m_LocalScale: {x: 147.08698, y: 147.08698, z: 147.08698}
   m_Children: []
   m_Father: {fileID: 1213577359}
   m_RootOrder: 1
@@ -100969,10 +100969,10 @@ MonoBehaviour:
   body: {fileID: 609774590}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 62.098667
+  radiusOfInfluence: 116.9886
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1398306856}
-  localStartPosition: {x: 3932, y: 0}
+  localStartPosition: {x: 2949, y: 0}
   t0: -0
   orbitElement:
     name: Earth
@@ -102068,10 +102068,10 @@ MonoBehaviour:
   body: {fileID: 1843303466}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 5819.9785
+  radiusOfInfluence: 10964.344
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 596769120}
-  localStartPosition: {x: 119197.48, y: 0}
+  localStartPosition: {x: 89398.11, y: 0}
   t0: -0
   orbitElement:
     name: Neptune
@@ -105479,10 +105479,10 @@ MonoBehaviour:
   body: {fileID: 1742049518}
   bodyPrefab: {fileID: 2591019870025392073, guid: 3353983e0069a4f4fb8ac79cb50b530f,
     type: 3}
-  radiusOfInfluence: 3664.4807
+  radiusOfInfluence: 6903.57
   centerSystem: {fileID: 704996547}
   sphereOfInfluence: {fileID: 1220279725}
-  localStartPosition: {x: 36099.36, y: 0}
+  localStartPosition: {x: 27074.52, y: 0}
   t0: -0
   orbitElement:
     name: Saturn

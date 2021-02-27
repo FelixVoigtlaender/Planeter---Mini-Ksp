@@ -52,6 +52,34 @@ public class MissionEvent
         MissionEvent[] events = { new MissionLand(), new MissionEnter() };
         return events;
     }
+
+    public string ColorCodeDescription(string description)
+    {
+        if (!description.Contains(MyVerb))
+            return description;
+
+        string[] planetNames = OrbitBodyGenerator.instance.GetPlanetNames();
+        string planet = "";
+        for (int i = 0; i < planetNames.Length; i++)
+        {
+            if (description.Contains(planetNames[i]))
+            {
+                planet = planetNames[i];
+                break;
+            }
+        }
+        if (planet.Length == 0)
+            return description;
+
+
+        string planetColor = OrbitBodyGenerator.instance.GetPlanet(planet).color;
+        string verbColor = "#538CD4";
+        string coloredDescription = description;
+
+        coloredDescription = coloredDescription.Replace(planet, "<color=" + planetColor + ">" + planet + "</color>");
+        coloredDescription = coloredDescription.Replace(MyVerb, "<color=" + verbColor + ">" + MyVerb + "</color>");
+        return coloredDescription;
+    }
 }
 
 [System.Serializable]

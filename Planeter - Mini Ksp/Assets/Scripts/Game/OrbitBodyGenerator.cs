@@ -64,7 +64,20 @@ public class OrbitBodyGenerator : MonoBehaviour
 
 
         return planetNames;
+    }
 
+    public OrbitElement GetPlanet(string name)
+    {
+        if (orbitElements == null || orbitElements.planets == null)
+            return null;
+
+        for (int i = 0; i < orbitElements.planets.Length; i++)
+        {
+            if (orbitElements.planets[i].name.Equals(name.Trim()))
+                return orbitElements.planets[i];
+        }
+
+        return null;
     }
 
     public void GeneratePlanets()

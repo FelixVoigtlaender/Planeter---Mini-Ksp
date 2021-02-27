@@ -163,7 +163,9 @@ public class Mission
                 MissionEvent missionEvent = allEvents[j].GenerateFromString(missionParts[i]);
                 if (missionEvent == null)
                     continue;
-                events.Add(missionEvent); 
+                events.Add(missionEvent);
+                description = description.Replace(missionParts[i], missionEvent.ColorCodeDescription(missionParts[i]));
+                break;
             }
         }
 

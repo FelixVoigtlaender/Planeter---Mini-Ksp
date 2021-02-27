@@ -40,7 +40,7 @@ def generatMoon(name, center, a_semiMajorAxis, e_eccentricity, mass, radius, col
 
 
 
-sun = generatePlanet("Sun", "Sun", 0,   0,  333000,   109,"#ffc700")
+sun = generatePlanet("Sun", "Sun", 0,   0,  33300,   109,"#ffc700")
 
 #Planets
 #planet = = generatePlanet("Name","Center",semiMajoAxis,eccentricity,mass,radus)
