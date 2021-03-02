@@ -369,8 +369,8 @@ public class GravitySystem : PointMass
         // Only Planets
         if (!GetParentSystem())
             return;
-        if (GetParentSystem().GetParentSystem())
-            return;
+        //if (GetParentSystem().GetParentSystem())
+        //    return;
 
         //Linerenderer
         lineRenderer = GetComponent<LineRenderer>();

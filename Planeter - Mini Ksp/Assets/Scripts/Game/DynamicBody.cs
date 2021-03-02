@@ -100,7 +100,6 @@ public class DynamicBody : MonoBehaviour
                 PredictPath(predictions, Mathf.CeilToInt(10 * OTime.timeScale));
             }
             OTime.maxTime = predictions.GetLastPrediction().time;
-            print(OTime.maxTime);
             yield return new WaitForEndOfFrame();
         }
     }

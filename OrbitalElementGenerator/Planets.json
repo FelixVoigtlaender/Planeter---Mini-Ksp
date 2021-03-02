@@ -81,5 +81,34 @@
             "radius": 3.883,
             "color": "#6bfffe"
         }
+    ],
+    "moons": [
+        {
+            "name": "Moon",
+            "center": "Earth",
+            "a_semiMajorAxis": 0.0025695459892541494,
+            "e_eccentricity": 0.0549,
+            "mass": 0.012293277208210477,
+            "radius": 0.27270444200282534,
+            "color": "#c0c0c7"
+        },
+        {
+            "name": "Phobos",
+            "center": "Mars",
+            "a_semiMajorAxis": 6.267462505169603e-05,
+            "e_eccentricity": 0.0151,
+            "mass": 1.7847186292878708e-09,
+            "radius": 0.0017684350965311568,
+            "color": "#c0c0c7"
+        },
+        {
+            "name": "Deimos",
+            "center": "Mars",
+            "a_semiMajorAxis": 0.00015680688507494514,
+            "e_eccentricity": 0.0002,
+            "mass": 2.471715583595792e-10,
+            "radius": 0.0009731596295714959,
+            "color": "#c0c0c7"
+        }
     ]
 }

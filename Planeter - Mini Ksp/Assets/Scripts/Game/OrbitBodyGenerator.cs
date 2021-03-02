@@ -29,11 +29,11 @@ public class OrbitBodyGenerator : MonoBehaviour
         }
     }
 
-
+    [Header("System")]
+    public GravitySystem mainSystem;
     [Header("Scaling")]
-    public float scaleSemiMajorAxis;
-    public float scaleMass;
-    public float scaleRadius;
+    public Scaling planetScales;
+    public Scaling moonScales;
     [Header("Generation")]
     public GameObject planetPrefab;
     public OrbitElements orbitElements;
@@ -47,7 +47,7 @@ public class OrbitBodyGenerator : MonoBehaviour
 
         // Orbit Elements
         orbitElements = OrbitElements.CreateFromJSON(jsonString);
-        orbitElements.ApplyScale(scaleSemiMajorAxis, scaleMass, scaleRadius);
+        orbitElements.ApplyScale(planetScales,moonScales);
     }
 
     public string[] GetPlanetNames()
@@ -110,7 +110,36 @@ public class OrbitBodyGenerator : MonoBehaviour
         }
 
     }
+    public void GenerateMoons()
+    {
+        if (orbitElements == null || orbitElements.moons == null)
+            return;
 
+        // Generate Planets
+        OrbitElement[] moonElements = orbitElements.moons;
+        List<GravitySystem> existingSystems = new List<GravitySystem>(FindObjectsOfType<GravitySystem>());
+        for (int i = 0; i < moonElements.Length; i++)
+        {
+            GravitySystem system = FindGravitySystem(moonElements[i].name, existingSystems.ToArray());
+
+            if (system == null)
+            {
+                GameObject moon = Instantiate(planetPrefab);
+                system = moon.GetComponent<GravitySystem>();
+                existingSystems.Add(system);
+            }
+
+            system.orbitElement = moonElements[i];
+            system.gameObject.name = moonElements[i].name;
+        }
+
+        // Setup Planets
+        foreach (GravitySystem gs in existingSystems)
+        {
+            gs.Setup(gs.orbitElement);
+        }
+
+    }
     GravitySystem FindGravitySystem(string name, GravitySystem[] systems)
     {
         for (int i = 0; i < systems.Length; i++)
@@ -119,5 +148,20 @@ public class OrbitBodyGenerator : MonoBehaviour
                 return systems[i];
         }
         return null;
+    }
+
+    public void CheckSystem()
+    {
+        if (!mainSystem)
+            return;
+        mainSystem.CheckSystem();
+    }
+
+    [System.Serializable]
+    public struct Scaling
+    {
+        public float scaleSemiMajorAxis;
+        public float scaleMass;
+        public float scaleRadius;
     }
 }

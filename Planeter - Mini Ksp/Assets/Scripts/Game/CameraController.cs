@@ -28,6 +28,7 @@ public class CameraController : MonoBehaviour
 
     [Header("Input")]
     public FieldTrigger fieldTrigger;
+    public float selectionDistance = 0;
 
     private void Awake()
     {
@@ -47,6 +48,8 @@ public class CameraController : MonoBehaviour
         FollowTarget();
         FollowSize();
         MouseInput();
+
+        selectionDistance = float.MaxValue;
     }
 
 
@@ -144,8 +147,12 @@ public class CameraController : MonoBehaviour
     }
 
 
-    public static void SetTarget(Transform target)
+    public static void SetTarget(Transform target, float distance = 0)
     {
+        if (distance > instance.selectionDistance)
+            return;
+
+        instance.selectionDistance = distance;
         instance.target = target;
 
         if (!target)
