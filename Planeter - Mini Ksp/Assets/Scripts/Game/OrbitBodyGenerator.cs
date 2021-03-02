@@ -67,6 +67,14 @@ public class OrbitBodyGenerator : MonoBehaviour
         return scaling;
     }
 
+    public string[] GetElementNames()
+    {
+        var myList = new List<string>();
+        myList.AddRange(GetPlanetNames());
+        myList.AddRange(GetMoonNames());
+        return myList.ToArray();
+    }
+
     public string[] GetPlanetNames()
     {
         string[] planetNames = new string[0];
@@ -82,6 +90,28 @@ public class OrbitBodyGenerator : MonoBehaviour
 
         return planetNames;
     }
+    public string[] GetMoonNames()
+    {
+        string[] moonNames = new string[0];
+        if (orbitElements == null || orbitElements.moons == null)
+            return moonNames;
+
+        moonNames = new string[orbitElements.moons.Length];
+        for (int i = 0; i < orbitElements.moons.Length; i++)
+        {
+            moonNames[i] = orbitElements.moons[i].name;
+        }
+
+
+        return moonNames;
+    }
+    public OrbitElement GetElement(string name)
+    {
+        OrbitElement element = GetPlanet(name);
+        if (element == null)
+            element = GetMoon(name);
+        return element;
+    }
 
     public OrbitElement GetPlanet(string name)
     {
@@ -96,6 +126,21 @@ public class OrbitBodyGenerator : MonoBehaviour
 
         return null;
     }
+
+    public OrbitElement GetMoon(string name)
+    {
+        if (orbitElements == null || orbitElements.moons == null)
+            return null;
+
+        for (int i = 0; i < orbitElements.moons.Length; i++)
+        {
+            if (orbitElements.moons[i].name.Equals(name.Trim()))
+                return orbitElements.moons[i];
+        }
+
+        return null;
+    }
+
 
     public void GeneratePlanets()
     {

@@ -22,7 +22,7 @@ public class Stage : MonoBehaviour
 
     public Vector2 CalculateThrust(Vector2 direction)
     {
-        return direction.normalized * thrust;
+        return direction * thrust;
 
     }
 

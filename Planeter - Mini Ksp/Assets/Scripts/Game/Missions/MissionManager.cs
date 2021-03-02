@@ -106,6 +106,7 @@ public class Mission
     [TextArea]
     public string description;
     public MissionEvent[] missionEvents;
+    public int pointReward;
     public bool achieved = false;
 
     public void Evaluate()
@@ -153,7 +154,7 @@ public class Mission
     {
         string[] missionParts = description.Split('.',',');
         List<MissionEvent> events = new List<MissionEvent>();
-        string[] planets = OrbitBodyGenerator.instance.GetPlanetNames();
+        string[] planets = OrbitBodyGenerator.instance.GetElementNames();
         MissionEvent[] allEvents = MissionEvent.GetAllMissionEvents();
 
         for (int i = 0; i < missionParts.Length; i++)
