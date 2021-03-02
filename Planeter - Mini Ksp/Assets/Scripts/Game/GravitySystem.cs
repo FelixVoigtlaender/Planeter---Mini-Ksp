@@ -18,7 +18,9 @@ public class GravitySystem : PointMass
 
     public OrbitElement orbitElement = new OrbitElement();
 
-    public LineRenderer lineRenderer; 
+    [Header("Path")]
+    public GameObject linePrefab;
+    LineRenderer lineRenderer; 
 
 
     public Predictions predictions;
@@ -319,7 +321,7 @@ public class GravitySystem : PointMass
         }
         else
         {
-            //radiusOfInfluence = 10000000000;
+            radiusOfInfluence = float.MaxValue;
         }
 
         // Add Siblings in RadiusOfInfluence
@@ -373,10 +375,12 @@ public class GravitySystem : PointMass
         //    return;
 
         //Linerenderer
-        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer = Instantiate(linePrefab, transform.parent).GetComponent<LineRenderer>() ;
+        lineRenderer.transform.localPosition = Vector2.zero;
+        //lineRenderer = GetComponent<LineRenderer>();
         if (!lineRenderer)
             return;
-
+        lineRenderer.useWorldSpace = false;
         //Prediction
         float orbitTime = OMath.GetOrbitPeriod(this);
         //int stepCount = Mathf.FloorToInt(orbitTime / OTime.fixedPlanetTimeSteps);

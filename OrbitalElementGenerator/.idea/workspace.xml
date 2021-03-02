@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14b5e661-5251-4ec0-b130-62a358870f3f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Planets.json" beforeDir="false" afterPath="$PROJECT_DIR$/Planets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Planeter - Mini Ksp/Assets/Scripts/Game/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Planeter - Mini Ksp/Assets/Scripts/Game/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Planeter - Mini Ksp/Library/InspectorExpandedItems.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../Planeter - Mini Ksp/Library/InspectorExpandedItems.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Planeter - Mini Ksp/Assets/Scripts/Game/OMath.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Planeter - Mini Ksp/Assets/Scripts/Game/OMath.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Planeter - Mini Ksp/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Planeter - Mini Ksp/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Planeter - Mini Ksp/Library/ScriptAssemblies/Assembly-CSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Planeter - Mini Ksp/Library/ScriptAssemblies/Assembly-CSharp.dll" afterDir="false" />
     </list>

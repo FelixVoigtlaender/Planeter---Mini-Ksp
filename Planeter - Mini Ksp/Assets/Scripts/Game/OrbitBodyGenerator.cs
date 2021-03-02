@@ -47,7 +47,24 @@ public class OrbitBodyGenerator : MonoBehaviour
 
         // Orbit Elements
         orbitElements = OrbitElements.CreateFromJSON(jsonString);
+
+        planetScales = ApplyConversion(planetScales);
+        moonScales = ApplyConversion(moonScales);
         orbitElements.ApplyScale(planetScales,moonScales);
+    }
+
+    public Scaling ApplyConversion(Scaling scaling)
+    {
+        switch (scaling.conversionType)
+        {
+            case ConversionType.AU:
+                scaling.scaleRadius = scaling.scaleSemiMajorAxis * (OMath.Er() / OMath.Au());
+                break;
+            case ConversionType.RADIUS:
+                scaling.scaleSemiMajorAxis = scaling.scaleRadius * (OMath.Au() / OMath.Er());
+                break;
+        }
+        return scaling;
     }
 
     public string[] GetPlanetNames()
@@ -163,5 +180,11 @@ public class OrbitBodyGenerator : MonoBehaviour
         public float scaleSemiMajorAxis;
         public float scaleMass;
         public float scaleRadius;
+        public ConversionType conversionType;
+    }
+
+    [System.Serializable]
+    public enum ConversionType{
+        RADIUS,AU,NONE
     }
 }

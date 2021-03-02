@@ -39,6 +39,24 @@ public class OMath : MonoBehaviour
     public float gravityConstant;
 
 
+    /// <summary>
+    /// Returns the astronomical unit(au) in km
+    /// au is roughly the distance from Earth to the Sun
+    /// </summary>
+    /// <returns></returns>
+    public static float Au()
+    {
+        return 149597870.700f;
+    }
+    /// <summary>
+    /// Returns earths radius in km
+    /// </summary>
+    /// <returns></returns>
+    public static float Er()
+    {
+        return 6378;
+    }
+
     public static float Sqr(float value)
     {
         return value * value;
