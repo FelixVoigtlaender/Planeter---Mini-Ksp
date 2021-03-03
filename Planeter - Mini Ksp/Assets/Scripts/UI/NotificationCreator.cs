@@ -32,8 +32,16 @@ public class NotificationCreator : MonoBehaviour
 
 
     public GameObject notificationPrefab;
+    public GameObject missionEventNoficiationPrefab;
     public NotificationStacking notificationStacking;
     public float delay = 1;
+
+    public void GenerateMissionEventNotification(MissionEvent missionEvent)
+    {
+        GameObject notificationObj = Instantiate(missionEventNoficiationPrefab, transform);
+        MissionNotification notification = notificationObj.GetComponent<MissionNotification>();
+        notification.SetUp(missionEvent);
+    }
     public void GenerateNotification(string title)
     {
         GenerateNotification(title, "", null);
@@ -56,14 +64,14 @@ public class NotificationCreator : MonoBehaviour
         notification.description = description;
         notification.icon = icon ? icon : notification.icon;
 
-        notification.OpenNotification();
+        //notification.OpenNotification();
 
-        notificationObj.transform.SetAsFirstSibling();
+        //notificationObj.transform.SetAsFirstSibling();
 
         StartCoroutine("DestroyNotification",notification);
     }
 
-    public void GenerateNotification(string title, string description, Sprite icon)
+    public NotificationManager GenerateNotification(string title, string description, Sprite icon)
     {
         GameObject notificationObj = Instantiate(notificationPrefab, transform);
         NotificationManager notification = notificationObj.GetComponent<NotificationManager>();
@@ -73,7 +81,7 @@ public class NotificationCreator : MonoBehaviour
         notification.description = description;
         notification.icon = icon ? icon : notification.icon;
 
-        //notificationStacking.CloseCurrentNotification();
+        return notification;
     }
 
     IEnumerator DestroyNotification(NotificationManager notification)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class MissionEvent
@@ -10,7 +11,7 @@ public class MissionEvent
     public virtual string MyVerb { get; set; }
     public string myObject;
     public bool achieved = false;
-
+    public event Action onAchieved;
     // Evaluation
     public virtual bool Evaluate()
     {
@@ -22,7 +23,12 @@ public class MissionEvent
     }
     public virtual bool SelfEvaluate()
     {
-        achieved = achieved ? achieved : Evaluate();
+        if (!achieved)
+        {
+            achieved = Evaluate();
+            if (achieved)
+                onAchieved?.Invoke();
+        }
         return achieved;
     }
 

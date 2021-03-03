@@ -58,9 +58,7 @@ namespace Michsky.UI.ModernUIPack
                 try
                 {
                     NotificationStacking stacking = transform.GetComponentInParent<NotificationStacking>();
-                    stacking.notifications.Add(this);
-                    stacking.enableUpdating = true;
-                    gameObject.SetActive(false);
+                    stacking.AddNotification(this);
                 }
 
                 catch { }

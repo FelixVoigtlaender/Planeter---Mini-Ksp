@@ -51,6 +51,13 @@ namespace Michsky.UI.ModernUIPack
             notifications[currentNotification].CloseNotification();
         }
 
+        public void AddNotification(NotificationManager notification)
+        {
+            notifications.Add(notification);
+            enableUpdating = true;
+            notification.gameObject.SetActive(false);
+        }
+
         IEnumerator StartNotification()
         {
             if(notifications[currentNotification].enableTimer)

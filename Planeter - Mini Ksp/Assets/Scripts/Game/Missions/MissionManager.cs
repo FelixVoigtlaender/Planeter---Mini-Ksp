@@ -83,6 +83,11 @@ public class MissionManager : MonoBehaviour
         activeMission = mission;
         stagingDisplay.Setup(mission);
 
+        foreach(MissionEvent missionEvent in mission.missionEvents)
+        {
+            NotificationCreator.instance.GenerateMissionEventNotification(missionEvent);
+        }
+
         onActiveMissionSelected?.Invoke();
     }
 
