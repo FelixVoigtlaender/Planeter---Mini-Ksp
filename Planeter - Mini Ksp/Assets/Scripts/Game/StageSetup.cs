@@ -72,6 +72,12 @@ public class StageSetup : MonoBehaviour
         UpdatePointText();
     }
 
+    public void SetTotalPoints(int points)
+    {
+        totalPoints = points;
+        CheckContent();
+    }
+
     public void UpdatePointText()
     {
         titlePoints.text = pointsLeft + " POINTS";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 public class MissionManager : MonoBehaviour
 {
@@ -34,6 +35,8 @@ public class MissionManager : MonoBehaviour
     public Transform displayList;
     public MissionDisplay stagingDisplay;
     public UnityEvent onActiveMissionSelected;
+    [Header("Reward")]
+    public StageSetup stageSetup;
     [Header("Missions")]
     public Mission activeMission;
     public Mission[] missions;
@@ -87,7 +90,9 @@ public class MissionManager : MonoBehaviour
     {
         if (activeMission == null || !GameManager.isGameActive)
             return;
-        activeMission.Evaluate();
+        bool missionAchieved = activeMission.Evaluate();
+
+        stageSetup.SetTotalPoints(Mathf.Max(stageSetup.totalPoints, activeMission.pointReward));
     }
     public void Reset()
     {
@@ -108,11 +113,12 @@ public class Mission
     public MissionEvent[] missionEvents;
     public int pointReward;
     public bool achieved = false;
+    public event Action onAchieved;
 
-    public void Evaluate()
+    public bool Evaluate()
     {
         if (achieved)
-            return;
+            return false;
         bool isMissionAchieved = true;
         for (int i = 0; i < missionEvents.Length; i++)
         {
@@ -131,13 +137,19 @@ public class Mission
             else
             {
                 isMissionAchieved = false;
+                break;
             }
         }
         if (isMissionAchieved)
         {
             NotificationCreator.instance.GenerateNotification(title.ToUpper() + " ACHIEVED!");
             achieved = true;
+            onAchieved?.Invoke();
+
+            return true;
         }
+        return false;
+        
     }
     public void Reset()
     {

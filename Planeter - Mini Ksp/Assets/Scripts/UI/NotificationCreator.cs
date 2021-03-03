@@ -32,6 +32,7 @@ public class NotificationCreator : MonoBehaviour
 
 
     public GameObject notificationPrefab;
+    public NotificationStacking notificationStacking;
     public float delay = 1;
     public void GenerateNotification(string title)
     {
@@ -45,7 +46,7 @@ public class NotificationCreator : MonoBehaviour
     {
         GenerateNotification(title, description, null);
     }
-    public void GenerateNotification(string title, string description, Sprite icon)
+    public void GenerateNotificationA(string title, string description, Sprite icon)
     {
         GameObject notificationObj = Instantiate(notificationPrefab, transform);
         NotificationManager notification = notificationObj.GetComponent<NotificationManager>();
@@ -60,6 +61,19 @@ public class NotificationCreator : MonoBehaviour
         notificationObj.transform.SetAsFirstSibling();
 
         StartCoroutine("DestroyNotification",notification);
+    }
+
+    public void GenerateNotification(string title, string description, Sprite icon)
+    {
+        GameObject notificationObj = Instantiate(notificationPrefab, transform);
+        NotificationManager notification = notificationObj.GetComponent<NotificationManager>();
+
+        notification.UpdateUI();
+        notification.title = title;
+        notification.description = description;
+        notification.icon = icon ? icon : notification.icon;
+
+        //notificationStacking.CloseCurrentNotification();
     }
 
     IEnumerator DestroyNotification(NotificationManager notification)
