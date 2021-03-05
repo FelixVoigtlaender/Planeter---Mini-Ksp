@@ -99,6 +99,7 @@ public class DynamicBody : MonoBehaviour
             {
                 PredictPath(predictions, Mathf.CeilToInt(10 * OTime.timeScale));
             }
+            OTime.maxTime = predictions.GetLastPrediction().time;
             yield return new WaitForEndOfFrame();
         }
     }
@@ -162,9 +163,18 @@ public class DynamicBody : MonoBehaviour
             bool fliesIntoCenter = Vector2.Dot(nextPrediction.localPosition.normalized, nextPrediction.localVelocity) < 0;
             if (fliesIntoCenter)
             {
-                Vector2 position = nextPrediction.localPosition.normalized * nextPrediction.gravitySystem.radius;
-                nextPrediction.localPosition = position;
-                nextPrediction.localVelocity = Vector2.zero;
+                Vector2 point1 = nextPrediction.localPosition;
+                Vector2 point2 = currentPrediction.localPosition;
+                Vector2 intersection1 = Vector2.zero;
+                Vector2 intersection2;
+                int intersectionCount = OMath.BetweenLineAndCircle(Vector2.zero, nextPrediction.gravitySystem.radius, point1, point2, out intersection1, out intersection2);
+
+                if (intersectionCount > 0)
+                {
+                    Vector2 position = intersection1;
+                    nextPrediction.localPosition = position;
+                    nextPrediction.localVelocity = Vector2.zero;
+                }
             }
             nextPrediction.isGrounded = true;
         }

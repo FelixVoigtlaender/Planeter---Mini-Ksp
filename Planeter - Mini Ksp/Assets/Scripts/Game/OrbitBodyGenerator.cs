@@ -29,11 +29,11 @@ public class OrbitBodyGenerator : MonoBehaviour
         }
     }
 
-
+    [Header("System")]
+    public GravitySystem mainSystem;
     [Header("Scaling")]
-    public float scaleSemiMajorAxis;
-    public float scaleMass;
-    public float scaleRadius;
+    public Scaling planetScales;
+    public Scaling moonScales;
     [Header("Generation")]
     public GameObject planetPrefab;
     public OrbitElements orbitElements;
@@ -47,7 +47,32 @@ public class OrbitBodyGenerator : MonoBehaviour
 
         // Orbit Elements
         orbitElements = OrbitElements.CreateFromJSON(jsonString);
-        orbitElements.ApplyScale(scaleSemiMajorAxis, scaleMass, scaleRadius);
+
+        planetScales = ApplyConversion(planetScales);
+        moonScales = ApplyConversion(moonScales);
+        orbitElements.ApplyScale(planetScales,moonScales);
+    }
+
+    public Scaling ApplyConversion(Scaling scaling)
+    {
+        switch (scaling.conversionType)
+        {
+            case ConversionType.AU:
+                scaling.scaleRadius = scaling.scaleSemiMajorAxis * (OMath.Er() / OMath.Au());
+                break;
+            case ConversionType.RADIUS:
+                scaling.scaleSemiMajorAxis = scaling.scaleRadius * (OMath.Au() / OMath.Er());
+                break;
+        }
+        return scaling;
+    }
+
+    public string[] GetElementNames()
+    {
+        var myList = new List<string>();
+        myList.AddRange(GetPlanetNames());
+        myList.AddRange(GetMoonNames());
+        return myList.ToArray();
     }
 
     public string[] GetPlanetNames()
@@ -64,8 +89,58 @@ public class OrbitBodyGenerator : MonoBehaviour
 
 
         return planetNames;
-
     }
+    public string[] GetMoonNames()
+    {
+        string[] moonNames = new string[0];
+        if (orbitElements == null || orbitElements.moons == null)
+            return moonNames;
+
+        moonNames = new string[orbitElements.moons.Length];
+        for (int i = 0; i < orbitElements.moons.Length; i++)
+        {
+            moonNames[i] = orbitElements.moons[i].name;
+        }
+
+
+        return moonNames;
+    }
+    public OrbitElement GetElement(string name)
+    {
+        OrbitElement element = GetPlanet(name);
+        if (element == null)
+            element = GetMoon(name);
+        return element;
+    }
+
+    public OrbitElement GetPlanet(string name)
+    {
+        if (orbitElements == null || orbitElements.planets == null)
+            return null;
+
+        for (int i = 0; i < orbitElements.planets.Length; i++)
+        {
+            if (orbitElements.planets[i].name.Equals(name.Trim()))
+                return orbitElements.planets[i];
+        }
+
+        return null;
+    }
+
+    public OrbitElement GetMoon(string name)
+    {
+        if (orbitElements == null || orbitElements.moons == null)
+            return null;
+
+        for (int i = 0; i < orbitElements.moons.Length; i++)
+        {
+            if (orbitElements.moons[i].name.Equals(name.Trim()))
+                return orbitElements.moons[i];
+        }
+
+        return null;
+    }
+
 
     public void GeneratePlanets()
     {
@@ -97,7 +172,36 @@ public class OrbitBodyGenerator : MonoBehaviour
         }
 
     }
+    public void GenerateMoons()
+    {
+        if (orbitElements == null || orbitElements.moons == null)
+            return;
 
+        // Generate Planets
+        OrbitElement[] moonElements = orbitElements.moons;
+        List<GravitySystem> existingSystems = new List<GravitySystem>(FindObjectsOfType<GravitySystem>());
+        for (int i = 0; i < moonElements.Length; i++)
+        {
+            GravitySystem system = FindGravitySystem(moonElements[i].name, existingSystems.ToArray());
+
+            if (system == null)
+            {
+                GameObject moon = Instantiate(planetPrefab);
+                system = moon.GetComponent<GravitySystem>();
+                existingSystems.Add(system);
+            }
+
+            system.orbitElement = moonElements[i];
+            system.gameObject.name = moonElements[i].name;
+        }
+
+        // Setup Planets
+        foreach (GravitySystem gs in existingSystems)
+        {
+            gs.Setup(gs.orbitElement);
+        }
+
+    }
     GravitySystem FindGravitySystem(string name, GravitySystem[] systems)
     {
         for (int i = 0; i < systems.Length; i++)
@@ -106,5 +210,26 @@ public class OrbitBodyGenerator : MonoBehaviour
                 return systems[i];
         }
         return null;
+    }
+
+    public void CheckSystem()
+    {
+        if (!mainSystem)
+            return;
+        mainSystem.CheckSystem();
+    }
+
+    [System.Serializable]
+    public struct Scaling
+    {
+        public float scaleSemiMajorAxis;
+        public float scaleMass;
+        public float scaleRadius;
+        public ConversionType conversionType;
+    }
+
+    [System.Serializable]
+    public enum ConversionType{
+        RADIUS,AU,NONE
     }
 }

@@ -11,7 +11,7 @@ namespace Michsky.UI.ModernUIPack
 
         [Header("SETTINGS")]
         public float delay = 1;
-        int currentNotification = 0;
+        public int currentNotification = 0;
 
         void Update()
         {
@@ -44,13 +44,44 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
+        public void ClearNotifications()
+        {
+            enableUpdating = false;
+            currentNotification = 0;
+            notifications.Clear();
+
+            foreach(Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        public void CloseCurrentNotification()
+        {
+            if (notifications.Count == 0)
+                return;
+            notifications[currentNotification].CloseNotification();
+        }
+
+        public void AddNotification(NotificationManager notification)
+        {
+            notifications.Add(notification);
+            enableUpdating = true;
+            notification.gameObject.SetActive(false);
+        }
+
         IEnumerator StartNotification()
         {
-            yield return new WaitForSeconds(notifications[currentNotification].timer + delay);
+            if(notifications[currentNotification].enableTimer)
+                yield return new WaitForSeconds(notifications[currentNotification].timer + delay);
+            else
+                while(!notifications[currentNotification].notificationAnimator.GetCurrentAnimatorStateInfo(0).IsName("Out"))
+                    yield return new WaitForSeconds(0.1f);
+
             Destroy(notifications[currentNotification].gameObject);
-            // notifications.Remove(notifications[currentNotification]);
-            enableUpdating = true;
+            //notifications.Remove(notifications[currentNotification]);
             currentNotification += 1;
+            enableUpdating = true;
             StopCoroutine("StartNotification");
         }
     }

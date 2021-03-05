@@ -25,7 +25,7 @@ public class CameraSelectable : MonoBehaviour
 
 
         if (selectOnStart)
-            Select();
+            Select(0);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -53,13 +53,14 @@ public class CameraSelectable : MonoBehaviour
 
         if (pixelDistance < pixelRadius)
         {
-            Select();
+            var worldToPixels = ((Screen.height / 2.0f) / Camera.main.orthographicSize);
+            Select(pixelDistance/worldToPixels);
         }
     }
 
-    public void Select()
+    public void Select(float distance)
     {
-        CameraController.SetTarget(transform);
+        CameraController.SetTarget(transform,distance);
     }
 
     /// <summary>
@@ -68,12 +69,12 @@ public class CameraSelectable : MonoBehaviour
     /// <param name="worldPos">Position of click in world space</param>
     public void ManageWorldInput(Vector2 worldPos)
     {
-        float pixelDistance = ((Vector2)transform.position - worldPos).magnitude;
+        float worldDistance = ((Vector2)transform.position - worldPos).magnitude;
         float radius = transform.lossyScale.x / 2;
 
-        if (pixelDistance < radius)
+        if (worldDistance < radius)
         {
-            CameraController.SetTarget(transform);
+            Select(worldDistance);
         }
     }
 

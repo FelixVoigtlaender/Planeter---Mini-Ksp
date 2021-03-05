@@ -5,6 +5,7 @@ using UnityEngine;
 public class Stage : MonoBehaviour
 {
     public float thrust = 1;
+    public int points = 1;
 
     bool quickSaveActive = true;
 
@@ -21,7 +22,7 @@ public class Stage : MonoBehaviour
 
     public Vector2 CalculateThrust(Vector2 direction)
     {
-        return direction.normalized * thrust;
+        return direction * thrust;
 
     }
 

@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 0}
-  lineWidthPx: 20
+  lineWidthPx: 30
 --- !u!1 &5772907087495128165
 GameObject:
   m_ObjectHideFlags: 0

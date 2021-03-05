@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class MissionEvent
@@ -10,7 +11,7 @@ public class MissionEvent
     public virtual string MyVerb { get; set; }
     public string myObject;
     public bool achieved = false;
-
+    public event Action onAchieved;
     // Evaluation
     public virtual bool Evaluate()
     {
@@ -22,7 +23,12 @@ public class MissionEvent
     }
     public virtual bool SelfEvaluate()
     {
-        achieved = achieved ? achieved : Evaluate();
+        if (!achieved)
+        {
+            achieved = Evaluate();
+            if (achieved)
+                onAchieved?.Invoke();
+        }
         return achieved;
     }
 
@@ -52,6 +58,34 @@ public class MissionEvent
         MissionEvent[] events = { new MissionLand(), new MissionEnter() };
         return events;
     }
+
+    public string ColorCodeDescription(string description)
+    {
+        if (!description.Contains(MyVerb))
+            return description;
+
+        string[] planetNames = OrbitBodyGenerator.instance.GetElementNames();
+        string planet = "";
+        for (int i = 0; i < planetNames.Length; i++)
+        {
+            if (description.Contains(planetNames[i]))
+            {
+                planet = planetNames[i];
+                break;
+            }
+        }
+        if (planet.Length == 0)
+            return description;
+
+
+        string planetColor = OrbitBodyGenerator.instance.GetElement(planet).color;
+        string verbColor = "#538CD4";
+        string coloredDescription = description;
+
+        coloredDescription = coloredDescription.Replace(planet, "<color=" + planetColor + ">" + planet + "</color>");
+        coloredDescription = coloredDescription.Replace(MyVerb, "<color=" + verbColor + ">" + MyVerb + "</color>");
+        return coloredDescription;
+    }
 }
 
 [System.Serializable]
@@ -75,7 +109,7 @@ public class MissionLand : MissionEvent
         if (!description.Contains(MyVerb))
             return null;
 
-        string[] planetNames = OrbitBodyGenerator.instance.GetPlanetNames();
+        string[] planetNames = OrbitBodyGenerator.instance.GetElementNames();
         string planet = "";
         for (int i = 0; i < planetNames.Length; i++)
         {
@@ -101,7 +135,7 @@ public class MissionLand : MissionEvent
     }
     public override string Description()
     {
-        return ("You landed on " + myObject);
+        return ("Land on " + myObject);
     }
 
 
@@ -128,7 +162,7 @@ public class MissionEnter : MissionEvent
         if (!description.Contains(MyVerb))
             return null;
 
-        string[] planetNames = OrbitBodyGenerator.instance.GetPlanetNames();
+        string[] planetNames = OrbitBodyGenerator.instance.GetElementNames();
         string planet = "";
         for (int i = 0; i < planetNames.Length; i++)
         {
@@ -152,6 +186,6 @@ public class MissionEnter : MissionEvent
     }
     public override string Description()
     {
-        return ("You entered the " + myObject + " system");
+        return ("Enter the " + myObject + " system");
     }
 }

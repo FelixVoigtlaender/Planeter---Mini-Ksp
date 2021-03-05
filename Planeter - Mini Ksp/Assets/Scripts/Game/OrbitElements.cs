@@ -6,6 +6,7 @@ using UnityEngine;
 public class OrbitElements
 {
     public OrbitElement[] planets;
+    public OrbitElement[] moons;
     public static OrbitElements CreateFromJSON(string jsonString)
     {
         return JsonUtility.FromJson<OrbitElements>(jsonString);
@@ -16,6 +17,22 @@ public class OrbitElements
         foreach(OrbitElement element in planets)
         {
             element.ApplyScale(scaleSemiMajorAxis, scaleMass, scaleRadius);
+        }
+        foreach (OrbitElement element in moons)
+        {
+            element.ApplyScale(scaleSemiMajorAxis, scaleMass, scaleRadius);
+        }
+    }
+
+    public void ApplyScale(OrbitBodyGenerator.Scaling planetScales, OrbitBodyGenerator.Scaling moonScales )
+    {
+        foreach (OrbitElement element in planets)
+        {
+            element.ApplyScale(planetScales.scaleSemiMajorAxis, planetScales.scaleMass, planetScales.scaleRadius);
+        }
+        foreach (OrbitElement element in moons)
+        {
+            element.ApplyScale(moonScales.scaleSemiMajorAxis,moonScales.scaleMass,planetScales.scaleRadius);
         }
     }
 }

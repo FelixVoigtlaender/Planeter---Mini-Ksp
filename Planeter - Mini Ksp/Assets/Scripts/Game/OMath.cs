@@ -39,6 +39,24 @@ public class OMath : MonoBehaviour
     public float gravityConstant;
 
 
+    /// <summary>
+    /// Returns the astronomical unit(au) in km
+    /// au is roughly the distance from Earth to the Sun
+    /// </summary>
+    /// <returns></returns>
+    public static float Au()
+    {
+        return 149597870.700f;
+    }
+    /// <summary>
+    /// Returns earths radius in km
+    /// </summary>
+    /// <returns></returns>
+    public static float Er()
+    {
+        return 6378;
+    }
+
     public static float Sqr(float value)
     {
         return value * value;
@@ -220,7 +238,6 @@ public class OMath : MonoBehaviour
         string s = gravitySystem.name + "\n";
         s += "X: " + x + " xT0: " + xt0 + "\n";
         s += "Y: " + y + " yT0: " + yt0 + "\n";
-        print(s);
 
         float t0;
         t0 = y > 0 ? xt0 : yt0;
@@ -236,6 +253,44 @@ public class OMath : MonoBehaviour
         else
             return (m - a) + b;
     }
+
+    public static int BetweenLineAndCircle(Vector2 circleCenter, float circleRadius, Vector2 point1, Vector2 point2, out Vector2 intersection1, out Vector2 intersection2)
+    {
+        float t;
+
+        var dx = point2.x - point1.x;
+        var dy = point2.y - point1.y;
+
+        var a = dx * dx + dy * dy;
+        var b = 2 * (dx * (point1.x - circleCenter.x) + dy * (point1.y - circleCenter.y));
+        var c = (point1.x - circleCenter.x) * (point1.x - circleCenter.x) + (point1.y - circleCenter.y) * (point1.y - circleCenter.y) - circleRadius * circleRadius;
+
+        var determinate = b * b - 4 * a * c;
+        if ((a <= 0.0000001) || (determinate < -0.0000001))
+        {
+            // No real solutions.
+            intersection1 = Vector2.zero;
+            intersection2 = Vector2.zero;
+            return 0;
+        }
+        if (determinate < 0.0000001 && determinate > -0.0000001)
+        {
+            // One solution.
+            t = -b / (2 * a);
+            intersection1 = new Vector2(point1.x + t * dx, point1.y + t * dy);
+            intersection2 = Vector2.zero;
+            return 1;
+        }
+
+        // Two solutions.
+        t = (float)((-b + Mathf.Sqrt(determinate)) / (2 * a));
+        intersection1 = new Vector2(point1.x + t * dx, point1.y + t * dy);
+        t = (float)((-b - Mathf.Sqrt(determinate)) / (2 * a));
+        intersection2 = new Vector2(point1.x + t * dx, point1.y + t * dy);
+
+        return 2;
+    }
+
 
 
     [System.Serializable]
