@@ -83,6 +83,8 @@ public class MissionManager : MonoBehaviour
         activeMission = mission;
         stagingDisplay.Setup(mission);
 
+        NotificationCreator.instance.ClearNotifications();
+
         foreach(MissionEvent missionEvent in mission.missionEvents)
         {
             NotificationCreator.instance.GenerateMissionEventNotification(missionEvent);
@@ -137,7 +139,7 @@ public class Mission
             // Notify player
             if (missionEvent.achieved)
             {
-                MissionManager.instance.GenerateNotification(missionEvent);
+                //MissionManager.instance.GenerateNotification(missionEvent);
             }
             else
             {

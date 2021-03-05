@@ -135,7 +135,7 @@ public class MissionLand : MissionEvent
     }
     public override string Description()
     {
-        return ("You landed on " + myObject);
+        return ("Land on " + myObject);
     }
 
 
@@ -186,6 +186,6 @@ public class MissionEnter : MissionEvent
     }
     public override string Description()
     {
-        return ("You entered the " + myObject + " system");
+        return ("Enter the " + myObject + " system");
     }
 }

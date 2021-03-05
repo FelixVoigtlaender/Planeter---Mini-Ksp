@@ -44,6 +44,18 @@ namespace Michsky.UI.ModernUIPack
             }
         }
 
+        public void ClearNotifications()
+        {
+            enableUpdating = false;
+            currentNotification = 0;
+            notifications.Clear();
+
+            foreach(Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
         public void CloseCurrentNotification()
         {
             if (notifications.Count == 0)

@@ -35576,7 +35576,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1444816971}
   m_HandleRect: {fileID: 1444816968}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -71612,7 +71612,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00048828125}
+  m_AnchoredPosition: {x: 0, y: 0.00024414062}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1306532701
@@ -86416,7 +86416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0.00018310547}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1665312010
@@ -93827,17 +93827,26 @@ MonoBehaviour:
     pointReward: 0
     achieved: 0
   missions:
-  - title: Venus Mission
-    description: 'First, enter earth. Then enter ther the Sun system and try to reach
-      Venus.
-
-      Once you enter Venus, try to land on Venus also.'
+  - title: Mechta
+    description: First mission to enter the Moon system.
     missionEvents: []
-    pointReward: 20
+    pointReward: 6
     achieved: 0
-  - title: Moon Mission
-    description: Start from earth. Create an Orbit around earth, from there enter
-      the Moon. Finally, land on the Moon.
+  - title: Luna 2
+    description: First spacecraft to reach lunar surface. First, enter the Moon system.
+      Then, land on the Moon.
+    missionEvents: []
+    pointReward: 8
+    achieved: 0
+  - title: Apollo 8
+    description: First crewed mission to the Moon. First, enter the Moon system,
+      and land on Earth.
+    missionEvents: []
+    pointReward: 9
+    achieved: 0
+  - title: Apollo 11
+    description: First crewed mission to reach lunar surface. First, enter the Moon
+      System, land on the Moon, enter the Earth system. Finally, land on Earth.
     missionEvents: []
     pointReward: 20
     achieved: 0
