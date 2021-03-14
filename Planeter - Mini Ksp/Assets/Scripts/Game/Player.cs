@@ -51,8 +51,8 @@ public class Player : MonoBehaviour
 
         dynamicBody.AddRelativeVelocity(thrust);
 
-        // Mission
-        MissionManager.instance.Evaluate();
+        // Mission - Cut
+        //MissionManager.instance.Evaluate();
     }
 
     public void OnPlanning()

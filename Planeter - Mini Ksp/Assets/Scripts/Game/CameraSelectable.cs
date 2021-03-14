@@ -12,7 +12,9 @@ public class CameraSelectable : MonoBehaviour
     public bool useWorldSpace = true;
 
     public FieldTrigger fieldTrigger;
-    
+
+    public bool useCameraSetup = false;
+    public CameraSetup cameraSetup;
 
     private void Start()
     {
@@ -22,10 +24,10 @@ public class CameraSelectable : MonoBehaviour
         {
             fieldTrigger.onPointerUp += OnPointerUp;
         }
-
-
         if (selectOnStart)
-            Select(0);
+        {
+            GameManager.OnGameStart += Select;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -58,9 +60,27 @@ public class CameraSelectable : MonoBehaviour
         }
     }
 
-    public void Select(float distance)
+
+    public void Select()
     {
-        CameraController.SetTarget(transform,distance);
+        Select(0,true);
+    }
+    public void Select(float distance = 0, bool instant = false)
+    {
+        if (useCameraSetup)
+        {
+            cameraSetup.target = transform;
+            CameraController.instance.SetCameraSetup(cameraSetup);
+        }
+        else
+        {
+            CameraController.SetTarget(transform, distance);
+        }
+
+        if (instant)
+        {
+            CameraController.instance.targetDelta = Vector2.zero;
+        }
     }
 
     /// <summary>

@@ -11,6 +11,9 @@ public class ContentCopy : MonoBehaviour
     public void Start()
     {
         myReorderableList = GetComponent<ReorderableList>();
+        ClearContent();
+        FillContent();
+        Canvas.ForceUpdateCanvases();
     }
 
     public void OnElementAdded(ReorderableList.ReorderableListEventStruct eventStruct)
@@ -31,6 +34,7 @@ public class ContentCopy : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        content.parent.GetComponent<RectTransform>().ForceUpdateRectTransforms();
     }
     public void FillContent(GameObject except = null)
     {
@@ -44,6 +48,7 @@ public class ContentCopy : MonoBehaviour
                 continue;
             Instantiate(child, content).transform.localScale = Vector3.one;
         }
+        Canvas.ForceUpdateCanvases();
     }
 
 }

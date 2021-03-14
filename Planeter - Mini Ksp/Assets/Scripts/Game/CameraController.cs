@@ -147,19 +147,21 @@ public class CameraController : MonoBehaviour
     }
 
 
-    public static void SetTarget(Transform target, float distance = 0)
+    public static bool SetTarget(Transform target, float distance = 0)
     {
         if (distance > instance.selectionDistance)
-            return;
+            return false;
 
         instance.selectionDistance = distance;
         instance.target = target;
 
         if (!target)
-            return;
+            return false;
 
         instance.targetOffset = Vector2.zero;
         instance.targetDelta = (Vector2)instance.transform.position - ((Vector2)target.position) ;
+
+        return true;
     }
     public static void LockTarget(Transform target)
     {
@@ -182,4 +184,21 @@ public class CameraController : MonoBehaviour
         float screenWidthInUnits = screenHeightInUnits * Camera.main.aspect; // basically height
         Gizmos.DrawWireCube(Vector3.zero, new Vector3(screenWidthInUnits,screenHeightInUnits,screenHeightInUnits));
     }
+
+    public void SetCameraSetup(CameraSetup setup)
+    {
+        SetTarget(setup.target);
+        targetOffset = setup.targetOffset;
+        sizeGoal = setup.sizeGoal;
+    }
+}
+
+[System.Serializable]
+public class CameraSetup
+{
+    [Header("Target")]
+    public Transform target;
+    public Vector2 targetOffset;
+    [Header("Size")]
+    public float sizeGoal;
 }

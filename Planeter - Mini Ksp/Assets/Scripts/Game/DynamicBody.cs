@@ -84,11 +84,11 @@ public class DynamicBody : MonoBehaviour
         transform.localPosition = currentPrediction.localPosition;
         DrawPath(predictionDrawer,predictions);
 
-        // Mission
-        if (prevPrediction.isGrounded != currentPrediction.isGrounded)
+        // Mission - Cut
+        /*if (prevPrediction.isGrounded != currentPrediction.isGrounded)
             MissionManager.instance.Evaluate();
         if (prevPrediction.gravitySystem != currentPrediction.gravitySystem)
-            MissionManager.instance.Evaluate();
+            MissionManager.instance.Evaluate();*/
     }
 
     private IEnumerator PathPrediction()

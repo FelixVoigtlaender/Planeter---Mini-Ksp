@@ -44,8 +44,8 @@ public class MissionManager : MonoBehaviour
     private void Start()
     {
         GenerateMissions();
-        GameManager.OnGameStart += Reset;
-        GameManager.OnGameStart += Evaluate;
+        //GameManager.OnGameStart += Reset;
+        //GameManager.OnGameStart += Evaluate;
     }
 
     public void GenerateNotification(MissionEvent missionEvent)
