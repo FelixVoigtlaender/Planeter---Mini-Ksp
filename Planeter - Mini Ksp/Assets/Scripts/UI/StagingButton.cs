@@ -9,7 +9,7 @@ public class StagingButton : MonoBehaviour
 
     private void Start()
     {
-        stageSetup.onTotalPointsChanged += PointsChanged;
+        stageSetup.totalPoints.OnValueChanged += CheckButton;
         GameManager.OnGameEnd += CheckButton;
         GameManager.OnGameStart += CheckButton;
         stageManager.onStagesChanged += CheckButton;
@@ -24,7 +24,7 @@ public class StagingButton : MonoBehaviour
     {
         bool notPlayed = stageManager.ActiveStageCount() == stageManager.TotalStageCount();
         bool noStagesLeft = stageManager.IsStagesEmpty();
-        bool noPoints = stageSetup.totalPoints <= 3;
+        bool noPoints = stageSetup.totalPoints.Value <= 3;
         bool notIngame = !GameManager.isGameActive;
 
         bool isActive = (notPlayed || noStagesLeft || notIngame) && !noPoints;

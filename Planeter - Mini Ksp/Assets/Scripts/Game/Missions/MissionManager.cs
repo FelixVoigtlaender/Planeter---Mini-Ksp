@@ -99,7 +99,7 @@ public class MissionManager : MonoBehaviour
             return;
         bool missionAchieved = activeMission.Evaluate();
 
-        stageSetup.SetTotalPoints(Mathf.Max(stageSetup.totalPoints, activeMission.pointReward));
+        //stageSetup.SetTotalPoints(Mathf.Max(stageSetup.totalPoints, activeMission.pointReward));
     }
     public void Reset()
     {

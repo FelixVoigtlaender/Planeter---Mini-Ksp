@@ -15,8 +15,8 @@ public class StageSetup : MonoBehaviour
     public ReorderableList thruster;
 
     [Header("Points")]
-    public int totalPoints = 10;
-    public int pointsLeft;
+    public IntValue totalPoints;
+    public IntValue pointsLeft;
 
 
     public event Action<int> onPointsLeftChanged;
@@ -31,9 +31,16 @@ public class StageSetup : MonoBehaviour
         myReorderableList.OnElementRemoved.AddListener(OnElementRemoved);
         myReorderableList.OnElementGrabbed.AddListener(OnElementRemoved);
 
-        pointsLeft = totalPoints;
+
+        totalPoints.Value = 3;
+
+
+        pointsLeft.Value = totalPoints.Value;
+
+
+        totalPoints.OnValueChanged += CheckContent;
+
         CheckContent();
-        UpdatePointText();
     }
     public void OnElementAdded(ReorderableList.ReorderableListEventStruct eventStruct)
     {
@@ -60,12 +67,12 @@ public class StageSetup : MonoBehaviour
         if (!addedStage)
             return true;
 
-        return addedStage.points <= pointsLeft;
+        return addedStage.points <= pointsLeft.Value;
     }
 
     public void CheckContent()
     {
-        int pointsLeft = totalPoints;
+        int pointsLeft = totalPoints.Value;
         // Count how much points are left
         RectTransform myContent = myReorderableList.ContentLayout.GetComponent<RectTransform>();
         foreach (Transform child in myContent.transform)
@@ -88,7 +95,7 @@ public class StageSetup : MonoBehaviour
             Stage stage = child.GetComponent<Stage>();
             if (!stage)
                 continue;
-            bool isGrabbable = pointsLeft > stage.points;
+            bool isGrabbable = pointsLeft >= stage.points;
             // Grey out
             Image image = stage.image;
             Color color = image.color;
@@ -97,26 +104,13 @@ public class StageSetup : MonoBehaviour
             // Is Grabbable
             child.GetComponent<ReorderableListElement>().IsGrabbable = isGrabbable;
         }
-        if (this.pointsLeft != pointsLeft)
-            onPointsLeftChanged?.Invoke(pointsLeft);
 
-
-        this.pointsLeft = pointsLeft;
-        UpdatePointText();
+        this.pointsLeft.Value = pointsLeft;
     }
 
     public void SetTotalPoints(int points)
     {
-        if (totalPoints != points)
-            onTotalPointsChanged?.Invoke(points);
-
-        totalPoints = points;
+        totalPoints.Value = points;
         CheckContent();
-    }
-
-    public void UpdatePointText()
-    {
-        titlePoints.text = pointsLeft + " POINTS";
-        print("Points changed");
     }
 }

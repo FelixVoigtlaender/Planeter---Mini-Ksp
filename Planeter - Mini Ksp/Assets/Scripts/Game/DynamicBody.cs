@@ -158,7 +158,7 @@ public class DynamicBody : MonoBehaviour
         nextPrediction.localPosition += nextPrediction.localVelocity * deltaTime;
 
         // Collision
-        if (nextPrediction.localPosition.sqrMagnitude < OMath.Sqr(nextPrediction.gravitySystem.radius))
+        if (nextPrediction.localPosition.sqrMagnitude < OMath.Sqr(nextPrediction.gravitySystem.radius+0.1f))
         {
             bool fliesIntoCenter = Vector2.Dot(nextPrediction.localPosition.normalized, nextPrediction.localVelocity) < 0;
             if (fliesIntoCenter)
