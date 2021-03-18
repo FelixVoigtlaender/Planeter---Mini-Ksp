@@ -38,16 +38,10 @@ public class Player : MonoBehaviour
             return;
         if (stageManager.IsStagesEmpty())
             return;
-
-        Stage currentStage = stageManager.GetCurrentStage();
-
-        if (!currentStage)
-            return;
-
         Vector2 dir = joystick.Direction;
         print(dir);
 
-        Vector2 thrust = currentStage.Ignite(dir);
+        Vector2 thrust = stageManager.Ignite(dir);
 
         dynamicBody.AddRelativeVelocity(thrust);
 

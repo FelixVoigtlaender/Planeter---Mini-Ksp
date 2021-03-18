@@ -113,4 +113,5 @@ public class StageSetup : MonoBehaviour
         totalPoints.Value = points;
         CheckContent();
     }
+
 }

@@ -21,6 +21,8 @@ public class IntDisplay : MonoBehaviour
             firstValue.OnValueChanged += OnValueChanged;
         if(secondValue != null)
             secondValue.OnValueChanged += OnValueChanged;
+
+        OnValueChanged();
     }
 
     public void OnValueChanged()

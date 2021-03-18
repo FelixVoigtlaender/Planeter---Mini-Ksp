@@ -161,7 +161,7 @@ public class DynamicBody : MonoBehaviour
         if (nextPrediction.localPosition.sqrMagnitude < OMath.Sqr(nextPrediction.gravitySystem.radius+0.1f))
         {
             bool fliesIntoCenter = Vector2.Dot(nextPrediction.localPosition.normalized, nextPrediction.localVelocity) < 0;
-            if (fliesIntoCenter)
+            if (nextPrediction.localPosition.sqrMagnitude < OMath.Sqr(nextPrediction.gravitySystem.radius + 0.01f))
             {
                 Vector2 point1 = nextPrediction.localPosition;
                 Vector2 point2 = currentPrediction.localPosition;

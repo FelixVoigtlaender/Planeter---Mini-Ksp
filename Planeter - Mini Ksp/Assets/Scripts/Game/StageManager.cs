@@ -32,6 +32,7 @@ public class StageManager : MonoBehaviour
             Transform child = transform.GetChild(i);
             child.gameObject.SetActive(true);
         }
+        Canvas.ForceUpdateCanvases();
     }
 
     public void OnQuickSave()
@@ -50,6 +51,8 @@ public class StageManager : MonoBehaviour
             Transform child = transform.GetChild(i);
             child.GetComponent<Stage>().OnLoadQuickSave();
         }
+
+        Canvas.ForceUpdateCanvases();
     }
     public Stage GetCurrentStage()
     {
@@ -99,6 +102,9 @@ public class StageManager : MonoBehaviour
         Vector2 thrust = GetCurrentStage().Ignite(dir);
 
         onStagesChanged?.Invoke();
+
+        Canvas.ForceUpdateCanvases();
+
         return thrust;
     }
 }

@@ -113,5 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reward: 1
   points: {fileID: 11400000, guid: 0e0726ca3662e0842b4e5096936f1e19, type: 2}
+  totalRewards: {fileID: 11400000, guid: 2faf695534aa9e5458582d5e474aad97, type: 2}
+  collectedRewards: {fileID: 11400000, guid: 051799400f3596b48850a1127ca628b2, type: 2}
   spriteEmpty: {fileID: 21300000, guid: c07549e02a2d55049906af989d15fe22, type: 3}
   spriteFilled: {fileID: 21300000, guid: 9df0f4d8c02014347ad2d7de427e0ced, type: 3}
